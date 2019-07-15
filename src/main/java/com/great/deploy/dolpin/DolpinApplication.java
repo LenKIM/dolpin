@@ -12,5 +12,4 @@ public class DolpinApplication {
     public static void main(String[] args) {
         SpringApplication.run(DolpinApplication.class, args);
     }
-
 }
