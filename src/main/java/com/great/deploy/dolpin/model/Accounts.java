@@ -1,11 +1,12 @@
 package com.great.deploy.dolpin.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "accounts")
+public class Accounts {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +20,10 @@ public class User {
     private String providerId;
     private String provider;
 
-    public User(String nickname, String favoriteId, String activeRegion, String medal, String duckLevel, String providerId, String provider) {
+    @OneToMany(mappedBy = "id")
+    private List<Favorite> favorite = new ArrayList<>();
+
+    public Accounts(String nickname, String favoriteId, String activeRegion, String medal, String duckLevel, String providerId, String provider) {
         this.nickname = nickname;
         this.favoriteId = favoriteId;
         this.activeRegion = activeRegion;
