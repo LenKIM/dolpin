@@ -1,4 +1,4 @@
-package com.great.deploy.dolpin.payload;
+package com.great.deploy.dolpin.dto;
 
 public class ApiResponse {
     private boolean success;

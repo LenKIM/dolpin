@@ -2,8 +2,6 @@ package com.great.deploy.dolpin.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "celebrity_member")

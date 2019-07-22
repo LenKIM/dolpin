@@ -1,4 +1,4 @@
-package com.great.deploy.dolpin.payload;
+package com.great.deploy.dolpin.dto;
 
 public class AuthResponse {
     private String accessToken;
