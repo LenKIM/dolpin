@@ -1,4 +1,4 @@
-package com.great.deploy.dolpin.domain;
+package com.great.deploy.dolpin.model;
 
 import javax.persistence.*;
 
@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Favorite {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     private Long userId;

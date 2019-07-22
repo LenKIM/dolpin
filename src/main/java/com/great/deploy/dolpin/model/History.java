@@ -1,4 +1,4 @@
-package com.great.deploy.dolpin.domain;
+package com.great.deploy.dolpin.model;
 
 import javax.persistence.*;
 
@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Table(name = "history")
 public class History {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     private String userName;
     private String celebrity;

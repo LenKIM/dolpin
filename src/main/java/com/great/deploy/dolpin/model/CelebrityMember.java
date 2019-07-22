@@ -1,21 +1,22 @@
-package com.great.deploy.dolpin.domain;
+package com.great.deploy.dolpin.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Table(name = "celebrity_member")
 public class CelebrityMember {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     private String name;
     private LocalDate birthday;
     private String picUrl;
+
 
     public CelebrityMember(String name, LocalDate birthday, String picUrl) {
         this.name = name;

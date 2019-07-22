@@ -1,7 +1,7 @@
 package com.great.deploy.dolpin.controller;
 
 import com.great.deploy.dolpin.exception.ResourceNotFoundException;
-import com.great.deploy.dolpin.model.User;
+import com.great.deploy.dolpin.model.Users;
 import com.great.deploy.dolpin.repository.UserRepository;
 import com.great.deploy.dolpin.security.CurrentUser;
 import com.great.deploy.dolpin.security.UserPrincipal;
@@ -18,8 +18,8 @@ public class UserController {
 
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
-    public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
+    public Users getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
         return userRepository.findById(userPrincipal.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Users", "id", userPrincipal.getId()));
     }
 }
