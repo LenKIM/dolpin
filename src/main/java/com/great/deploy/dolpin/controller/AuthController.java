@@ -2,7 +2,7 @@ package com.great.deploy.dolpin.controller;
 
 import com.great.deploy.dolpin.exception.BadRequestException;
 import com.great.deploy.dolpin.model.AuthProvider;
-import com.great.deploy.dolpin.model.User;
+import com.great.deploy.dolpin.model.Users;
 import com.great.deploy.dolpin.payload.ApiResponse;
 import com.great.deploy.dolpin.payload.AuthResponse;
 import com.great.deploy.dolpin.payload.LoginRequest;
@@ -63,23 +63,23 @@ public class AuthController {
             throw new BadRequestException("Email address already in use.");
         }
 
-        // Creating user's account
-        User user = new User();
-        user.setName(signUpRequest.getName());
-        user.setEmail(signUpRequest.getEmail());
-        user.setPassword(signUpRequest.getPassword());
-        user.setProvider(AuthProvider.local);
+        // Creating users's account
+        Users users = new Users();
+        users.setName(signUpRequest.getName());
+        users.setEmail(signUpRequest.getEmail());
+        users.setPassword(signUpRequest.getPassword());
+        users.setProvider(AuthProvider.local);
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        users.setPassword(passwordEncoder.encode(users.getPassword()));
 
-        User result = userRepository.save(user);
+        Users result = userRepository.save(users);
 
         URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/user/me")
+                .fromCurrentContextPath().path("/users/me")
                 .buildAndExpand(result.getId()).toUri();
 
         return ResponseEntity.created(location)
-                .body(new ApiResponse(true, "User registered successfully@"));
+                .body(new ApiResponse(true, "Users registered successfully@"));
     }
 
 }

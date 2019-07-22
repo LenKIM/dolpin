@@ -1,4 +1,4 @@
-package com.great.deploy.dolpin.domain;
+package com.great.deploy.dolpin.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -8,7 +8,7 @@ import java.time.LocalDate;
 public class Pins {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     private Double latitude;
@@ -23,6 +23,14 @@ public class Pins {
     private String imgProvider;
     private LocalDate startDate;
     private LocalDate endDate;
+
+    @ManyToOne
+    @JoinColumn( name = "celebrity_member_id")
+    private CelebrityMember celebrityMember;
+
+    @ManyToOne
+    @JoinColumn( name = "celebrity_group_id")
+    private CelebrityGroup celebrityGroup;
 
     public Pins(Double latitude, Double longitude, String title, String imgUrl, String imgProvider, LocalDate startDate, LocalDate endDate) {
         this.latitude = latitude;
