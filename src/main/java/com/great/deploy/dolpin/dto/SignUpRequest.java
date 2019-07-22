@@ -1,4 +1,4 @@
-package com.great.deploy.dolpin.payload;
+package com.great.deploy.dolpin.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
