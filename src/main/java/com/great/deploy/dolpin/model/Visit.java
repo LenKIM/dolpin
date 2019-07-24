@@ -9,6 +9,7 @@ public class Visit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
     private Long pinId;
 
     public Visit(Long pinId) {

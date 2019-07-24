@@ -13,11 +13,7 @@ public class Pins {
 
     private Double latitude;
     private Double longitude;
-
-    enum category {
-        AD, FOOD
-    }
-
+    private Category category;
     private String title;
     private String imgUrl;
     private String imgProvider;
@@ -25,11 +21,11 @@ public class Pins {
     private LocalDate endDate;
 
     @ManyToOne
-    @JoinColumn( name = "celebrity_member_id")
+    @JoinColumn(name = "celebrity_member_id")
     private CelebrityMember celebrityMember;
 
     @ManyToOne
-    @JoinColumn( name = "celebrity_group_id")
+    @JoinColumn(name = "celebrity_group_id")
     private CelebrityGroup celebrityGroup;
 
     public Pins(Double latitude, Double longitude, String title, String imgUrl, String imgProvider, LocalDate startDate, LocalDate endDate) {
