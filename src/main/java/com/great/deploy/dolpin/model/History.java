@@ -11,15 +11,16 @@ public class History {
     private String userName;
     private String celebrity;
 
-    public enum behavior {
-        CERTIFICATION, REPORT, FIX
-    }
+    private Behavior behavior;
 
     public History(String userName, String celebrity) {
         this.userName = userName;
         this.celebrity = celebrity;
     }
 
+    public Behavior getBehavior() {
+        return behavior;
+    }
 
     public Long getId() {
         return id;
