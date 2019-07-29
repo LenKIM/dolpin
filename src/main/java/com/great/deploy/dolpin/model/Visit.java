@@ -1,6 +1,10 @@
 package com.great.deploy.dolpin.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "visit")
@@ -11,6 +15,12 @@ public class Visit {
     Long id;
 
     private Long pinId;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updateAt;
 
     public Visit(Long pinId) {
         this.pinId = pinId;
