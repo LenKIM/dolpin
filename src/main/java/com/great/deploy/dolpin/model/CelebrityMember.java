@@ -1,7 +1,11 @@
 package com.great.deploy.dolpin.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "celebrity_member")
@@ -14,6 +18,12 @@ public class CelebrityMember {
     private String name;
     private LocalDate birthday;
     private String picUrl;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updateAt;
 
 
     public CelebrityMember(String name, LocalDate birthday, String picUrl) {
