@@ -1,6 +1,10 @@
 package com.great.deploy.dolpin.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "history")
@@ -10,8 +14,13 @@ public class History {
     Long id;
     private String userName;
     private String celebrity;
-
     private Behavior behavior;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updateAt;
 
     public History(String userName, String celebrity) {
         this.userName = userName;
