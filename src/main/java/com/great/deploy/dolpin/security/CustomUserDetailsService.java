@@ -2,8 +2,8 @@ package com.great.deploy.dolpin.security;
 
 
 import com.great.deploy.dolpin.exception.ResourceNotFoundException;
-import com.great.deploy.dolpin.model.Users;
-import com.great.deploy.dolpin.repository.UserRepository;
+import com.great.deploy.dolpin.model.Accounts;
+import com.great.deploy.dolpin.repository.AccountsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,13 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
-    UserRepository userRepository;
+    AccountsRepository accountsRepository;
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
-        Users users = userRepository.findByEmail(email)
+        Accounts users = accountsRepository.findByEmail(email)
                 .orElseThrow(() ->
                         new UsernameNotFoundException("Users not found with email : " + email)
         );
@@ -35,7 +35,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Transactional
     public UserDetails loadUserById(Long id) {
-        Users users = userRepository.findById(id).orElseThrow(
+        Accounts users = accountsRepository.findById(id).orElseThrow(
             () -> new ResourceNotFoundException("Users", "id", id)
         );
 

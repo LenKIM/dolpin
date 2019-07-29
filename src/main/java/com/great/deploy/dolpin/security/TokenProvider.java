@@ -1,9 +1,12 @@
 package com.great.deploy.dolpin.security;
 
 import com.great.deploy.dolpin.config.AppProperties;
+import com.great.deploy.dolpin.model.Accounts;
+import com.great.deploy.dolpin.repository.AccountsRepository;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,9 @@ public class TokenProvider {
     private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
 
     private AppProperties appProperties;
+
+    @Autowired
+    private AccountsRepository usersRepository;
 
     public TokenProvider(AppProperties appProperties) {
         this.appProperties = appProperties;
@@ -41,6 +47,15 @@ public class TokenProvider {
                 .getBody();
 
         return Long.parseLong(claims.getSubject());
+    }
+
+    public Accounts getUserFromToken(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(appProperties.getAuth().getTokenSecret())
+                .parseClaimsJws(token)
+                .getBody();
+        Long userId = Long.parseLong(claims.getSubject());
+        return usersRepository.findById(userId).orElse(null); //나이스한 방법. 에러뿌무뿜
     }
 
     public boolean validateToken(String authToken) {
