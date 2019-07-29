@@ -1,8 +1,8 @@
 package com.great.deploy.dolpin.controller;
 
 import com.great.deploy.dolpin.exception.ResourceNotFoundException;
-import com.great.deploy.dolpin.model.Users;
-import com.great.deploy.dolpin.repository.UserRepository;
+import com.great.deploy.dolpin.model.Accounts;
+import com.great.deploy.dolpin.repository.AccountsRepository;
 import com.great.deploy.dolpin.security.CurrentUser;
 import com.great.deploy.dolpin.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private AccountsRepository userRepository;
 
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
-    public Users getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
+    public Accounts getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
         return userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Users", "id", userPrincipal.getId()));
     }

@@ -1,9 +1,9 @@
 package com.great.deploy.dolpin.security.oauth2;
 
 import com.great.deploy.dolpin.exception.OAuth2AuthenticationProcessingException;
+import com.great.deploy.dolpin.model.Accounts;
 import com.great.deploy.dolpin.model.AuthProvider;
-import com.great.deploy.dolpin.model.Users;
-import com.great.deploy.dolpin.repository.UserRepository;
+import com.great.deploy.dolpin.repository.AccountsRepository;
 import com.great.deploy.dolpin.security.UserPrincipal;
 import com.great.deploy.dolpin.security.oauth2.user.OAuth2UserInfo;
 import com.great.deploy.dolpin.security.oauth2.user.OAuth2UserInfoFactory;
@@ -23,7 +23,7 @@ import java.util.Optional;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private AccountsRepository userRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
@@ -45,8 +45,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
         }
 
-        Optional<Users> userOptional = userRepository.findByEmail(oAuth2UserInfo.getEmail());
-        Users users;
+        Optional<Accounts> userOptional = userRepository.findByEmail(oAuth2UserInfo.getEmail());
+        Accounts users;
         if(userOptional.isPresent()) {
             users = userOptional.get();
             if(!users.getProvider().equals(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))) {
@@ -62,8 +62,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         return UserPrincipal.create(users, oAuth2User.getAttributes());
     }
 
-    private Users registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
-        Users users = new Users();
+    private Accounts registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
+        Accounts users = new Accounts();
 
         users.setProvider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
         users.setProviderId(oAuth2UserInfo.getId());
@@ -73,7 +73,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         return userRepository.save(users);
     }
 
-    private Users updateExistingUser(Users existingUsers, OAuth2UserInfo oAuth2UserInfo) {
+    private Accounts updateExistingUser(Accounts existingUsers, OAuth2UserInfo oAuth2UserInfo) {
         existingUsers.setName(oAuth2UserInfo.getName());
         existingUsers.setImageUrl(oAuth2UserInfo.getImageUrl());
         return userRepository.save(existingUsers);

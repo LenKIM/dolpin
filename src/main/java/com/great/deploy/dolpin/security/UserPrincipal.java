@@ -1,6 +1,6 @@
 package com.great.deploy.dolpin.security;
 
-import com.great.deploy.dolpin.model.Users;
+import com.great.deploy.dolpin.model.Accounts;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,7 +25,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
         this.authorities = authorities;
     }
 
-    public static UserPrincipal create(Users users) {
+    public static UserPrincipal create(Accounts users) {
         List<GrantedAuthority> authorities = Collections.
                 singletonList(new SimpleGrantedAuthority("ROLE_USER"));
 
@@ -37,7 +37,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
         );
     }
 
-    public static UserPrincipal create(Users users, Map<String, Object> attributes) {
+    public static UserPrincipal create(Accounts users, Map<String, Object> attributes) {
         UserPrincipal userPrincipal = UserPrincipal.create(users);
         userPrincipal.setAttributes(attributes);
         return userPrincipal;
