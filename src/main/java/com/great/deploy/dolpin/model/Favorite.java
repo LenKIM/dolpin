@@ -1,5 +1,6 @@
 package com.great.deploy.dolpin.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -17,7 +18,8 @@ public class Favorite {
     @Embedded
     private Celebrites celebrites;
 
-    @ManyToOne(optional = false)
+    @JsonManagedReference
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "accounts_id")
     private Accounts accounts;
 
@@ -58,4 +60,6 @@ public class Favorite {
     public void setAccounts(Accounts accounts) {
         this.accounts = accounts;
     }
+
+
 }

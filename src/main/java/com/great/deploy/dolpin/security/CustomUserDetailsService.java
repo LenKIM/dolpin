@@ -1,10 +1,9 @@
-package com.great.deploy.dolpin.service;
+package com.great.deploy.dolpin.security;
 
 
 import com.great.deploy.dolpin.exception.ResourceNotFoundException;
 import com.great.deploy.dolpin.model.Accounts;
 import com.great.deploy.dolpin.repository.AccountsRepository;
-import com.great.deploy.dolpin.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
