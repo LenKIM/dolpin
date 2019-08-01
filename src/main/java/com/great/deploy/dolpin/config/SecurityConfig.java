@@ -98,6 +98,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                     .and()
                 .authorizeRequests()
+            .antMatchers("/swagger-resources/**").permitAll()
                     .antMatchers("/",
                         "/error",
                         "/favicon.ico",
@@ -108,25 +109,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js")
-                        .permitAll()
-                    .antMatchers("/auth/**", "/oauth2/**")
-                        .permitAll()
-                    .anyRequest()
-                        .authenticated()
-                    .and()
-                .oauth2Login()
-                    .authorizationEndpoint()
-                        .baseUri("/oauth2/authorize")
-                        .authorizationRequestRepository(cookieAuthorizationRequestRepository())
-                        .and()
-                    .redirectionEndpoint()
-                        .baseUri("/oauth2/callback/*")
-                        .and()
-                    .userInfoEndpoint()
-                        .userService(customOAuth2UserService)
-                        .and()
-                    .successHandler(oAuth2AuthenticationSuccessHandler)
-                    .failureHandler(oAuth2AuthenticationFailureHandler);
+                        .permitAll();
+//                    .antMatchers("/auth/**", "/oauth2/**")
+//                        .permitAll()
+
+//            .anyRequest()
+//                        .authenticated()
+//                    .and()
+//                .oauth2Login()
+//                    .authorizationEndpoint()
+//                        .baseUri("/oauth2/authorize")
+//                        .authorizationRequestRepository(cookieAuthorizationRequestRepository())
+//                        .and()
+//                    .redirectionEndpoint()
+//                        .baseUri("/oauth2/callback/*")
+//                        .and()
+//                    .userInfoEndpoint()
+//                        .userService(customOAuth2UserService)
+//                        .and()
+//                    .successHandler(oAuth2AuthenticationSuccessHandler)
+//                    .failureHandler(oAuth2AuthenticationFailureHandler);
 
         // Add our custom Token based authentication filter
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
