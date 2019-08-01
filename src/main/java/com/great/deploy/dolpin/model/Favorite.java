@@ -11,12 +11,15 @@ import java.time.LocalDateTime;
 public class Favorite {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-    private Long userId;
-    private Long memberId;
-    private Long groupId;
+    @Embedded
+    private Celebrites celebrites;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "accounts_id")
+    private Accounts accounts;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -24,25 +27,35 @@ public class Favorite {
     @UpdateTimestamp
     private LocalDateTime updateAt;
 
-    public Favorite(Long userId, Long memberId, Long groupId) {
-        this.userId = userId;
-        this.memberId = memberId;
-        this.groupId = groupId;
+    public Favorite() {
+    }
+
+    public Favorite(Accounts accounts, Celebrites celebrites) {
+        this.celebrites = celebrites;
+        this.accounts = accounts;
     }
 
     public Long getId() {
         return id;
     }
 
-    public Long getUserId() {
-        return userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Long getMemberId() {
-        return memberId;
+    public Celebrites getCelebrites() {
+        return celebrites;
     }
 
-    public Long getGroupId() {
-        return groupId;
+    public void setCelebrites(Celebrites celebrites) {
+        this.celebrites = celebrites;
+    }
+
+    public Accounts getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(Accounts accounts) {
+        this.accounts = accounts;
     }
 }
