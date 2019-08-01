@@ -15,6 +15,9 @@ public class CelebrityMember {
     private LocalDate birthday;
     private String picUrl;
 
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private CelebrityGroup celebrityGroup;
 
     public CelebrityMember(String name, LocalDate birthday, String picUrl) {
         this.name = name;
