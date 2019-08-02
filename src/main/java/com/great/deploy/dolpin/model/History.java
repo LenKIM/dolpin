@@ -14,7 +14,6 @@ public class History {
     Long id;
     private String userName;
     private String celebrity;
-
     private Behavior behavior;
 
     @CreationTimestamp
@@ -22,6 +21,7 @@ public class History {
 
     @UpdateTimestamp
     private LocalDateTime updateAt;
+
 
     public History(String userName, String celebrity, Behavior behavior) {
         this.userName = userName;

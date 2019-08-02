@@ -1,6 +1,8 @@
 package com.great.deploy.dolpin.model;
 
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -31,6 +33,7 @@ public class Favorite {
 
     public Favorite() {
     }
+
 
     public Favorite(Accounts accounts, Celebrites celebrites) {
         this.celebrites = celebrites;

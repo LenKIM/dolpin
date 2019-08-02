@@ -12,7 +12,7 @@ import com.amazonaws.regions.Regions;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application-dev.properties")
 public class AmazonS3Config {
   @Value("${aws.access.key.id}")
   private String awsKeyId;

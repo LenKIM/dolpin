@@ -7,7 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 import java.util.ArrayList;
 import java.util.List;
 @Configuration
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application-dev.properties")
 @ConfigurationProperties(prefix = "app")
 public class AppProperties {
     private final Auth auth = new Auth();
