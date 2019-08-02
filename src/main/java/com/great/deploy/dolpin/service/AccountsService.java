@@ -48,11 +48,9 @@ public class AccountsService {
                 }).orElseThrow(() -> new UsernameNotFoundException("Account not found with userId : " + userId));
     }
 
-    public Accounts getAccountByUserId(Long userId) {
+    Accounts getAccountByUserId(Long userId) {
         return accountsRepository
                 .findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Users", "id", userId));
     }
-
-
 }
