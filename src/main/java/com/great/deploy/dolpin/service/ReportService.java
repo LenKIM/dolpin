@@ -1,9 +1,12 @@
 package com.great.deploy.dolpin.service;
 
+import com.great.deploy.dolpin.dto.DolpinRequest;
 import com.great.deploy.dolpin.dto.ProofRequest;
 import com.great.deploy.dolpin.dto.ProofResponse;
 
 public interface ReportService {
 
     ProofResponse proof(ProofRequest proofRequest);
+
+    ProofResponse dolpin(DolpinRequest dolpinRequest);
 }
