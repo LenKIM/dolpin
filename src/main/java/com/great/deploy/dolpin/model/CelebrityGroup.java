@@ -1,6 +1,8 @@
 package com.great.deploy.dolpin.model;
 
+
 import lombok.NoArgsConstructor;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -21,12 +23,12 @@ public class CelebrityGroup {
     private LocalDate birthday;
     private String picUrl;
 
-//    @CreationTimestamp
-//    private LocalDateTime createdAt;
-//
-//    @UpdateTimestamp
-//    private LocalDateTime updateAt;
-//
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updateAt;
+
 
     public CelebrityGroup(String name, LocalDate birthday, String picUrl) {
         this.name = name;
