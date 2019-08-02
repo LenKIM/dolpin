@@ -1,5 +1,6 @@
 package com.great.deploy.dolpin.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -18,7 +19,7 @@ public class Accounts {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -55,7 +56,8 @@ public class Accounts {
     @Enumerated(EnumType.STRING)
     private AuthProvider provider;
 
-    @OneToMany(mappedBy = "id")
+    @JsonBackReference
+    @OneToMany(mappedBy = "accounts")
     private List<Favorite> favorite = new ArrayList<>();
 
     public Long getId() {

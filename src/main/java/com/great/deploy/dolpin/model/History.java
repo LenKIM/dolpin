@@ -22,8 +22,34 @@ public class History {
     @UpdateTimestamp
     private LocalDateTime updateAt;
 
-    public History(String userName, String celebrity) {
+
+    public History(String userName, String celebrity, Behavior behavior) {
         this.userName = userName;
+        this.celebrity = celebrity;
+        this.behavior = behavior;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getCelebrity() {
+        return celebrity;
+    }
+
+    public void setCelebrity(String celebrity) {
         this.celebrity = celebrity;
     }
 
@@ -31,15 +57,7 @@ public class History {
         return behavior;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getCelebrity() {
-        return celebrity;
+    public void setBehavior(Behavior behavior) {
+        this.behavior = behavior;
     }
 }
