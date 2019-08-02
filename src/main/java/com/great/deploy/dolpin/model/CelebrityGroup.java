@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@NoArgsConstructor
 @Table(name = "celebrity_group")
 public class CelebrityGroup {
 
@@ -29,6 +28,8 @@ public class CelebrityGroup {
     @UpdateTimestamp
     private LocalDateTime updateAt;
 
+    public CelebrityGroup() {
+    }
 
     public CelebrityGroup(String name, LocalDate birthday, String picUrl) {
         this.name = name;
