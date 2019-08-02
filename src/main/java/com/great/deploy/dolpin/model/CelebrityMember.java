@@ -24,6 +24,12 @@ public class CelebrityMember {
     private LocalDate birthday;
     private String picUrl;
 
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updateAt;
+
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "group_id")
