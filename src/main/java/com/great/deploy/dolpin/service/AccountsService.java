@@ -1,6 +1,6 @@
 package com.great.deploy.dolpin.service;
 
-import com.great.deploy.dolpin.dto.AccountReqeust;
+import com.great.deploy.dolpin.dto.AccountRequest;
 import com.great.deploy.dolpin.exception.ResourceNotFoundException;
 import com.great.deploy.dolpin.model.Accounts;
 import com.great.deploy.dolpin.repository.AccountsRepository;
@@ -24,7 +24,7 @@ public class AccountsService {
     }
 
 
-    public Accounts updateAccounts(Long userId, AccountReqeust accountReqeust) {
+    public Accounts updateAccounts(Long userId, AccountRequest accountRequest) {
 
         if (!accountsRepository.existsById(userId)) {
             throw new UsernameNotFoundException("Account not found with id " + userId);
@@ -32,10 +32,10 @@ public class AccountsService {
 
         return accountsRepository.findById(userId).map(
                 user -> {
-                    user.setNickname(accountReqeust.getNickname());
-                    user.setActiveRegion(accountReqeust.getActiveRegion());
-                    user.setMedal(accountReqeust.getMedal());
-                    user.setDuckLevel(accountReqeust.getDuckLevel());
+                    user.setNickname(accountRequest.getNickname());
+                    user.setActiveRegion(accountRequest.getActiveRegion());
+                    user.setMedal(accountRequest.getMedal());
+                    user.setDuckLevel(accountRequest.getDuckLevel());
                     return accountsRepository.save(user);
                 }).orElseThrow(() -> new ResourceNotFoundException("Users", "id", userId));
     }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/report")
 public class ReportController  {
 
-    ReportService reportService;
+    private ReportService reportService;
 
     @GetMapping("/proof/{pinId}")
     public Response<ProofResponse> reportProof(@PathVariable Long pinId) {
@@ -31,5 +31,4 @@ public class ReportController  {
 //        reportService.dolpin(dolpinRequest);
 //
 //    }
-
 }
