@@ -1,5 +1,9 @@
 package com.great.deploy.dolpin.model;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.NoArgsConstructor;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -8,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
+@NoArgsConstructor
 @Table(name = "celebrity_member")
 public class CelebrityMember {
 
@@ -20,6 +25,7 @@ public class CelebrityMember {
     private String picUrl;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "group_id")
     private CelebrityGroup celebrityGroup;
 
@@ -43,5 +49,9 @@ public class CelebrityMember {
 
     public String getPicUrl() {
         return picUrl;
+    }
+
+    public CelebrityGroup getCelebrityGroup() {
+        return celebrityGroup;
     }
 }
