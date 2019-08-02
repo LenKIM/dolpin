@@ -2,6 +2,7 @@ package com.great.deploy.dolpin.service;
 
 import com.great.deploy.dolpin.dto.ClosePinResponse;
 import com.great.deploy.dolpin.dto.PinDetailResponse;
+import com.great.deploy.dolpin.dto.PinInfo;
 import com.great.deploy.dolpin.dto.PinResponse;
 import com.great.deploy.dolpin.exception.ResourceNotFoundException;
 import com.great.deploy.dolpin.model.Pins;
@@ -55,5 +56,21 @@ public class PinServiceImpl implements PinService {
         .startDate(pin.getStartDate())
         .endDate(pin.getEndDate())
         .build();
+  }
+
+//  @Override
+//  public PinInfo modifyPin(Long pinId, PinInfo pinInfo) {
+//    Pins pins = new Pins();
+//    pins.setId(pinId);
+//    pins.set
+//
+//    return null;
+//  }
+
+
+  @Override
+  public void deletePin(Long pinId) {
+    Pins pin = pinsRepository.findById(pinId).orElseThrow(() -> new ResourceNotFoundException("pinId", "id", "long"));
+    pinsRepository.delete(pin);
   }
 }

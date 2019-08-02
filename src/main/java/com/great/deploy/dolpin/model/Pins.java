@@ -1,6 +1,8 @@
 package com.great.deploy.dolpin.model;
 
+import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -10,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
+@Setter
 @Table(name = "pins")
 public class Pins {
 
