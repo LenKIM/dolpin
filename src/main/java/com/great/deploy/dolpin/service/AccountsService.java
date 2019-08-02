@@ -58,12 +58,11 @@ public class AccountsService {
                                 "Account not found with userId : " + userId));
     }
 
-    public Accounts getAccountByUserId(Long userId) {
+    Accounts getAccountByUserId(Long userId) {
         return accountsRepository
                 .findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Users", "id", userId));
     }
-
 
     public List<Pins> getPinsByUserId(Long userId) {
         List<Long> groupIdList = accountsRepository.findById(userId).get().getFavorite().stream()
