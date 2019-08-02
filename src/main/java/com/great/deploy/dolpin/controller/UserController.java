@@ -1,6 +1,6 @@
 package com.great.deploy.dolpin.controller;
 
-import com.great.deploy.dolpin.dto.AccountReqeust;
+import com.great.deploy.dolpin.dto.AccountRequest;
 import com.great.deploy.dolpin.dto.Response;
 import com.great.deploy.dolpin.exception.ResourceNotFoundException;
 import com.great.deploy.dolpin.model.Accounts;
@@ -38,8 +38,8 @@ public class UserController {
     }
 
     @PostMapping("/user/{userId}")
-    public Response<Accounts> updateUser(@PathVariable Long userId, @RequestBody AccountReqeust accountReqeust) {
-        return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), accountsService.updateAccounts(userId, accountReqeust));
+    public Response<Accounts> updateUser(@PathVariable Long userId, @RequestBody AccountRequest accountRequest) {
+        return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), accountsService.updateAccounts(userId, accountRequest));
     }
 
     @DeleteMapping("/user/{userId}")

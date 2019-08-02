@@ -1,6 +1,7 @@
 package com.great.deploy.dolpin.dto;
 
 public class DolpinRequest {
+
     private String title;
     private String imgUrl;
     private String imgProvider;
