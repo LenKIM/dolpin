@@ -27,6 +27,10 @@ public class Pins {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+
+
+
+
     @UpdateTimestamp
     private LocalDateTime updateAt;
 

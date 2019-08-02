@@ -29,3 +29,4 @@ public class CelebrityController {
         return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), celebrityService.getCelebrities());
     }
 }
+
