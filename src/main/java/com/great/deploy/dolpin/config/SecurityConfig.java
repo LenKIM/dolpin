@@ -99,6 +99,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()
                 .authorizeRequests()
             .antMatchers("/swagger-resources/**").permitAll()
+            .antMatchers("/api/**").permitAll()
                     .antMatchers("/",
                         "/error",
                         "/favicon.ico",
@@ -109,10 +110,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js")
+                        .permitAll()
+                    .antMatchers("/api/auth/**", "/oauth2/**")
                         .permitAll();
-//                    .antMatchers("/auth/**", "/oauth2/**")
-//                        .permitAll()
-
 //            .anyRequest()
 //                        .authenticated()
 //                    .and()
