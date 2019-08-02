@@ -2,7 +2,7 @@ package com.great.deploy.dolpin.dto;
 
 public class ProofRequest {
 
-    Long id;
+    private Long id;
 
     public ProofRequest(Long id) {
         this.id = id;

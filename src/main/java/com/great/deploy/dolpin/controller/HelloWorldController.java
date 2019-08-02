@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class HelloWorldController {
 
-    @GetMapping("/")
+    @GetMapping("/ping")
     public String getCurrentUser() {
-        return "hello world";
+        return "pong";
     }
 }
