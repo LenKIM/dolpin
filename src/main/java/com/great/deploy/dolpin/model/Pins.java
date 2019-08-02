@@ -1,7 +1,11 @@
 package com.great.deploy.dolpin.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "pins")
@@ -19,6 +23,12 @@ public class Pins {
     private String imgProvider;
     private LocalDate startDate;
     private LocalDate endDate;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updateAt;
 
     @ManyToOne
     @JoinColumn(name = "celebrity_member_id")
