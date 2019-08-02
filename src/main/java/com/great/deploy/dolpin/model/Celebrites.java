@@ -5,30 +5,30 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Celebrites {
 
-    private int memberId;
-    private int groupId;
+    private Long memberId;
+    private Long groupId;
 
     public Celebrites() {
     }
 
-    public Celebrites(int memberId, int groupId) {
+    public Celebrites(Long memberId, Long groupId) {
         this.memberId = memberId;
         this.groupId = groupId;
     }
 
-    public int getMemberId() {
+    public Long getMemberId() {
         return memberId;
     }
 
-    public void setMemberId(int memberId) {
+    public void setMemberId(Long memberId) {
         this.memberId = memberId;
     }
 
-    public int getGroupId() {
+    public Long getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(int groupId) {
+    public void setGroupId(Long groupId) {
         this.groupId = groupId;
     }
 }
