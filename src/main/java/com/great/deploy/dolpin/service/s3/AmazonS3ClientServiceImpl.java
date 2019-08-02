@@ -37,8 +37,9 @@ public class AmazonS3ClientServiceImpl implements AmazonS3ClientService {
   }
 
   @Override
-  public void uploadFileToS3Bucket(MultipartFile multipartFile, boolean enablePublicReadAccess) {
+  public String uploadFileToS3Bucket(MultipartFile multipartFile, boolean enablePublicReadAccess) {
     String fileName = multipartFile.getOriginalFilename();
+    String uploadImageUrl = null;
 
     try {
       //creating the file in the server (temporarily)
@@ -54,11 +55,14 @@ public class AmazonS3ClientServiceImpl implements AmazonS3ClientService {
         putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
       }
       this.amazonS3.putObject(putObjectRequest);
+      uploadImageUrl = amazonS3.getUrl(this.awsS3AudioBucket, fileName).toString();
       //removing the file created in the server
       file.delete();
     } catch (IOException | AmazonServiceException ex) {
       logger.error("error [" + ex.getMessage() + "] occurred while uploading [" + fileName + "] ");
     }
+
+    return uploadImageUrl;
   }
 
   @Override

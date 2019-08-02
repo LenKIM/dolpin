@@ -4,10 +4,12 @@ import com.great.deploy.dolpin.dto.AccountReqeust;
 import com.great.deploy.dolpin.dto.Response;
 import com.great.deploy.dolpin.exception.ResourceNotFoundException;
 import com.great.deploy.dolpin.model.Accounts;
+import com.great.deploy.dolpin.model.Pins;
 import com.great.deploy.dolpin.repository.AccountsRepository;
 import com.great.deploy.dolpin.security.CurrentUser;
 import com.great.deploy.dolpin.security.UserPrincipal;
 import com.great.deploy.dolpin.service.AccountsService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -44,5 +46,10 @@ public class UserController {
     @DeleteMapping("/user/{userId}")
     public Response<Boolean> updateUser(@PathVariable @NotBlank Long userId) {
         return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), accountsService.deleteAccounts(userId));
+    }
+
+    @GetMapping("/user/{userId}/pins")
+    public Response<List<Pins>> getUserPins(@PathVariable @NotBlank Long userId){
+        return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), accountsService.getPinsByUserId(userId));
     }
 }
