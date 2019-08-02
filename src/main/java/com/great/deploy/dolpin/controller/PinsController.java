@@ -2,10 +2,12 @@ package com.great.deploy.dolpin.controller;
 
 import com.great.deploy.dolpin.dto.CelebrityResponse;
 import com.great.deploy.dolpin.dto.ClosePinResponse;
+import com.great.deploy.dolpin.dto.CreatePinRequest;
 import com.great.deploy.dolpin.dto.PinDetailResponse;
 import com.great.deploy.dolpin.dto.PinInfo;
 import com.great.deploy.dolpin.dto.PinResponse;
 import com.great.deploy.dolpin.dto.Response;
+import com.great.deploy.dolpin.model.Pins;
 import com.great.deploy.dolpin.service.PinService;
 import com.great.deploy.dolpin.service.s3.AmazonS3ClientService;
 import java.util.List;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,33 +38,26 @@ public class PinsController {
   @Autowired
   private PinService pinService;
 
-
-  @PostMapping(value = "/pin", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public void createPin(@RequestPart(value = "data", required = false) MultipartFile multipartFile){
-
-    String profileImageUrl = null;
-    if (multipartFile != null) {
-      // upload profile to storage
-      amazonS3ClientService.uploadFileToS3Bucket(multipartFile, true);
-    }
-  }
-
   /* 6. 모든 pin의 목록을 넘겨주는 API */
   @GetMapping("/pins")
   public Response<List<PinResponse>> getAllPins() {
     return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), pinService.getAllPins());
   }
 
-  /* 반경 100m 내의 핀을 보여주는 API */
-//  @GetMapping("/pins/pin/closer")
-//  public Response<Page<ClosePinResponse>> getClosePins(
-//      @RequestParam Double latitude,
-//      @RequestParam Double longitude,
-//      @RequestParam int start
-//  ){
-//    Pageable pageable = PageRequest.of(start, 20);
-//    Page<ClosePinResponse> closePinResponses = pinService.getClosePins(latitude, latitude, pageable);
+//  /* 7. 핀 등록하기 */
+//  @PostMapping(value = "/pin", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//  public Response<Pins> createPin(@RequestBody CreatePinRequest createPinRequest, MultipartFile image){
+//    String imageUrl = null;
 //
+//    if ( image != null) {
+//      // upload profile to storage
+//       imageUrl = amazonS3ClientService.uploadFileToS3Bucket(image, true);
+//       pinService.createPin(createPinRequest, imageUrl);
+//      System.out.println("등록된 이미지 url은 " + imageUrl);
+//      return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), pinService.createPin(createPinRequest, imageUrl));
+//    } else {
+//      return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), pinService.createPin(createPinRequest, imageUrl));
+//    }
 //  }
 
   /* 9. Pin detail 정보 보여주는 API */
@@ -82,6 +78,4 @@ public class PinsController {
     pinService.deletePin(pinId);
     return new Response<>(HttpStatus.NO_CONTENT.value(), HttpStatus.NO_CONTENT.getReasonPhrase(), "true");
   }
-
-
 }
