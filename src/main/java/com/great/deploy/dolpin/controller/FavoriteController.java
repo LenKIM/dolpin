@@ -32,13 +32,10 @@ public class FavoriteController {
         return getFavoriteResponse(favorites);
     }
 
-    //    TODO memberId 와 GroupID를 List로 만들어 주는 코드가 필요한데, 자꾸 에러.
     @PostMapping("/favorite/user/{userId}")
     @ApiOperation(value = "아이돌 저장하기", response = FavoriteResponseModel.class)
-    public Response<FavoriteResponse> saveFavorites(@PathVariable @NotBlank Long userId, @RequestBody Celebrites celebrites) {
+    public Response<FavoriteResponse> saveFavorites(@PathVariable @NotBlank Long userId, @RequestBody List<Celebrites> celebrites) {
         if (StringUtils.isEmpty(userId)) throw new BadRequestException("UserId 가 없음");
-
-//        예외처리 만약 FavoriteResponse 안에 같은 데이터가 존재하면 삐익
 
         List<Favorite> favorites = favoriteService.saveCelebriteFavorites(userId, celebrites);
         return getFavoriteResponse(favorites);
