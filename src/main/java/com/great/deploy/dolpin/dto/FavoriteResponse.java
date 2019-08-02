@@ -6,8 +6,7 @@ import java.util.List;
 
 public class FavoriteResponse {
 
-
-    List<Celebrites> celebrites;
+    private List<Celebrites> celebrites;
 
     public FavoriteResponse() {
     }
@@ -18,5 +17,9 @@ public class FavoriteResponse {
 
     public List<Celebrites> getCelebrites() {
         return celebrites;
+    }
+
+    public void setCelebrites(List<Celebrites> celebrites) {
+        this.celebrites = celebrites;
     }
 }

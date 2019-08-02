@@ -1,6 +1,6 @@
 package com.great.deploy.dolpin.dto;
 
-public class AccountReqeust {
+public class AccountRequest {
 
     private String nickname;
 
@@ -10,10 +10,10 @@ public class AccountReqeust {
 
     private String duckLevel;
 
-    public AccountReqeust() {
+    public AccountRequest() {
     }
 
-    public AccountReqeust(String nickname, String activeRegion, String medal, String duckLevel) {
+    public AccountRequest(String nickname, String activeRegion, String medal, String duckLevel) {
         this.nickname = nickname;
         this.activeRegion = activeRegion;
         this.medal = medal;

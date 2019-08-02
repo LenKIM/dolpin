@@ -2,7 +2,7 @@ package com.great.deploy.dolpin.dto;
 
 public class ProofResponse {
 
-    boolean result;
+    private boolean result;
 
     public ProofResponse(boolean result) {
         this.result = result;
