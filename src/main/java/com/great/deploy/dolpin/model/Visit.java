@@ -16,11 +16,17 @@ public class Visit {
 
     private Long pinId;
 
+    private Long userId;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     private LocalDateTime updateAt;
+
+    public Long getUserId() {
+        return userId;
+    }
 
     public Visit(Long pinId) {
         this.pinId = pinId;
