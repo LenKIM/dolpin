@@ -38,9 +38,6 @@ public class PinsRepositoryTest {
     System.out.println(byCelebrityGroup_idIn);
 
     pinsRepository.flush();
-
-
-
   }
 
 }
