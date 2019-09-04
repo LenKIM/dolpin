@@ -2,6 +2,13 @@ package com.great.deploy.dolpin.model;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -9,6 +16,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "pins")
+@EntityListeners(AuditingEntityListener.class)
 public class Pins {
 
     @Id
@@ -39,9 +47,43 @@ public class Pins {
         this.latitude = latitude;
     }
 
+
+    public static class PinsBuilder {
+
+        //Required parameters
+        private Long id;
+        private Double latitude;
+        private Double longitude;
+        private String title;
+        private String imgUrl;
+        private String imgProvider;
+        private LocalDate startDate;
+        private LocalDate endDate;
+
+        private CelebrityMember celebrityMember;
+        private CelebrityGroup celebrityGroup;
+
+        @CreationTimestamp
+        private LocalDateTime createdAt;
+
+        @UpdateTimestamp
+        private LocalDateTime updatedAt;
+
+        @CreatedBy
+        private String createdBy;
+
+        @LastModifiedBy
+        private String modifiedBy;
+
+        public PinsBuilder latitude(Double longi) {
+            latitude = longi;
+            return this;
+        }
+
     public Double getLongitude() {
         return longitude;
     }
+
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;

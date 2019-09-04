@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "celebrity_member")
+@NoArgsConstructor
 public class CelebrityMember {
 
     @Id
@@ -33,9 +34,6 @@ public class CelebrityMember {
     @JsonIgnore
     @JoinColumn(name = "group_id")
     private CelebrityGroup celebrityGroup;
-
-    public CelebrityMember() {
-    }
 
     public CelebrityMember(String name, LocalDate birthday, String picUrl) {
         this.name = name;
