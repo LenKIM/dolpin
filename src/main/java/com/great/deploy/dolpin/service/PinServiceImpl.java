@@ -48,7 +48,6 @@ public class PinServiceImpl implements PinService {
             celebrityGroup = celebrityGroupRepository.findById(createPinRequest.getGroupId())
                     .orElseThrow(() -> new ResourceNotFoundException("groupId", "id", "long"));
         }
-
         return pinsRepository.save(new Pins(createPinRequest.getLatitude(), createPinRequest.getLongitude(),
                 createPinRequest.getTitle(), imageUrl, createPinRequest.getImgProvider(),
                 createPinRequest.getStartDate(), createPinRequest.getEndDate(), celebrityMember, celebrityGroup));
