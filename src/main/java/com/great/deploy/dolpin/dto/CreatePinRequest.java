@@ -12,6 +12,7 @@ public class CreatePinRequest {
   private LocalDate startDate;
   private LocalDate endDate;
 
+
   public Long getMemberId() {
     return memberId;
   }
