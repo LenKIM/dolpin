@@ -1,13 +1,12 @@
-package com.great.deploy.dolpin.security;
+package com.great.deploy.dolpin.account;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import java.lang.annotation.*;
 
-@Target({ElementType.PARAMETER, ElementType.TYPE})
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-@Documented
-@AuthenticationPrincipal
+@AuthenticationPrincipal(expression = "#this == 'anonymousUser' ? null : account")
 public @interface CurrentUser {
 
 }
