@@ -12,7 +12,7 @@ public class History {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    private String userName;
+    private Long userId;
     private String celebrity;
     private Behavior behavior;
 
@@ -23,8 +23,8 @@ public class History {
     private LocalDateTime updateAt;
 
 
-    public History(String userName, String celebrity, Behavior behavior) {
-        this.userName = userName;
+    public History(Long userId, String celebrity, Behavior behavior) {
+        this.userId = userId;
         this.celebrity = celebrity;
         this.behavior = behavior;
     }
@@ -37,12 +37,12 @@ public class History {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getCelebrity() {
@@ -59,5 +59,21 @@ public class History {
 
     public void setBehavior(Behavior behavior) {
         this.behavior = behavior;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(LocalDateTime updateAt) {
+        this.updateAt = updateAt;
     }
 }
