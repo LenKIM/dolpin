@@ -1,5 +1,5 @@
 package com.great.deploy.dolpin.model;
 
-enum Category {
+public enum Category {
     AD, FOOD
 }

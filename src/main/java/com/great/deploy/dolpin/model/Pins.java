@@ -1,19 +1,18 @@
 package com.great.deploy.dolpin.model;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "pins")
+@EntityListeners(AuditingEntityListener.class)
 public class Pins {
 
     @Id
@@ -74,14 +73,20 @@ public class Pins {
         private LocalDate startDate;
         private LocalDate endDate;
 
-        @CreationTimestamp
-        private LocalDateTime createdAt;
-
         private CelebrityMember celebrityMember;
         private CelebrityGroup celebrityGroup;
 
+        @CreationTimestamp
+        private LocalDateTime createdAt;
+
         @UpdateTimestamp
         private LocalDateTime updatedAt;
+
+        @CreatedBy
+        private String createdBy;
+
+        @LastModifiedBy
+        private String modifiedBy;
 
         public PinsBuilder latitude(Double longi) {
             latitude = longi;

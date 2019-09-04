@@ -8,6 +8,7 @@ import com.great.deploy.dolpin.service.ReportService;
 import com.great.deploy.dolpin.swagger.ProofResponseModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/report")
 public class ReportController  {
 
+    @Autowired
+    private ReportService reportService;
+
     @ApiOperation(value = "아이돌 저장하기", response = ProofResponseModel.class)
     @GetMapping("/proof/{pinId}")
     public Response<ProofResponse> reportProof(@PathVariable Long pinId) {
@@ -29,11 +33,5 @@ public class ReportController  {
         return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), proofResponse);
     }
 
-    private ReportService reportService;
 
-//    @PostMapping("/proopf/dolpin")
-//    public Response<ProofResponseModel> reportDolpin(@RequestBody DolpinRequest dolpinRequest){
-//        reportService.dolpin(dolpinRequest);
-//
-//    }
 }

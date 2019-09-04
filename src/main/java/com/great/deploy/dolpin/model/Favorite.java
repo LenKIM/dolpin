@@ -1,68 +1,29 @@
 package com.great.deploy.dolpin.model;
 
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "favorite")
+@Embeddable
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class Favorite {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @Embedded
-    private Celebrites celebrites;
-
-    @JsonManagedReference
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "accounts_id")
-    private Accounts accounts;
+    private Long memberId;
+    private Long groupId;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     private LocalDateTime updateAt;
-
-    public Favorite() {
-    }
-
-
-    public Favorite(Accounts accounts, Celebrites celebrites) {
-        this.celebrites = celebrites;
-        this.accounts = accounts;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Celebrites getCelebrites() {
-        return celebrites;
-    }
-
-    public void setCelebrites(Celebrites celebrites) {
-        this.celebrites = celebrites;
-    }
-
-    public Accounts getAccounts() {
-        return accounts;
-    }
-
-    public void setAccounts(Accounts accounts) {
-        this.accounts = accounts;
-    }
-
-
 }
