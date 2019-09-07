@@ -5,7 +5,6 @@ import com.great.deploy.dolpin.account.CurrentUser;
 import com.great.deploy.dolpin.dto.ProofRequest;
 import com.great.deploy.dolpin.dto.ProofResponse;
 import com.great.deploy.dolpin.dto.Response;
-import com.great.deploy.dolpin.exception.BadRequestException;
 import com.great.deploy.dolpin.exception.ResourceNotFoundException;
 import com.great.deploy.dolpin.service.ReportService;
 import com.great.deploy.dolpin.swagger.ProofResponseModel;
@@ -27,16 +26,23 @@ public class ReportController  {
     @Autowired
     private ReportService reportService;
 
-    @ApiOperation(value = "아이돌 저장하기", response = ProofResponseModel.class)
+    @ApiOperation(value = "Idol Support", response = ProofResponseModel.class)
     @GetMapping("/proof/{pinId}")
-    public Response<ProofResponse> reportProof(@PathVariable Long pinId, @ApiIgnore @CurrentUser Account account) {
-        if(account == null){
-            throw new BadRequestException("No found user");
-        }
+    public Response<ProofResponse> reportProof(
+            @PathVariable Long pinId,
+            @ApiIgnore @CurrentUser Account account) {
+
+        Account.validateAccount(account);
+
         ProofResponse proofResponse = reportService.proof(new ProofRequest(pinId));
+
         if(!proofResponse.isResult()){
             throw new ResourceNotFoundException("pins", "id", "id");
         }
-        return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), proofResponse);
+        return new Response<>(
+                HttpStatus.OK.value(),
+                HttpStatus.OK.getReasonPhrase(),
+                proofResponse
+        );
     }
 }

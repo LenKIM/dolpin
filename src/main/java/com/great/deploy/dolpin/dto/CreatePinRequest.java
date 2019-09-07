@@ -6,12 +6,20 @@ public class CreatePinRequest {
   private Long memberId;
   private Long groupId;
   private String title;
+  private String imgUrl;
   private String imgProvider;
   private Double latitude;
   private Double longitude;
   private LocalDate startDate;
   private LocalDate endDate;
 
+  public String getImgUrl() {
+    return imgUrl;
+  }
+
+  public void setImgUrl(String imgUrl) {
+    this.imgUrl = imgUrl;
+  }
 
   public Long getMemberId() {
     return memberId;

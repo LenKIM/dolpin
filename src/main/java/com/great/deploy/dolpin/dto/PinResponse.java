@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 public class PinResponse {
 
+  static
   private Long id;
   private String title;
   private Double latitude;

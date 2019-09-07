@@ -1,5 +1,6 @@
 package com.great.deploy.dolpin.model;
 
+import com.great.deploy.dolpin.dto.CreatePinRequest;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -17,6 +18,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Table(name = "pins")
 public class Pins {
+
+    public static Pins of(CreatePinRequest pinRequest, CelebrityMember celebrityMember, CelebrityGroup celebrityGroup) {
+        return new Pins(
+                pinRequest.getLatitude(),
+                pinRequest.getLongitude(),
+                pinRequest.getTitle(),
+                pinRequest.getImgUrl(),
+                pinRequest.getImgProvider(),
+                pinRequest.getStartDate(),
+                pinRequest.getEndDate(),
+                celebrityMember,
+                celebrityGroup);
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -18,30 +18,38 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Set;
 
-@Api(value = "FavoriteController", description = "아이돌 즐겨찾기 관련 API")
+import static com.great.deploy.dolpin.account.Account.validateAccount;
+
+@Api(value = "FavoriteController", description = "About User's Idol Favorites API")
 @RestController
-@RequestMapping(value = "/api", produces = "application/json")
+@RequestMapping(value = "/api/favorite/user", produces = "application/json")
 public class FavoriteController {
 
     @Autowired
     AccountService accountService;
 
-    @ApiOperation(value = "특정 유저의 아이돌 목록 가져오기", response = FavoriteResponseModel.class)
-    @GetMapping("/favorite/user")
+    @ApiOperation(value = "Get current user's favorites Info", response = FavoriteResponseModel.class)
+    @GetMapping()
     public Response<FavoriteResponse> getFavorites(@ApiIgnore @CurrentUser Account account) {
-        if(account == null){
-            throw new BadRequestException("No found user");
-        }
+        validateAccount(account);
         return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), new FavoriteResponse(account.getFavorite()));
     }
 
-    @PostMapping("/favorite/user")
-    @ApiOperation(value = "좋아하는 아이돌 저장하기", response = FavoriteResponseModel.class)
-    public Response<AccountResponse> saveFavorites(@RequestBody Set<Favorite> Favorite, @ApiIgnore @CurrentUser Account account) {
-        if(account == null){
-            throw new BadRequestException("No found user");
+    @PostMapping()
+    @ApiOperation(value = "Post current user's favorites Info", response = FavoriteResponseModel.class)
+    public Response<AccountResponse> saveFavorites(@RequestBody Set<Favorite> favorites,
+                                                   @ApiIgnore @CurrentUser Account account) {
+        validateAccount(account);
+        if(favorites.size() == 0) {
+            throw new BadRequestException("No favorites in Request");
         }
-        Account savedAccount = Account.saveFavorites(account, Favorite);
-        return new Response<>(HttpStatus.ACCEPTED.value(), HttpStatus.ACCEPTED.getReasonPhrase(), Account.ofResponse(savedAccount));
+
+        Account savedAccount = Account.saveFavorites(account, favorites);
+
+        return new Response<>(
+                HttpStatus.ACCEPTED.value(),
+                HttpStatus.ACCEPTED.getReasonPhrase(),
+                Account.ofResponse(savedAccount)
+        );
     }
 }

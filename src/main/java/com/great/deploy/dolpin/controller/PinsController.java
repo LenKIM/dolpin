@@ -4,7 +4,12 @@ import com.great.deploy.dolpin.account.Account;
 import com.great.deploy.dolpin.account.CurrentUser;
 import com.great.deploy.dolpin.dto.*;
 import com.great.deploy.dolpin.exception.BadRequestException;
+import com.great.deploy.dolpin.exception.NotSupportException;
+import com.great.deploy.dolpin.model.CelebrityGroup;
+import com.great.deploy.dolpin.model.CelebrityMember;
 import com.great.deploy.dolpin.model.Pins;
+import com.great.deploy.dolpin.repository.CelebrityGroupRepository;
+import com.great.deploy.dolpin.repository.CelebrityMemberRepository;
 import com.great.deploy.dolpin.service.PinService;
 import com.great.deploy.dolpin.service.s3.AmazonS3ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,67 +23,115 @@ import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @RestController
+@RequestMapping(value = "/api/pins", produces = "application/json")
 public class PinsController {
+
     @Autowired
     private AmazonS3ClientService amazonS3ClientService;
 
     @Autowired
     private PinService pinService;
 
-    /* 6. 모든 pin의 목록을 넘겨주는 API */
-    @GetMapping("/pins")
-    public Response<List<PinResponse>> getAllPins(@ApiIgnore @CurrentUser Account account) {
-        if (account == null) {
-            throw new BadRequestException("No found user");
-        }
+    @Autowired
+    CelebrityGroupRepository celebrityGroupRepository;
 
-        return new Response<>(HttpStatus.ACCEPTED.value(), HttpStatus.ACCEPTED.getReasonPhrase(), pinService.getAllPins());
+    @Autowired
+    CelebrityMemberRepository celebrityMemberRepository;
+
+    @GetMapping()
+    public Response<List<PinResponse>> getAllPins(@ApiIgnore @CurrentUser Account account) {
+
+        Account.validateAccount(account);
+
+        return new Response<>(
+                HttpStatus.ACCEPTED.value(),
+                HttpStatus.ACCEPTED.getReasonPhrase(),
+                pinService.getAllPins()
+        );
     }
 
-    /* 7. 핀 등록하기 */
     @PostMapping(value = "/pin", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json")
-    public Response<Pins> createPin(@ModelAttribute CreatePinRequest createPinRequest, MultipartFile image, @ApiIgnore @CurrentUser Account account) {
-        if (account == null) {
-            throw new BadRequestException("No found user");
-        }
+    public Response<Pins> createPin(
+            @ModelAttribute CreatePinRequest createPinRequest,
+            MultipartFile image,
+            @ApiIgnore @CurrentUser Account account
+    ) {
+        Account.validateAccount(account);
         String imageUrl = null;
 
         if (image != null) {
             // upload profile to storage
             imageUrl = amazonS3ClientService.uploadFileToS3Bucket(image, true);
-            Pins pin = pinService.createPin(createPinRequest, imageUrl);
+
+            CelebrityMember celebrityMember = celebrityMemberRepository
+                    .findById(createPinRequest.getMemberId())
+                    .orElse(null);
+
+            if(celebrityMember == null){
+                throw new NotSupportException(HttpStatus.NOT_FOUND.value(), "Not Found Member Id");
+            }
+
+            CelebrityGroup celebrityGroup = celebrityGroupRepository
+                    .findById(createPinRequest.getGroupId())
+                    .orElse(null);
+
+            if(celebrityGroup == null){
+                throw new NotSupportException(HttpStatus.NOT_FOUND.value(), "Not Found Group Id");
+            }
+            Pins pin = pinService.createPin(Pins.of(createPinRequest, celebrityMember, celebrityGroup), imageUrl);
+
             System.out.println("IMAGE_URL = " + imageUrl);
-            return new Response<>(HttpStatus.CREATED.value(), HttpStatus.CREATED.getReasonPhrase(), pin);
+
+            return new Response<>(
+                    HttpStatus.CREATED.value(),
+                    HttpStatus.CREATED.getReasonPhrase(),
+                    pin
+            );
         } else {
             throw new BadRequestException("NO RESISTED IMAGE");
         }
     }
 
-    /* 9. Pin detail 정보 보여주는 API */
     @GetMapping("/pin/{pinId}/detail")
-    public Response<PinDetailResponse> getPinDetail(@PathVariable @NotBlank Long pinId, @ApiIgnore @CurrentUser Account account) {
-        if (account == null) {
-            throw new BadRequestException("No found user");
-        }
-        return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), pinService.getPinDetail(pinId));
+    public Response<PinDetailResponse> getPinDetail(
+            @PathVariable @NotBlank Long pinId,
+            @ApiIgnore @CurrentUser Account account
+    ) {
+        Account.validateAccount(account);
+        return new Response<>(
+                HttpStatus.OK.value(),
+                HttpStatus.OK.getReasonPhrase(),
+                pinService.getPinDetail(pinId)
+        );
     }
 
-    /* 11. Pin 수정하기 API */
     @PutMapping("/pin/{pinId}")
-    public Response<Pins> modifyPin(@PathVariable @NotBlank Long pinId, PinRequest pinRequest, @ApiIgnore @CurrentUser Account account) {
-        if (account == null) {
-            throw new BadRequestException("No found user");
-        }
-        return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), pinService.modifyPin(pinId, pinRequest));
+    public Response<Pins> modifyPin(
+            @PathVariable @NotBlank Long pinId,
+            @RequestBody PinRequest pinRequest,
+            @ApiIgnore @CurrentUser Account account) {
+
+        Account.validateAccount(account);
+
+        return new Response<>(
+                HttpStatus.OK.value(),
+                HttpStatus.OK.getReasonPhrase(),
+                pinService.modifyPin(pinId, pinRequest)
+        );
     }
 
-    /* 12. Pin 삭제하기 API */
     @DeleteMapping("/pin/{pinId}")
-    public Response<String> deletePin(@PathVariable @NotBlank Long pinId, @ApiIgnore @CurrentUser Account account) {
-        if (account == null) {
-            throw new BadRequestException("No found user");
-        }
+    public Response<String> deletePin(
+            @PathVariable @NotBlank Long pinId,
+            @ApiIgnore @CurrentUser Account account
+    ) {
+        Account.validateAccount(account);
+
         pinService.deletePin(pinId);
-        return new Response<>(HttpStatus.NO_CONTENT.value(), HttpStatus.NO_CONTENT.getReasonPhrase(), "SUCCESS DELETE");
+        return new Response<>(
+                HttpStatus.NO_CONTENT.value(),
+                HttpStatus.NO_CONTENT.getReasonPhrase(),
+                "SUCCESS DELETE"
+        );
     }
 }

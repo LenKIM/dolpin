@@ -1,7 +1,6 @@
 package com.great.deploy.dolpin.service;
 
 import com.amazonaws.services.kms.model.NotFoundException;
-import com.great.deploy.dolpin.dto.CreatePinRequest;
 import com.great.deploy.dolpin.dto.PinDetailResponse;
 import com.great.deploy.dolpin.dto.PinRequest;
 import com.great.deploy.dolpin.dto.PinResponse;
@@ -34,23 +33,31 @@ public class PinServiceImpl implements PinService {
     }
 
     @Override
-    public Pins createPin(CreatePinRequest createPinRequest, String imageUrl) {
+    public Pins createPin(Pins pins, String imageUrl) {
 
         CelebrityMember celebrityMember = null;
         CelebrityGroup celebrityGroup = null;
 
-        if (StringUtils.isEmpty(createPinRequest.getMemberId())) {
-            celebrityMember = celebrityMemberRepository.findById(createPinRequest.getMemberId())
+        if (StringUtils.isEmpty(pins.getCelebrityGroup().getId())) {
+            celebrityMember = celebrityMemberRepository.findById(pins.getCelebrityMember().getId())
                     .orElseThrow(() -> new ResourceNotFoundException("memberId", "id", "long"));
         }
 
-        if (StringUtils.isEmpty(createPinRequest.getGroupId())) {
-            celebrityGroup = celebrityGroupRepository.findById(createPinRequest.getGroupId())
+        if (StringUtils.isEmpty(pins.getCelebrityGroup().getId())) {
+            celebrityGroup = celebrityGroupRepository.findById(pins.getCelebrityGroup().getId())
                     .orElseThrow(() -> new ResourceNotFoundException("groupId", "id", "long"));
         }
-        return pinsRepository.save(new Pins(createPinRequest.getLatitude(), createPinRequest.getLongitude(),
-                createPinRequest.getTitle(), imageUrl, createPinRequest.getImgProvider(),
-                createPinRequest.getStartDate(), createPinRequest.getEndDate(), celebrityMember, celebrityGroup));
+        return pinsRepository.save(
+                new Pins(
+                        pins.getLatitude(),
+                        pins.getLongitude(),
+                        pins.getTitle(),
+                        imageUrl,
+                        pins.getImgProvider(),
+                        pins.getStartDate(),
+                        pins.getEndDate(),
+                        celebrityMember,
+                        celebrityGroup));
     }
 
     @Override
@@ -58,7 +65,15 @@ public class PinServiceImpl implements PinService {
         List<Pins> allPins = pinsRepository.findAll();
         return allPins.stream()
                 .map(pins ->
-                        new PinResponse(pins.getId(), pins.getTitle(), pins.getLatitude(), pins.getLongitude(), pins.getImgProvider(), pins.getImgUrl(), pins.getStartDate(), pins.getEndDate())
+                        new PinResponse(
+                                pins.getId(),
+                                pins.getTitle(),
+                                pins.getLatitude(),
+                                pins.getLongitude(),
+                                pins.getImgProvider(),
+                                pins.getImgUrl(),
+                                pins.getStartDate(),
+                                pins.getEndDate())
                 ).collect(Collectors.toList());
     }
 
@@ -67,7 +82,12 @@ public class PinServiceImpl implements PinService {
         Pins pin = pinsRepository.findById(pinId)
                 .orElseThrow(() -> new ResourceNotFoundException("pinId", "id", "long"));
 
-        return new PinDetailResponse(pin.getId(), pin.getTitle(), pin.getImgUrl(), pin.getImgProvider(), pin.getStartDate(), pin.getEndDate());
+        return new PinDetailResponse(pin.getId(),
+                pin.getTitle(),
+                pin.getImgUrl(),
+                pin.getImgProvider(),
+                pin.getStartDate(),
+                pin.getEndDate());
     }
 
     @Override

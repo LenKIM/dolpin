@@ -17,14 +17,14 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = InvalidStatusException.class)
-    public ResponseEntity<ErrorInfo> nonAuthExceptionHandler(InvalidStatusException exception){
+    public ResponseEntity<ErrorInfo> notInvalidStatusExceptionHandler(InvalidStatusException exception){
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(new ErrorInfo(exception.errorCode, exception.errorMsg));
     }
 
     @ExceptionHandler(value = NotSupportException.class)
-    public ResponseEntity<ErrorInfo> nonAuthExceptionHandler(NotSupportException exception){
+    public ResponseEntity<ErrorInfo> notSupportExceptionHandler(NotSupportException exception){
         return ResponseEntity
                 .status(4040)
                 .body(new ErrorInfo(exception.errorCode, exception.errorMsg));

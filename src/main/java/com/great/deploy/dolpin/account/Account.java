@@ -7,7 +7,6 @@ import com.great.deploy.dolpin.model.Favorite;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -53,7 +52,7 @@ public class Account {
                 account.getMedal(), account.getDuckLevel(), account.getFavorite());
     }
 
-    public static void validateAccount(@CurrentUser @ApiIgnore Account account) {
+    public static void validateAccount(Account account) {
         if (account == null) {
             throw new BadRequestException("No found user");
         }
@@ -61,7 +60,6 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     private Integer id;
 
     @NotNull

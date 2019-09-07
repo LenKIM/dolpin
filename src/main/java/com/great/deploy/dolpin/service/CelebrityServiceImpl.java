@@ -5,6 +5,7 @@ import com.great.deploy.dolpin.model.CelebrityGroup;
 import com.great.deploy.dolpin.model.CelebrityMember;
 import com.great.deploy.dolpin.repository.CelebrityGroupRepository;
 import com.great.deploy.dolpin.repository.CelebrityMemberRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,15 +14,10 @@ import java.util.List;
 @Service
 public class CelebrityServiceImpl implements CelebrityService {
 
+    @Autowired
     private CelebrityGroupRepository celebrityGroupRepository;
+    @Autowired
     private CelebrityMemberRepository celebrityMemberRepository;
-
-    public CelebrityServiceImpl(
-            CelebrityGroupRepository celebrityGroupRepository,
-            CelebrityMemberRepository celebrityMemberRepository) {
-        this.celebrityGroupRepository = celebrityGroupRepository;
-        this.celebrityMemberRepository = celebrityMemberRepository;
-    }
 
     @Override
     public List<CelebrityResponse> getCelebrities() {
