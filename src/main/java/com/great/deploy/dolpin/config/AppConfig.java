@@ -45,21 +45,24 @@ public class AppConfig {
             @Override
             public void run(ApplicationArguments args) throws Exception {
 
-                Set<AccountRole> adminRoles = new HashSet<>();
+                final Set<AccountRole> adminRoles = new HashSet<>();
                 adminRoles.add(AccountRole.ADMIN);
                 adminRoles.add(AccountRole.USER);
                 Account admin = Account.builder()
+                        .name("admin")
+                        .imageUrl("https://m.post.naver.com/viewer/postView.nhn?volumeNo=14295665&memberNo=33408012#")
+                        .nickname("여신")
+                        .activeRegion("Seoul")
+                        .duckLevel("아직 초보")
+                        .medal("A+")
                         .email(appProperties.getAdminUsername())
                         .password(appProperties.getAdminPassword())
                         .roles(adminRoles)
                         .build();
                 accountService.saveAccount(admin);
 
-                Set<AccountRole> roles = new HashSet<>();
-                roles.add(AccountRole.ADMIN);
-                roles.add(AccountRole.USER);
-                Set<AccountRole> userRoles = new HashSet<>();
-                userRoles.add(AccountRole.USER);
+                final Set<AccountRole> userRoles = new HashSet<>();
+                userRoles.add(AccountRole.ADMIN);
                 Account user = Account.builder()
                         .email(appProperties.getUserUsername())
                         .password(appProperties.getUserPassword())

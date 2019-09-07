@@ -25,14 +25,19 @@ public class AccountService implements UserDetailsService {
         return this.accountRepository.save(account);
     }
 
+//    public Account updateAccount(String email) {
+//        Optional<Account> currentUser = this.accountRepository.findByEmail(email);
+//        currentUser.map(
+//                account -> {
+//                    new Account(account.getId(),)
+//                }
+//        )
+//        return new Account();
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Account account = accountRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
         return new AccountAdapter(account);
     }
-
-
-
-
 }

@@ -1,5 +1,6 @@
 package com.great.deploy.dolpin.account;
 
+import com.great.deploy.dolpin.dto.AccountResponse;
 import com.great.deploy.dolpin.model.Favorite;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -18,6 +19,42 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Account {
+
+    public static Account of(Integer id, Account old) {
+        return new Account(id, old.getEmail(), old.getPassword(),
+                old.getRoles(), old.getName(), old.getImageUrl(),
+                old.getNickname(), old.getActiveRegion(), old.getMedal(),
+                old.getDuckLevel(), old.getFavorite(), old.getCreatedAt(),
+                LocalDateTime.now());
+    }
+
+    public static Account saveFavorites(Account account, Set<Favorite> favorite) {
+        return new Account(account.getId(), account.getEmail(), account.getPassword(),
+                account.getRoles(), account.getName(), account.getImageUrl(),
+                account.getNickname(), account.getActiveRegion(), account.getMedal(),
+                account.getDuckLevel(), favorite, account.getCreatedAt(), LocalDateTime.now());
+
+    }
+
+    public static AccountResponse ofResponse(Account account) {
+        return new AccountResponse(account.getId(), account.getEmail(), account.getName(),
+                account.getImageUrl(), account.getNickname(), account.getActiveRegion(),
+                account.getMedal(), account.getDuckLevel(), account.getFavorite());
+    }
+
+    public Account(String email, String password, Set<AccountRole> roles, String name, String imageUrl, String nickname, String activeRegion, String medal, String duckLevel, Set<Favorite> favorite) {
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.nickname = nickname;
+        this.activeRegion = activeRegion;
+        this.medal = medal;
+        this.duckLevel = duckLevel;
+        this.favorite = favorite;
+    }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,8 +82,9 @@ public class Account {
 
     private String duckLevel;
 
-    @ElementCollection
-    @CollectionTable(name = "account_favorite", joinColumns = @JoinColumn(name = "favorite_id"))
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "account_favorite", joinColumns = @JoinColumn(name = "account_id"))
+
     private Set<Favorite> favorite = new HashSet<>();
 
     @CreationTimestamp
@@ -54,6 +92,5 @@ public class Account {
 
     @UpdateTimestamp
     private LocalDateTime updateAt;
-
 
 }

@@ -12,7 +12,7 @@ public class AccountAdapter extends User {
 
     private Account account;
 
-    public AccountAdapter(Account account) {
+    AccountAdapter(Account account) {
         super(account.getEmail(), account.getPassword(), authorities(account.getRoles()));
         this.account = account;
     }
