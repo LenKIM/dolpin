@@ -1,6 +1,6 @@
 package com.great.deploy.dolpin.config;
 
-import com.great.deploy.dolpin.account.AccountService;
+import com.great.deploy.dolpin.service.AccountService;
 import com.great.deploy.dolpin.common.AppProperties;
 import com.great.deploy.dolpin.common.BaseControllerTest;
 import com.great.deploy.dolpin.common.TestDescription;

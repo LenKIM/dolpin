@@ -1,6 +1,6 @@
 package com.great.deploy.dolpin.config;
 
-import com.great.deploy.dolpin.account.AccountService;
+import com.great.deploy.dolpin.service.AccountService;
 import com.great.deploy.dolpin.common.AppProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -18,19 +18,19 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
 
     @Autowired
-    TokenStore tokenStore;
+    private TokenStore tokenStore;
 
     @Autowired
-    AppProperties appProperties;
+    private AppProperties appProperties;
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {

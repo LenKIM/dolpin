@@ -2,7 +2,7 @@ package com.great.deploy.dolpin.dto;
 
 import java.time.LocalDate;
 
-public class PinInfo {
+public class PinRequest {
   private String title;
   private String imgUrl;
   private String imgProvider;

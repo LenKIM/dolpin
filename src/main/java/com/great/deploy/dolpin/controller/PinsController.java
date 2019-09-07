@@ -1,9 +1,8 @@
 package com.great.deploy.dolpin.controller;
 
-import com.great.deploy.dolpin.dto.CreatePinRequest;
-import com.great.deploy.dolpin.dto.PinDetailResponse;
-import com.great.deploy.dolpin.dto.PinResponse;
-import com.great.deploy.dolpin.dto.Response;
+import com.great.deploy.dolpin.account.Account;
+import com.great.deploy.dolpin.account.CurrentUser;
+import com.great.deploy.dolpin.dto.*;
 import com.great.deploy.dolpin.exception.BadRequestException;
 import com.great.deploy.dolpin.model.Pins;
 import com.great.deploy.dolpin.service.PinService;
@@ -27,11 +26,13 @@ public class PinsController {
 
   /* 6. 모든 pin의 목록을 넘겨주는 API */
   @GetMapping("/pins")
-  public Response<List<PinResponse>> getAllPins() {
-    return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), pinService.getAllPins());
+  public Response<List<PinResponse>> getAllPins(@CurrentUser Account account) {
+    if(account.getId() == null ) throw new BadRequestException("Something wrong on Account");
+
+    return new Response<>(HttpStatus.ACCEPTED.value(), HttpStatus.ACCEPTED.getReasonPhrase(), pinService.getAllPins());
   }
 
-//  /* 7. 핀 등록하기 */
+  /* 7. 핀 등록하기 */
   @PostMapping(value = "/pin", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json")
   public Response<Pins> createPin(@ModelAttribute CreatePinRequest createPinRequest, MultipartFile image){
     String imageUrl = null;
@@ -39,30 +40,33 @@ public class PinsController {
     if ( image != null) {
       // upload profile to storage
        imageUrl = amazonS3ClientService.uploadFileToS3Bucket(image, true);
-       pinService.createPin(createPinRequest, imageUrl);
-      System.out.println("등록된 이미지 url은 " + imageUrl);
-      return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), pinService.createPin(createPinRequest, imageUrl));
+      Pins pin = pinService.createPin(createPinRequest, imageUrl);
+      System.out.println("IMAGE_URL = " + imageUrl);
+      return new Response<>(HttpStatus.CREATED.value(), HttpStatus.CREATED.getReasonPhrase(), pin);
     } else {
-      throw new BadRequestException("등록된 이미지가 없음");
+      throw new BadRequestException("NO RESISTED IMAGE");
     }
   }
 
   /* 9. Pin detail 정보 보여주는 API */
   @GetMapping("/pin/{pinId}/detail")
-  public Response<PinDetailResponse> getPinDetail(@PathVariable @NotBlank Long pinId){
+  public Response<PinDetailResponse> getPinDetail(@PathVariable @NotBlank Long pinId, @CurrentUser Account account){
+    if(account.getId() == null ) throw new BadRequestException("Something wrong on Account");
     return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), pinService.getPinDetail(pinId));
   }
 
-//  /* 11. Pin 수정하기 API */
-//  @PutMapping("/pin/{pinId}")
-//  public Response<PinInfo> modifyPin(@PathVariable @NotBlank Long pinId, PinInfo pinInfo) {
-//    return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), pinService.modifyPin(pinId, pinInfo));
-//  }
+  /* 11. Pin 수정하기 API */
+  @PutMapping("/pin/{pinId}")
+  public Response<Pins> modifyPin(@PathVariable @NotBlank Long pinId, PinRequest pinRequest, @CurrentUser Account account) {
+    if(account.getId() == null ) throw new BadRequestException("Something wrong on Account");
+    return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), pinService.modifyPin(pinId, pinRequest));
+  }
 
   /* 12. Pin 삭제하기 API */
   @DeleteMapping("/pin/{pinId}")
-  public Response<String> deletePin(@PathVariable @NotBlank Long pinId) {
+  public Response<String> deletePin(@PathVariable @NotBlank Long pinId, @CurrentUser Account account) {
+    if(account.getId() == null ) throw new BadRequestException("Something wrong on Account");
     pinService.deletePin(pinId);
-    return new Response<>(HttpStatus.NO_CONTENT.value(), HttpStatus.NO_CONTENT.getReasonPhrase(), "true");
+    return new Response<>(HttpStatus.NO_CONTENT.value(), HttpStatus.NO_CONTENT.getReasonPhrase(), "SUCCESS DELETE");
   }
 }

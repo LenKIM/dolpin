@@ -1,5 +1,7 @@
-package com.great.deploy.dolpin.account;
+package com.great.deploy.dolpin.service;
 
+import com.great.deploy.dolpin.account.Account;
+import com.great.deploy.dolpin.account.AccountAdapter;
 import com.great.deploy.dolpin.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,15 +26,6 @@ public class AccountService implements UserDetailsService {
         account.setPassword(this.passwordEncoder.encode(account.getPassword()));
         return this.accountRepository.save(account);
     }
-
-//    public Account updateAccount(String email) {
-//        Optional<Account> currentUser = this.accountRepository.findByEmail(email);
-//        currentUser.map(
-//                account -> {
-//                    new Account(account.getId(),)
-//                }
-//        )
-//        return new Account();
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

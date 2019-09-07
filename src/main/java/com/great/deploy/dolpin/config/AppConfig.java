@@ -2,7 +2,7 @@ package com.great.deploy.dolpin.config;
 
 import com.great.deploy.dolpin.account.Account;
 import com.great.deploy.dolpin.account.AccountRole;
-import com.great.deploy.dolpin.account.AccountService;
+import com.great.deploy.dolpin.service.AccountService;
 import com.great.deploy.dolpin.common.AppProperties;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

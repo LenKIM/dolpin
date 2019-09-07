@@ -18,20 +18,28 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-rest'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    
-    testCompile group: 'org.springframework.security', name: 'spring-security-test', version: ${spring-security.version}
-    compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.5'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     compile group: 'org.springframework.security.oauth.boot', name: 'spring-security-oauth2-autoconfigure', version: '2.1.3.RELEASE'
-//    testCompile group: 'com.h2database', name: 'h2', version: '1.4.197'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    implementation 'com.amazonaws:aws-java-sdk-bom:1.11.228'
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.592'
-    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.15'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     compileOnly('org.projectlombok:lombok')
 
+    compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.5'
+
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.15'
+
+//    test
+    testCompile group: 'com.h2database', name: 'h2', version: '1.4.197'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.1.5.RELEASE'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+//   aws s3
+    implementation 'com.amazonaws:aws-java-sdk-bom:1.11.228'
+    compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.592'
+
+//   swagger
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
 }

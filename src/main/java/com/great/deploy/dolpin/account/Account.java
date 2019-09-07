@@ -33,7 +33,6 @@ public class Account {
                 account.getRoles(), account.getName(), account.getImageUrl(),
                 account.getNickname(), account.getActiveRegion(), account.getMedal(),
                 account.getDuckLevel(), favorite, account.getCreatedAt(), LocalDateTime.now());
-
     }
 
     public static AccountResponse ofResponse(Account account) {
@@ -41,20 +40,6 @@ public class Account {
                 account.getImageUrl(), account.getNickname(), account.getActiveRegion(),
                 account.getMedal(), account.getDuckLevel(), account.getFavorite());
     }
-
-    public Account(String email, String password, Set<AccountRole> roles, String name, String imageUrl, String nickname, String activeRegion, String medal, String duckLevel, Set<Favorite> favorite) {
-        this.email = email;
-        this.password = password;
-        this.roles = roles;
-        this.name = name;
-        this.imageUrl = imageUrl;
-        this.nickname = nickname;
-        this.activeRegion = activeRegion;
-        this.medal = medal;
-        this.duckLevel = duckLevel;
-        this.favorite = favorite;
-    }
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

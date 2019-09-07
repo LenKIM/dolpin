@@ -1,6 +1,6 @@
 package com.great.deploy.dolpin.config;
 
-import com.great.deploy.dolpin.account.AccountService;
+import com.great.deploy.dolpin.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

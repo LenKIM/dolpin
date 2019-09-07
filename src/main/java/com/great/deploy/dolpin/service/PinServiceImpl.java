@@ -3,7 +3,7 @@ package com.great.deploy.dolpin.service;
 import com.amazonaws.services.kms.model.NotFoundException;
 import com.great.deploy.dolpin.dto.CreatePinRequest;
 import com.great.deploy.dolpin.dto.PinDetailResponse;
-import com.great.deploy.dolpin.dto.PinInfo;
+import com.great.deploy.dolpin.dto.PinRequest;
 import com.great.deploy.dolpin.dto.PinResponse;
 import com.great.deploy.dolpin.exception.ResourceNotFoundException;
 import com.great.deploy.dolpin.model.CelebrityGroup;
@@ -71,28 +71,19 @@ public class PinServiceImpl implements PinService {
     }
 
     @Override
-    public PinResponse updatePin(Long pinId, PinInfo pinInfo) {
+    public Pins modifyPin(Long pinId, PinRequest pinRequest) {
         return pinsRepository.findById(pinId)
                 .map(pin -> {
-                            pin.setTitle(pinInfo.getTitle());
-                            pin.setImgUrl(pinInfo.getImgUrl());
-                            pin.setImgProvider(pinInfo.getImgProvider());
-                            pin.setLatitude(pinInfo.getLatitude());
-                            pin.setLongitude(pinInfo.getLongitude());
-                            pin.setStartDate(pinInfo.getStartDate());
-                            pin.setEndDate(pinInfo.getEndDate());
+                            pin.setTitle(pinRequest.getTitle());
+                            pin.setImgUrl(pinRequest.getImgUrl());
+                            pin.setImgProvider(pinRequest.getImgProvider());
+                            pin.setLatitude(pinRequest.getLatitude());
+                            pin.setLongitude(pinRequest.getLongitude());
+                            pin.setStartDate(pinRequest.getStartDate());
+                            pin.setEndDate(pinRequest.getEndDate());
                             return pinsRepository.save(pin);
                         }
-                )
-                .map(pin -> new PinResponse(pin.getId(),
-                        pin.getTitle(),
-                        pin.getLatitude(),
-                        pin.getLongitude(),
-                        pin.getImgProvider(),
-                        pin.getImgUrl(),
-                        pin.getStartDate(),
-                        pin.getEndDate()))
-                .orElseThrow(() -> new NotFoundException("Not Fount pin ID " + pinId));
+                ).orElseThrow(() -> new NotFoundException("Not Fount pin ID " + pinId));
     }
 
 
