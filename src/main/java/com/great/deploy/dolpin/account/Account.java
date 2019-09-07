@@ -1,12 +1,16 @@
 package com.great.deploy.dolpin.account;
 
+import com.great.deploy.dolpin.dto.AccountRequest;
 import com.great.deploy.dolpin.dto.AccountResponse;
+import com.great.deploy.dolpin.exception.BadRequestException;
 import com.great.deploy.dolpin.model.Favorite;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,11 +24,19 @@ import java.util.Set;
 @AllArgsConstructor
 public class Account {
 
-    public static Account of(Integer id, Account old) {
-        return new Account(id, old.getEmail(), old.getPassword(),
-                old.getRoles(), old.getName(), old.getImageUrl(),
-                old.getNickname(), old.getActiveRegion(), old.getMedal(),
-                old.getDuckLevel(), old.getFavorite(), old.getCreatedAt(),
+    public static Account of(Account oldAccount, AccountRequest newAccount) {
+        return new Account(oldAccount.getId(),
+                oldAccount.getEmail(),
+                oldAccount.getPassword(),
+                oldAccount.getRoles(),
+                oldAccount.getName(),
+                oldAccount.getImageUrl(),
+                newAccount.getNickname(),
+                newAccount.getActiveRegion(),
+                newAccount.getMedal(),
+                newAccount.getDuckLevel(),
+                oldAccount.getFavorite(),
+                oldAccount.getCreatedAt(),
                 LocalDateTime.now());
     }
 
@@ -41,20 +53,27 @@ public class Account {
                 account.getMedal(), account.getDuckLevel(), account.getFavorite());
     }
 
+    public static void validateAccount(@CurrentUser @ApiIgnore Account account) {
+        if (account == null) {
+            throw new BadRequestException("No found user");
+        }
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
     private Integer id;
+
+    @NotNull
+    private String password;
 
     @Column(unique = true)
     private String email;
-
-    private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     private Set<AccountRole> roles;
 
-    @Column
     private String name;
 
     private String imageUrl;
@@ -69,7 +88,6 @@ public class Account {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "account_favorite", joinColumns = @JoinColumn(name = "account_id"))
-
     private Set<Favorite> favorite = new HashSet<>();
 
     @CreationTimestamp
@@ -77,5 +95,4 @@ public class Account {
 
     @UpdateTimestamp
     private LocalDateTime updateAt;
-
 }

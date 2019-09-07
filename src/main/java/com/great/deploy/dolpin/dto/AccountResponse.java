@@ -8,7 +8,11 @@ import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AccountResponse {
 
     private Integer id;
