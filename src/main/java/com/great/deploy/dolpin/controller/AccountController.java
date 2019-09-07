@@ -4,6 +4,7 @@ import com.great.deploy.dolpin.account.Account;
 import com.great.deploy.dolpin.account.CurrentUser;
 import com.great.deploy.dolpin.dto.AccountResponse;
 import com.great.deploy.dolpin.dto.Response;
+import com.great.deploy.dolpin.exception.BadRequestException;
 import com.great.deploy.dolpin.service.AccountService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,16 +24,18 @@ public class AccountController {
 
     @ApiOperation(value = "현재 유저 정보 가져오기")
     @GetMapping("/user")
-    public Response<AccountResponse> getCurrentUserInfo(@ApiIgnore(value = "NEED ACCESS_TOKEN BEARER HEADER")
-                                                            @RequestHeader(value = "OAuth Token") @CurrentUser Account account) {
+    public Response<AccountResponse> getCurrentUserInfo(@ApiIgnore @CurrentUser Account account) {
+        if(account == null){
+            throw new BadRequestException("No found user");
+        }
         return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), Account.ofResponse(account));
     }
 
     @ApiOperation(value = "현재 유저 정보 업데이트")
     @PutMapping("/user")
-    public Response<AccountResponse> updateCurrentUserInfo(Account newAccount, @CurrentUser Account account) {
-        if (account.getId() == null) {
-            // 예외처리.
+    public Response<AccountResponse> updateCurrentUserInfo(Account newAccount, @ApiIgnore @CurrentUser Account account) {
+        if(account == null){
+            throw new BadRequestException("No found user");
         }
 
         return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), Account.ofResponse(Account.of(account.getId(), newAccount)));

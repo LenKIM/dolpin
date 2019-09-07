@@ -28,7 +28,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                             "/swagger**",
                             "/favicon**",
                             "/csrf",
-                            "/v2/**")
+                            "/v2/**",
+                            "/definitions/**")
                         .permitAll()
                     .anyRequest()
                         .authenticated()
