@@ -3,7 +3,7 @@
 //
 //import static org.assertj.core.api.Assertions.assertThat;
 //
-//import com.great.deploy.dolpin.model.Pins;
+//import com.great.deploy.dolpin.domain.Pins;
 //import java.util.ArrayList;
 //import java.util.HashSet;
 //import java.util.List;

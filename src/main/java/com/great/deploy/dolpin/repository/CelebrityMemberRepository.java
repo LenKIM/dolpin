@@ -1,6 +1,6 @@
 package com.great.deploy.dolpin.repository;
 
-import com.great.deploy.dolpin.model.CelebrityMember;
+import com.great.deploy.dolpin.domain.CelebrityMember;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 

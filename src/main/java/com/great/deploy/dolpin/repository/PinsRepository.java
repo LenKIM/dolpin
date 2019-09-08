@@ -1,6 +1,6 @@
 package com.great.deploy.dolpin.repository;
 
-import com.great.deploy.dolpin.model.Pins;
+import com.great.deploy.dolpin.domain.Pins;
 import java.util.List;
 import java.util.Set;
 import org.springframework.data.jpa.repository.JpaRepository;

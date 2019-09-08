@@ -1,6 +1,6 @@
 package com.great.deploy.dolpin.repository;
 
-import com.great.deploy.dolpin.model.History;
+import com.great.deploy.dolpin.domain.History;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

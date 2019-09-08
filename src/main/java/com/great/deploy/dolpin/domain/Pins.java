@@ -1,4 +1,4 @@
-package com.great.deploy.dolpin.model;
+package com.great.deploy.dolpin.domain;
 
 import com.great.deploy.dolpin.dto.CreatePinRequest;
 import lombok.*;

@@ -3,7 +3,7 @@ package com.great.deploy.dolpin.account;
 import com.great.deploy.dolpin.dto.AccountRequest;
 import com.great.deploy.dolpin.dto.AccountResponse;
 import com.great.deploy.dolpin.exception.BadRequestException;
-import com.great.deploy.dolpin.model.Favorite;
+import com.great.deploy.dolpin.domain.Favorite;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;

@@ -6,7 +6,7 @@ import com.great.deploy.dolpin.dto.AccountResponse;
 import com.great.deploy.dolpin.dto.FavoriteResponse;
 import com.great.deploy.dolpin.dto.Response;
 import com.great.deploy.dolpin.exception.BadRequestException;
-import com.great.deploy.dolpin.model.Favorite;
+import com.great.deploy.dolpin.domain.Favorite;
 import com.great.deploy.dolpin.service.AccountService;
 import com.great.deploy.dolpin.swagger.FavoriteResponseModel;
 import io.swagger.annotations.Api;

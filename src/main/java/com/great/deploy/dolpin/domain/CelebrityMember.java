@@ -1,5 +1,8 @@
-package com.great.deploy.dolpin.model;
+package com.great.deploy.dolpin.domain;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.NoArgsConstructor;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -9,12 +12,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "celebrity_group")
-public class CelebrityGroup {
+@Table(name = "celebrity_member")
+@NoArgsConstructor
+public class CelebrityMember {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    Long id;
 
     private String name;
     private LocalDate birthday;
@@ -26,10 +30,12 @@ public class CelebrityGroup {
     @UpdateTimestamp
     private LocalDateTime updateAt;
 
-    public CelebrityGroup() {
-    }
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "group_id")
+    private CelebrityGroup celebrityGroup;
 
-    public CelebrityGroup(String name, LocalDate birthday, String picUrl) {
+    public CelebrityMember(String name, LocalDate birthday, String picUrl) {
         this.name = name;
         this.birthday = birthday;
         this.picUrl = picUrl;
@@ -49,5 +55,9 @@ public class CelebrityGroup {
 
     public String getPicUrl() {
         return picUrl;
+    }
+
+    public CelebrityGroup getCelebrityGroup() {
+        return celebrityGroup;
     }
 }

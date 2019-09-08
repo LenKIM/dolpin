@@ -3,7 +3,7 @@ package com.great.deploy.dolpin.service;
 import com.great.deploy.dolpin.dto.PinDetailResponse;
 import com.great.deploy.dolpin.dto.PinRequest;
 import com.great.deploy.dolpin.dto.PinResponse;
-import com.great.deploy.dolpin.model.Pins;
+import com.great.deploy.dolpin.domain.Pins;
 
 import java.util.List;
 

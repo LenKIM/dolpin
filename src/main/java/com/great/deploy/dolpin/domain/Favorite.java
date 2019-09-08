@@ -1,4 +1,4 @@
-package com.great.deploy.dolpin.model;
+package com.great.deploy.dolpin.domain;
 
 
 import lombok.AllArgsConstructor;

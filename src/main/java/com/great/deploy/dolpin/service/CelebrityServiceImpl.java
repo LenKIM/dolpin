@@ -1,8 +1,8 @@
 package com.great.deploy.dolpin.service;
 
 import com.great.deploy.dolpin.dto.CelebrityResponse;
-import com.great.deploy.dolpin.model.CelebrityGroup;
-import com.great.deploy.dolpin.model.CelebrityMember;
+import com.great.deploy.dolpin.domain.CelebrityGroup;
+import com.great.deploy.dolpin.domain.CelebrityMember;
 import com.great.deploy.dolpin.repository.CelebrityGroupRepository;
 import com.great.deploy.dolpin.repository.CelebrityMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,6 @@
-package com.great.deploy.dolpin.model;
+package com.great.deploy.dolpin.domain;
 
+import com.great.deploy.dolpin.model.Behavior;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
