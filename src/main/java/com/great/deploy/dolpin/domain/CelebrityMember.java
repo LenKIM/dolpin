@@ -4,9 +4,6 @@ package com.great.deploy.dolpin.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.NoArgsConstructor;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,20 +17,19 @@ public class CelebrityMember {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    private String name;
     private LocalDate birthday;
+    private String name;
     private String picUrl;
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updateAt;
 
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "group_id")
     private CelebrityGroup celebrityGroup;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updateAt;
+
 
     public CelebrityMember(String name, LocalDate birthday, String picUrl) {
         this.name = name;

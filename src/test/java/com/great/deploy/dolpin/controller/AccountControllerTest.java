@@ -4,15 +4,10 @@ import com.great.deploy.dolpin.account.Account;
 import com.great.deploy.dolpin.account.AccountRole;
 import com.great.deploy.dolpin.common.AppProperties;
 import com.great.deploy.dolpin.common.BaseControllerTest;
-import com.great.deploy.dolpin.common.TestDescription;
 import com.great.deploy.dolpin.repository.AccountRepository;
-import com.great.deploy.dolpin.repository.CelebrityGroupRepository;
-import com.great.deploy.dolpin.repository.CelebrityMemberRepository;
 import com.great.deploy.dolpin.service.AccountService;
 import org.junit.Before;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.oauth2.common.util.Jackson2JsonParser;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -21,19 +16,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class CelebrityControllerTest extends BaseControllerTest {
+public class AccountControllerTest extends BaseControllerTest {
+
 
     @Autowired
-    CelebrityMemberRepository celebrityMemberRepository;
-
-    @Autowired
-    CelebrityGroupRepository celebrityGroupRepository;
+    AppProperties appProperties;
 
     @Autowired
     AccountService accountService;
@@ -41,8 +30,10 @@ public class CelebrityControllerTest extends BaseControllerTest {
     @Autowired
     AccountRepository accountRepository;
 
-    @Autowired
-    AppProperties appProperties;
+    @Before
+    public void setUp(){
+        this.accountRepository.deleteAll();
+    }
 
     private Account createAccount() {
         Set<AccountRole> accountRoles = Stream.of(AccountRole.ADMIN, AccountRole.ADMIN)
@@ -76,26 +67,5 @@ public class CelebrityControllerTest extends BaseControllerTest {
         String responseBody = perform.andReturn().getResponse().getContentAsString();
         Jackson2JsonParser parser = new Jackson2JsonParser();
         return parser.parseMap(responseBody).get("access_token").toString();
-    }
-
-    @Before
-    public void setUp(){
-        this.accountRepository.deleteAll();
-    }
-
-    @Test
-    @TestDescription("연예인 개인 정보 가져오기")
-    public void getCelebrityMember() throws Exception {
-
-        this.mockMvc.perform(get("/api/celebrities")
-                .header(HttpHeaders.AUTHORIZATION, getBearerToken(false))
-        )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("code").value("200"))
-                .andExpect(jsonPath("msg").value("ok"))
-                .andExpect(jsonPath("data[0].id").exists())
-                .andExpect(jsonPath("data[0].name").exists())
-                .andExpect(jsonPath("data[0].birthday").exists());
     }
 }

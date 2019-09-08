@@ -16,8 +16,8 @@ public class CelebrityGroup {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
     private LocalDate birthday;
+    private String name;
     private String picUrl;
 
     @CreationTimestamp
