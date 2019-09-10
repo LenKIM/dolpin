@@ -4,19 +4,25 @@ import com.great.deploy.dolpin.account.Account;
 import com.great.deploy.dolpin.account.AccountRole;
 import com.great.deploy.dolpin.common.AppProperties;
 import com.great.deploy.dolpin.common.BaseControllerTest;
+import com.great.deploy.dolpin.common.TestDescription;
+import com.great.deploy.dolpin.dto.AccountRequest;
 import com.great.deploy.dolpin.repository.AccountRepository;
 import com.great.deploy.dolpin.service.AccountService;
 import org.junit.Before;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.common.util.Jackson2JsonParser;
-import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class AccountControllerTest extends BaseControllerTest {
 
@@ -35,37 +41,81 @@ public class AccountControllerTest extends BaseControllerTest {
         this.accountRepository.deleteAll();
     }
 
-    private Account createAccount() {
-        Set<AccountRole> accountRoles = Stream.of(AccountRole.ADMIN, AccountRole.ADMIN)
-                .collect(Collectors.toSet());
-        Account len = Account.builder()
-                .email(appProperties.getUserUsername())
-                .password(appProperties.getUserPassword())
-                .roles(accountRoles)
+    @Test
+    @TestDescription("계정 정보를 조회하는 테스트")
+    public void existedAccountTest() throws Exception {
+        this.mockMvc.perform(get("/api/user")
+                .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(false, () -> {
+                    Set<AccountRole> accountRoles = Stream.of(AccountRole.ADMIN, AccountRole.USER)
+                            .collect(Collectors.toSet());
+
+                    Account lenn = Account.builder()
+                            .email("joenggyu0@gmail.com")
+                            .password("password")
+                            .medal("넌최고의팬텀이야")
+                            .duckLevel("달인덕")
+                            .activeRegion("서울")
+                            .nickname("BTS_LOVE")
+                            .imageUrl("Https://aaaa.com")
+                            .name("김정규")
+                            .roles(accountRoles)
+                            .build();
+
+                    return this.accountService.saveAccount(lenn);
+                }))
+        )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("code").value("200"))
+                .andExpect(jsonPath("msg").value("OK"))
+                .andExpect(jsonPath("data.id").exists())
+                .andExpect(jsonPath("data.name").value("김정규"))
+                .andExpect(jsonPath("data.email").value("joenggyu0@gmail.com"));
+    }
+
+    @Test
+    @TestDescription("계정 정보를 수정하는 테스트")
+    public void updateAccountTest() throws Exception {
+
+        AccountRequest updatedAccount = AccountRequest.builder()
+                .activeRegion("경기도")
+                .duckLevel("덕덕달")
+                .nickname("BTS_LOVE_S2")
+                .medal("쿄호호오오")
                 .build();
-        return this.accountService.saveAccount(len);
-    }
 
+        this.mockMvc.perform(put("/api/user")
+                .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(false, () -> {
 
-    private String getBearerToken(boolean needToCreateAccount) throws Exception {
-        return "Bearer " + getAccessToken(needToCreateAccount);
-    }
+                    Set<AccountRole> accountRoles2 = Stream.of(AccountRole.ADMIN, AccountRole.USER)
+                            .collect(Collectors.toSet());
 
-    private String getAccessToken ( boolean needToCreateAccount) throws Exception {
+                    Account len = Account.builder()
+                            .email("joenggyu0@gmail.com")
+                            .password("password")
+                            .medal("넌최고의팬텀이야")
+                            .duckLevel("달인덕")
+                            .activeRegion("서울")
+                            .nickname("BTS_LOVE")
+                            .imageUrl("Https://aaaa.com")
+                            .name("김정규")
+                            .roles(accountRoles2)
+                            .build();
 
-        if (needToCreateAccount) {
-            createAccount();
-        }
-//        this.accountService.saveAccount(len);
-
-        ResultActions perform = this.mockMvc.perform(post("/oauth/token")
-                .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
-                .param("username", appProperties.getUserUsername())
-                .param("password", appProperties.getUserPassword())
-                .param("grant_type", "password"));
-
-        String responseBody = perform.andReturn().getResponse().getContentAsString();
-        Jackson2JsonParser parser = new Jackson2JsonParser();
-        return parser.parseMap(responseBody).get("access_token").toString();
+                    return this.accountService.saveAccount(len);
+                }))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(this.objectMapper.writeValueAsString(updatedAccount)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("code").value("200"))
+                .andExpect(jsonPath("msg").value("OK"))
+                .andExpect(jsonPath("data.id").exists())
+                .andExpect(jsonPath("data.name").value("김정규"))
+                .andExpect(jsonPath("data.email").value("joenggyu0@gmail.com"))
+                .andExpect(jsonPath("data.active_region").value("경기도"))
+                .andExpect(jsonPath("data.duck_level").value("덕덕달"))
+                .andExpect(jsonPath("data.nickname").value("BTS_LOVE_S2"))
+        ;
     }
 }

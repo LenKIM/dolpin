@@ -25,8 +25,8 @@ public class Account {
 
     public static Account of(Account oldAccount, AccountRequest newAccount) {
         return new Account(oldAccount.getId(),
-                oldAccount.getEmail(),
                 oldAccount.getPassword(),
+                oldAccount.getEmail(),
                 oldAccount.getRoles(),
                 oldAccount.getName(),
                 oldAccount.getImageUrl(),

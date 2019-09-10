@@ -1,7 +1,10 @@
 package com.great.deploy.dolpin.dto;
 
+import lombok.*;
+
 import java.time.LocalDate;
 
+@Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
 public class CreatePinRequest {
   private Long memberId;
   private Long groupId;
