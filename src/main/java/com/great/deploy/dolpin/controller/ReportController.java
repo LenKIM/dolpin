@@ -37,7 +37,7 @@ public class ReportController  {
         ProofResponse proofResponse = reportService.proof(new ProofRequest(pinId));
 
         if(!proofResponse.isResult()){
-            throw new ResourceNotFoundException("pins", "id", "id");
+            throw new ResourceNotFoundException("Couldn't found pinId");
         }
         return new Response<>(
                 HttpStatus.OK.value(),

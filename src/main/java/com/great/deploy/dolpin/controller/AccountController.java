@@ -24,7 +24,6 @@ public class AccountController {
     @Autowired
     AccountService accountService;
 
-
     @ApiOperation(value = "Get Current User Info")
     @GetMapping("/user")
     public Response<AccountResponse> getCurrentUserInfo(@ApiIgnore @CurrentUser Account account) {

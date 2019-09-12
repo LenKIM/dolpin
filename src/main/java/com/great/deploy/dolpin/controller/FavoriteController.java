@@ -40,7 +40,7 @@ public class FavoriteController {
     public Response<AccountResponse> saveFavorites(@RequestBody Set<Favorite> favorites,
                                                    @ApiIgnore @CurrentUser Account account) {
         validateAccount(account);
-        if(favorites.size() == 0) {
+        if (favorites.size() == 0) {
             throw new BadRequestException("No favorites in Request");
         }
 
