@@ -1,5 +1,6 @@
 package com.great.deploy.dolpin.domain;
 
+import com.great.deploy.dolpin.common.AuditEntity;
 import com.great.deploy.dolpin.dto.CreatePinRequest;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -12,12 +13,12 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "id", callSuper = false)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "pins")
-public class Pins {
+public class Pins extends AuditEntity {
 
     public static Pins of(CreatePinRequest pinRequest, CelebrityMember celebrityMember, CelebrityGroup celebrityGroup) {
         return new Pins(
@@ -44,7 +45,16 @@ public class Pins {
     private LocalDate startDate;
     private LocalDate endDate;
 
-    public Pins(Double latitude, Double longitude, String title, String imgUrl, String imgProvider, LocalDate startDate, LocalDate endDate, CelebrityMember celebrityMember, CelebrityGroup celebrityGroup) {
+    @ManyToOne
+    @JoinColumn(name = "celebrity_member_id")
+    private CelebrityMember celebrityMember;
+
+    @ManyToOne
+    @JoinColumn(name = "celebrity_group_id")
+    private CelebrityGroup celebrityGroup;
+
+    public Pins(Double latitude, Double longitude, String title, String imgUrl, String imgProvider,
+                LocalDate startDate, LocalDate endDate, CelebrityMember celebrityMember, CelebrityGroup celebrityGroup) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.title = title;
@@ -56,18 +66,11 @@ public class Pins {
         this.celebrityGroup = celebrityGroup;
     }
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+    public Long getCelebrityMemberId(){
+        return celebrityMember.getId();
+    }
 
-    @UpdateTimestamp
-    private LocalDateTime updateAt;
-
-    @ManyToOne
-    @JoinColumn(name = "celebrity_member_id")
-    private CelebrityMember celebrityMember;
-
-    @ManyToOne
-    @JoinColumn(name = "celebrity_group_id")
-    private CelebrityGroup celebrityGroup;
-
+    public Long getCelebrityGroupId(){
+        return celebrityGroup.getId();
+    }
 }

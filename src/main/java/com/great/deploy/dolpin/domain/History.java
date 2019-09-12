@@ -1,28 +1,19 @@
 package com.great.deploy.dolpin.domain;
 
+import com.great.deploy.dolpin.common.AuditEntity;
 import com.great.deploy.dolpin.model.Behavior;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "history")
-public class History {
+public class History extends AuditEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     private Long userId;
     private String celebrity;
     private Behavior behavior;
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updateAt;
-
 
     public History(Long userId, String celebrity, Behavior behavior) {
         this.userId = userId;
@@ -60,21 +51,5 @@ public class History {
 
     public void setBehavior(Behavior behavior) {
         this.behavior = behavior;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdateAt() {
-        return updateAt;
-    }
-
-    public void setUpdateAt(LocalDateTime updateAt) {
-        this.updateAt = updateAt;
     }
 }

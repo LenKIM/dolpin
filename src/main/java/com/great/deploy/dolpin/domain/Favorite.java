@@ -1,26 +1,19 @@
 package com.great.deploy.dolpin.domain;
 
 
+import com.great.deploy.dolpin.common.AuditEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Embeddable;
-import java.time.LocalDateTime;
 
 @Embeddable
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class Favorite {
+public class Favorite extends AuditEntity {
 
     private Long memberId;
     private Long groupId;
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updateAt;
 }

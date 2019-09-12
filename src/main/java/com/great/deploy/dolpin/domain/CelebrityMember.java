@@ -2,6 +2,7 @@ package com.great.deploy.dolpin.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.great.deploy.dolpin.common.AuditEntity;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "celebrity_member")
 @NoArgsConstructor
-public class CelebrityMember {
+public class CelebrityMember extends AuditEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +26,6 @@ public class CelebrityMember {
     @JsonIgnore
     @JoinColumn(name = "group_id")
     private CelebrityGroup celebrityGroup;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updateAt;
 
 
     public CelebrityMember(String name, LocalDate birthday, String picUrl) {

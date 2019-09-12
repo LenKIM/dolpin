@@ -1,14 +1,12 @@
 package com.great.deploy.dolpin.domain;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import com.great.deploy.dolpin.common.AuditEntity;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "visit")
-public class Visit {
+public class Visit extends AuditEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,12 +15,6 @@ public class Visit {
     private Long pinId;
 
     private Long userId;
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updateAt;
 
     public Long getUserId() {
         return userId;
