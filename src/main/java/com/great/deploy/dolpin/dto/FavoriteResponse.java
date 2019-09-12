@@ -1,25 +1,19 @@
 package com.great.deploy.dolpin.dto;
 
 import com.great.deploy.dolpin.domain.Favorite;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Set;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class FavoriteResponse {
 
     private Set<Favorite> celebrites;
 
-    public FavoriteResponse() {
-    }
-
-    public FavoriteResponse(Set<Favorite> celebrites) {
-        this.celebrites = celebrites;
-    }
-
-    public Set<Favorite> getCelebrites() {
-        return celebrites;
-    }
-
-    public void setCelebrites(Set<Favorite> celebrites) {
-        this.celebrites = celebrites;
-    }
 }

@@ -16,21 +16,12 @@ import java.util.Set;
 public class AccountResponse {
 
     private Integer id;
-
     private String email;
-
     private String name;
-
     private String imageUrl;
-
     private String nickname;
-
     private String activeRegion;
-
     private String medal;
-
     private String duckLevel;
-
     private Set<Favorite> favorite = new HashSet<>();
-
 }
