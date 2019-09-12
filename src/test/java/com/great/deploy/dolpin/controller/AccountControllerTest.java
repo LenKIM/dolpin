@@ -1,7 +1,5 @@
 package com.great.deploy.dolpin.controller;
 
-import com.great.deploy.dolpin.account.Account;
-import com.great.deploy.dolpin.account.AccountRole;
 import com.great.deploy.dolpin.common.AppProperties;
 import com.great.deploy.dolpin.common.BaseControllerTest;
 import com.great.deploy.dolpin.common.TestDescription;
@@ -13,10 +11,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -45,24 +39,7 @@ public class AccountControllerTest extends BaseControllerTest {
     @TestDescription("계정 정보를 조회하는 테스트")
     public void existedAccountTest() throws Exception {
         this.mockMvc.perform(get("/api/user")
-                .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(false, () -> {
-                    Set<AccountRole> accountRoles = Stream.of(AccountRole.ADMIN, AccountRole.USER)
-                            .collect(Collectors.toSet());
-
-                    Account lenn = Account.builder()
-                            .email("joenggyu0@gmail.com")
-                            .password("password")
-                            .medal("넌최고의팬텀이야")
-                            .duckLevel("달인덕")
-                            .activeRegion("서울")
-                            .nickname("BTS_LOVE")
-                            .imageUrl("Https://aaaa.com")
-                            .name("김정규")
-                            .roles(accountRoles)
-                            .build();
-
-                    return this.accountService.saveAccount(lenn);
-                }))
+                .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(false))
         )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -85,25 +62,7 @@ public class AccountControllerTest extends BaseControllerTest {
                 .build();
 
         this.mockMvc.perform(put("/api/user")
-                .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(false, () -> {
-
-                    Set<AccountRole> accountRoles2 = Stream.of(AccountRole.ADMIN, AccountRole.USER)
-                            .collect(Collectors.toSet());
-
-                    Account len = Account.builder()
-                            .email("joenggyu0@gmail.com")
-                            .password("password")
-                            .medal("넌최고의팬텀이야")
-                            .duckLevel("달인덕")
-                            .activeRegion("서울")
-                            .nickname("BTS_LOVE")
-                            .imageUrl("Https://aaaa.com")
-                            .name("김정규")
-                            .roles(accountRoles2)
-                            .build();
-
-                    return this.accountService.saveAccount(len);
-                }))
+                .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(false))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(this.objectMapper.writeValueAsString(updatedAccount)))
                 .andDo(print())

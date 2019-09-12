@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Set;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -58,14 +57,29 @@ public class BaseControllerTest {
     }
 
 
-    public String getBearerToken(boolean needToCreateAccount, Supplier<Account> accountConsumer) throws Exception {
-        return "Bearer " + getAccessToken(needToCreateAccount, accountConsumer);
+    public String getBearerToken(boolean needToCreateAccount) throws Exception {
+        return "Bearer " + getAccessToken(needToCreateAccount);
     }
 
-    private String getAccessToken(boolean needToCreateAccount, Supplier<Account> accountConsumer) throws Exception {
+    private String getAccessToken(boolean needToCreateAccount) throws Exception {
 
         if (needToCreateAccount) {
-            accountConsumer.get();
+            Set<AccountRole> accountRoles = Stream.of(AccountRole.ADMIN, AccountRole.USER)
+                    .collect(Collectors.toSet());
+
+            Account len = Account.builder()
+                    .email("joenggyu0@gmail.com")
+                    .password("password")
+                    .medal("넌최고의팬텀이야")
+                    .duckLevel("달인덕")
+                    .activeRegion("서울")
+                    .nickname("BTS_LOVE")
+                    .imageUrl("Https://aaaa.com")
+                    .name("김정규")
+                    .roles(accountRoles)
+                    .build();
+
+            this.accountService.saveAccount(len);
         }
 
         ResultActions perform = this.mockMvc.perform(post("/oauth/token")

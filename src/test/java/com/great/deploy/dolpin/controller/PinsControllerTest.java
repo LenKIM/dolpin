@@ -1,10 +1,14 @@
 package com.great.deploy.dolpin.controller;
 
-import com.great.deploy.dolpin.account.Account;
-import com.great.deploy.dolpin.account.AccountRole;
 import com.great.deploy.dolpin.common.BaseControllerTest;
 import com.great.deploy.dolpin.common.TestDescription;
+import com.great.deploy.dolpin.domain.CelebrityGroup;
+import com.great.deploy.dolpin.domain.CelebrityMember;
+import com.great.deploy.dolpin.domain.Pins;
 import com.great.deploy.dolpin.dto.CreatePinRequest;
+import com.great.deploy.dolpin.dto.PinRequest;
+import com.great.deploy.dolpin.repository.CelebrityGroupRepository;
+import com.great.deploy.dolpin.repository.CelebrityMemberRepository;
 import com.great.deploy.dolpin.repository.PinsRepository;
 import com.great.deploy.dolpin.service.AccountService;
 import com.great.deploy.dolpin.service.PinService;
@@ -18,11 +22,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -39,25 +40,13 @@ public class PinsControllerTest extends BaseControllerTest {
 
     @Test
     @TestDescription("Get All pins")
+
     public void getAllPins() throws Exception {
         this.mockMvc.perform(get("/api/pins")
-                .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(false, () -> {
-                    Set<AccountRole> accountRoles = Stream.of(AccountRole.ADMIN, AccountRole.ADMIN)
-                            .collect(Collectors.toSet());
-                    Account len = Account.builder()
-                            .email("joenggyu0@gmail.com")
-                            .password("password")
-                            .medal("넌최고의팬텀이야")
-                            .duckLevel("달인덕")
-                            .activeRegion("서울")
-                            .nickname("BTS_LOVE")
-                            .imageUrl("Https://aaaa.com")
-                            .name("김정규")
-                            .roles(accountRoles)
-                            .build();
-                    return this.accountService.saveAccount(len);
-                }))
-        ).andExpect(MockMvcResultMatchers.jsonPath("AA").value("AA"));
+                .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(false))
+        )
+            .andExpect(MockMvcResultMatchers.jsonPath("code").value("202"))
+            .andExpect(MockMvcResultMatchers.jsonPath("msg").value("Accepted"));
     }
 
     @Test
@@ -70,61 +59,110 @@ public class PinsControllerTest extends BaseControllerTest {
                 .memberId(2L)
                 .startDate(LocalDate.now())
                 .endDate(LocalDate.of(2019, 10, 5))
-                .imgUrl("IMAGE_URL")
+                .imgUrl("ABCASDAJSDK")
                 .imgProvider("IMAGEPROVIDER")
                 .latitude(37.564494D)
                 .longitude(126.979677D)
                 .build();
 
-        MockMultipartFile multipartFile = new MockMultipartFile("AOA", "AOA.jpg",
+        MockMultipartFile multipartFile = new MockMultipartFile("data", "AOA.jpg",
                 "image/jpeg", "SpringAAAAFramework".getBytes());
 
         MockHttpServletRequestBuilder requestBuilder =
-                MockMvcRequestBuilders.multipart("/api/pins/pin")
+                MockMvcRequestBuilders
+                        .multipart("/api/pins/pin")
                         .file(multipartFile)
-                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                        .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(true, () -> {
-                            Set<AccountRole> accountRoles = Stream.of(AccountRole.ADMIN, AccountRole.ADMIN)
-                                    .collect(Collectors.toSet());
-
-                            Account len = Account.builder()
-                                    .email("joenggyu0@gmail.com")
-                                    .password("password")
-                                    .medal("넌최고의팬텀이야")
-                                    .duckLevel("달인덕")
-                                    .activeRegion("서울")
-                                    .nickname("BTS_LOVE")
-                                    .imageUrl("Https://aaaa.com")
-                                    .name("김정규")
-                                    .roles(accountRoles)
-                                    .build();
-
-                            return this.accountService.saveAccount(len);
-
-                        }))
-                        .content(this.objectMapper.writeValueAsString(build))
-                ;
+                        .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(false))
+                        .param("model", this.objectMapper.writeValueAsString(build))
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE);
 
         this.mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("code").value("201"))
+                .andExpect(MockMvcResultMatchers.jsonPath("msg").value("Created"))
+                .andExpect(MockMvcResultMatchers.jsonPath("data.id").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("data.img_url").exists())
+        ;
+    }
+
+    @Autowired
+    CelebrityGroupRepository celebrityGroupRepository;
+
+    @Autowired
+    CelebrityMemberRepository celebrityMemberRepository;
+
+
+    @Test
+    public void getPinDetail() throws Exception {
+        //Given
+        CelebrityGroup celebrityGroup = celebrityGroupRepository.findById(1L).get();
+        CelebrityMember celebrityMember = celebrityMemberRepository.findById(1L).get();
+
+        CreatePinRequest build = CreatePinRequest
+                .builder()
+                .title("ILOVEBTS")
+                .groupId(1L)
+                .memberId(2L)
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.of(2019, 10, 5))
+                .imgUrl("ABCASDAJSDK")
+                .imgProvider("IMAGEPROVIDER")
+                .latitude(37.564494D)
+                .longitude(126.979677D)
+                .build();
+
+        Pins one = Pins.of(build, celebrityMember, celebrityGroup);
+        Pins two = Pins.of(build, celebrityMember, celebrityGroup);
+        Pins save = pinsRepository.save(one);
+        pinsRepository.save(two);
+
+
+        this.mockMvc.perform(get("/api/pins/pin/" + save.getId() + "/detail")
+                .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(false)))
+                .andExpect(MockMvcResultMatchers.jsonPath("code").value("200"))
+                .andExpect(MockMvcResultMatchers.jsonPath("msg").value("OK"));
+    }
+
+    @Test
+    public void modifyPin() throws Exception {
+        //Given
+        CelebrityGroup celebrityGroup = celebrityGroupRepository.findById(1L).get();
+        CelebrityMember celebrityMember = celebrityMemberRepository.findById(1L).get();
+
+        CreatePinRequest build = CreatePinRequest
+                .builder()
+                .title("ILOVEBTS")
+                .groupId(1L)
+                .memberId(2L)
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.of(2019, 10, 5))
+                .imgUrl("ABCASDAJSDK")
+                .imgProvider("IMAGEPROVIDER")
+                .latitude(37.564494D)
+                .longitude(126.979677D)
+                .build();
+
+        Pins tempPin = Pins.of(build, celebrityMember, celebrityGroup);
+        Pins save = pinsRepository.save(tempPin);
+
+        PinRequest pinRequest = PinRequest.builder()
+                .title("ILOVESPRING")
+                .imgProvider("AAAAAAA")
+                .imgUrl("AVHSUYDSUD")
+                .latitude(37.564494D)
+                .longitude(126.979677D)
+                .startDate(LocalDate.of(2019, 10, 5))
+                .endDate(LocalDate.of(2019, 11, 5))
+                .build();
+
+        this.mockMvc
+                .perform(put("/api/pins/pin/" + save.getId())
+                    .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(true))
+                    .content(this.objectMapper.writeValueAsString(pinRequest))
+                    .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(MockMvcResultMatchers.jsonPath("code").value("200"))
                 .andExpect(MockMvcResultMatchers.jsonPath("msg").value("OK"))
-                .andExpect(MockMvcResultMatchers.jsonPath("data.title").value("ILOVEBTS"))
-                .andExpect(MockMvcResultMatchers.jsonPath("data.start_date").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("data.end_date").exists())
-                ;
-    }
-
-    @Test
-    public void getPinDetail() {
-    }
-
-    @Test
-    public void modifyPin() {
-    }
-
-    @Test
-    public void deletePin() {
+                .andExpect(MockMvcResultMatchers.jsonPath("data.title").value("ILOVESPRING"));
     }
 }
