@@ -39,7 +39,6 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        //TODO DB로 변경 할 것.
         clients.inMemory()
                 .withClient(appProperties.getClientId())
                 .authorizedGrantTypes("password", "refresh_token")

@@ -15,6 +15,7 @@ public class JsonConfig {
     ObjectMapper objectMapper(){
         return Jackson2ObjectMapperBuilder.json()
                 .propertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
+                .simpleDateFormat("[yyyy,MM,dd]")
                 .build();
     }
 }

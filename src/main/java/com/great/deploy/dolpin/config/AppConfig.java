@@ -64,6 +64,12 @@ public class AppConfig {
                 final Set<AccountRole> userRoles = new HashSet<>();
                 userRoles.add(AccountRole.ADMIN);
                 Account user = Account.builder()
+                        .name("admin")
+                        .imageUrl("https://m.post.naver.com/viewer/postView.nhn?volumeNo=14295665&memberNo=33408012#")
+                        .nickname("BTS_L.O.V.E")
+                        .activeRegion("Seoul")
+                        .duckLevel("이젠나도돌핀!")
+                        .medal("동메달")
                         .email(appProperties.getUserUsername())
                         .password(appProperties.getUserPassword())
                         .roles(userRoles)

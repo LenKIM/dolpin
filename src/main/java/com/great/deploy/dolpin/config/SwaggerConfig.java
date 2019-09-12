@@ -25,8 +25,6 @@ import java.util.List;
 @EnableSwagger2
 public class SwaggerConfig {
 
-//  my-app.client-id=myApp
-//  my-app.client-secret=pass
   @Value("${my-app.client-id}")
   private String clientId;
   @Value("${my-app.client-secret}")
@@ -96,7 +94,8 @@ public class SwaggerConfig {
     return new ApiInfoBuilder().title("Dolpin")
             .description("")
             .termsOfServiceUrl("https://www.dolpin.club/api")
-            .contact(new Contact("Hasson", "http://www.example.com", "hasson@example.com"))
-            .license("Open Source").licenseUrl("https://www.example.com").version("1.0.0").build();
+            .contact(new Contact("Len", "http://www.example.com", "len@gmail.com"))
+            .version("0.8.0")
+            .build();
   }
 }
