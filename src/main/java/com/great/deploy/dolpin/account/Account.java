@@ -1,14 +1,16 @@
 package com.great.deploy.dolpin.account;
 
-import com.great.deploy.dolpin.common.AuditEntity;
 import com.great.deploy.dolpin.domain.Favorite;
 import com.great.deploy.dolpin.dto.AccountRequest;
 import com.great.deploy.dolpin.dto.AccountResponse;
 import com.great.deploy.dolpin.exception.OAuth2AuthenticationProcessingException;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,7 +21,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Account extends AuditEntity {
+public class Account {
 
     public static Account of(Account oldAccount, AccountRequest newAccount) {
         return new Account(oldAccount.getId(),
@@ -32,7 +34,10 @@ public class Account extends AuditEntity {
                 newAccount.getActiveRegion(),
                 newAccount.getMedal(),
                 newAccount.getDuckLevel(),
-                oldAccount.getFavorite());
+                oldAccount.getFavorite(),
+                oldAccount.getCreatedAt(),
+                LocalDateTime.now()
+                );
     }
 
     public static Account saveFavorites(Account account, Set<Favorite> favorite) {
@@ -46,7 +51,9 @@ public class Account extends AuditEntity {
                 account.getActiveRegion(),
                 account.getMedal(),
                 account.getDuckLevel(),
-                favorite
+                favorite,
+                account.getCreatedAt(),
+                LocalDateTime.now()
         );
     }
 
@@ -97,4 +104,10 @@ public class Account extends AuditEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "account_favorite", joinColumns = @JoinColumn(name = "account_id"))
     private Set<Favorite> favorite = new HashSet<>();
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updateAt;
 }

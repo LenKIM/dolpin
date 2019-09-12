@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -58,7 +59,10 @@ public class AppConfig {
                         .email(appProperties.getAdminUsername())
                         .password(appProperties.getAdminPassword())
                         .roles(adminRoles)
+                        .createdAt(LocalDateTime.now())
+                        .updateAt(LocalDateTime.now())
                         .build();
+
                 accountService.saveAccount(admin);
 
                 final Set<AccountRole> userRoles = new HashSet<>();
@@ -72,8 +76,11 @@ public class AppConfig {
                         .medal("동메달")
                         .email(appProperties.getUserUsername())
                         .password(appProperties.getUserPassword())
+                        .createdAt(LocalDateTime.now())
+                        .updateAt(LocalDateTime.now())
                         .roles(userRoles)
                         .build();
+
                 accountService.saveAccount(user);
             }
         };

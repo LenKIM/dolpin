@@ -39,7 +39,7 @@ public class AccountControllerTest extends BaseControllerTest {
     @TestDescription("계정 정보를 조회하는 테스트")
     public void existedAccountTest() throws Exception {
         this.mockMvc.perform(get("/api/user")
-                .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(false))
+                .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(true))
         )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -62,7 +62,7 @@ public class AccountControllerTest extends BaseControllerTest {
                 .build();
 
         this.mockMvc.perform(put("/api/user")
-                .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(false))
+                .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(true))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(this.objectMapper.writeValueAsString(updatedAccount)))
                 .andDo(print())
