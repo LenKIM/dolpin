@@ -1,14 +1,12 @@
 package com.great.deploy.dolpin.domain;
 
 
-import com.great.deploy.dolpin.common.AuditEntity;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "celebrity_group")
-public class CelebrityGroup extends AuditEntity {
+public class CelebrityGroup{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,17 +2,15 @@ package com.great.deploy.dolpin.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.great.deploy.dolpin.common.AuditEntity;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "celebrity_member")
 @NoArgsConstructor
-public class CelebrityMember extends AuditEntity {
+public class CelebrityMember{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
