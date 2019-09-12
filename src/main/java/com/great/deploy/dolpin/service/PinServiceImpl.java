@@ -31,20 +31,19 @@ public class PinServiceImpl implements PinService {
     @Override
     public Pins createPin(Pins pins, String imageUrl) {
 
-        CelebrityMember celebrityMember = null;
-        CelebrityGroup celebrityGroup = null;
-
-
         Long memberId = pins.getCelebrityMemberId();
+        Long groupId = pins.getCelebrityGroupId();
 
+        CelebrityMember celebrityMember = pins.getCelebrityMember();
+        CelebrityGroup celebrityGroup = pins.getCelebrityGroup();
 
         if (StringUtils.isEmpty(memberId)) {
             celebrityMember = celebrityMemberRepository.findById(memberId)
                     .orElseThrow(() -> new ResourceNotFoundException("Couldn't found memberId"));
         }
 
-        if (StringUtils.isEmpty(pins.getCelebrityGroup().getId())) {
-            celebrityGroup = celebrityGroupRepository.findById(pins.getCelebrityGroup().getId())
+        if (StringUtils.isEmpty(groupId)) {
+            celebrityGroup = celebrityGroupRepository.findById(groupId)
                     .orElseThrow(() -> new ResourceNotFoundException("Couldn't found groupId"));
         }
         return pinsRepository.save(
@@ -57,7 +56,8 @@ public class PinServiceImpl implements PinService {
                         pins.getStartDate(),
                         pins.getEndDate(),
                         celebrityMember,
-                        celebrityGroup));
+                        celebrityGroup)
+        );
     }
 
     @Override

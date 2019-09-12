@@ -75,7 +75,7 @@ public class PinsController {
                 .orElse(CreatePinRequest.EMPTY);
 
         if(createPinRequest == CreatePinRequest.EMPTY){
-            throw new ResourceNotFoundException("Not Fount createPinRequest Model");
+            throw new ResourceNotFoundException("Not Found createPinRequest Model");
         }
         String imageUrl = null;
         if (image != null) {

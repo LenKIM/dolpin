@@ -65,14 +65,14 @@ public class PinsControllerTest extends BaseControllerTest {
                 .longitude(126.979677D)
                 .build();
 
-        MockMultipartFile multipartFile = new MockMultipartFile("data", "AOA.jpg",
-                "image/jpeg", "SpringAAAAFramework".getBytes());
+        MockMultipartFile multipartFile = new MockMultipartFile("data", "AOasdasdA.jpg",
+                "image/jpeg", "SpringAAAAasdasdFramework".getBytes());
 
         MockHttpServletRequestBuilder requestBuilder =
                 MockMvcRequestBuilders
                         .multipart("/api/pins/pin")
                         .file(multipartFile)
-                        .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(false))
+                        .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(true))
                         .param("model", this.objectMapper.writeValueAsString(build))
                         .contentType(MediaType.MULTIPART_FORM_DATA_VALUE);
 
