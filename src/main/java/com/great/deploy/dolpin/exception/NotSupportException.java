@@ -1,5 +1,6 @@
 package com.great.deploy.dolpin.exception;
 
+
 public class NotSupportException extends DolpinException {
 
     public NotSupportException(int errorCode, String errorMsg) {

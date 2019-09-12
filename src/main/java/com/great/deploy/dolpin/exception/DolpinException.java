@@ -2,8 +2,12 @@ package com.great.deploy.dolpin.exception;
 
 public class DolpinException extends RuntimeException {
 
-    int errorCode;
-    String errorMsg;
+    protected int errorCode;
+    protected String errorMsg;
+
+    public DolpinException(String message) {
+        super(message);
+    }
 
     public DolpinException(int errorCode, String message, String errorMsg) {
         super(message);
