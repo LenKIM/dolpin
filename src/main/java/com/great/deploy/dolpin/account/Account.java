@@ -1,27 +1,25 @@
 package com.great.deploy.dolpin.account;
 
+import com.great.deploy.dolpin.common.AuditEntity;
+import com.great.deploy.dolpin.domain.Favorite;
 import com.great.deploy.dolpin.dto.AccountRequest;
 import com.great.deploy.dolpin.dto.AccountResponse;
-import com.great.deploy.dolpin.exception.BadRequestException;
-import com.great.deploy.dolpin.domain.Favorite;
+import com.great.deploy.dolpin.exception.OAuth2AuthenticationProcessingException;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "id", callSuper = false)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Account {
+public class Account extends AuditEntity {
 
     public static Account of(Account oldAccount, AccountRequest newAccount) {
         return new Account(oldAccount.getId(),
@@ -34,27 +32,39 @@ public class Account {
                 newAccount.getActiveRegion(),
                 newAccount.getMedal(),
                 newAccount.getDuckLevel(),
-                oldAccount.getFavorite(),
-                oldAccount.getCreatedAt(),
-                LocalDateTime.now());
+                oldAccount.getFavorite());
     }
 
     public static Account saveFavorites(Account account, Set<Favorite> favorite) {
-        return new Account(account.getId(), account.getEmail(), account.getPassword(),
-                account.getRoles(), account.getName(), account.getImageUrl(),
-                account.getNickname(), account.getActiveRegion(), account.getMedal(),
-                account.getDuckLevel(), favorite, account.getCreatedAt(), LocalDateTime.now());
+        return new Account(account.getId(),
+                account.getEmail(),
+                account.getPassword(),
+                account.getRoles(),
+                account.getName(),
+                account.getImageUrl(),
+                account.getNickname(),
+                account.getActiveRegion(),
+                account.getMedal(),
+                account.getDuckLevel(),
+                favorite
+        );
     }
 
     public static AccountResponse ofResponse(Account account) {
-        return new AccountResponse(account.getId(), account.getEmail(), account.getName(),
-                account.getImageUrl(), account.getNickname(), account.getActiveRegion(),
-                account.getMedal(), account.getDuckLevel(), account.getFavorite());
+        return new AccountResponse(account.getId(),
+                account.getEmail(),
+                account.getName(),
+                account.getImageUrl(),
+                account.getNickname(),
+                account.getActiveRegion(),
+                account.getMedal(),
+                account.getDuckLevel(),
+                account.getFavorite());
     }
 
     public static void validateAccount(Account account) {
         if (account == null) {
-            throw new BadRequestException("No found user");
+            throw new OAuth2AuthenticationProcessingException("Need Check Account Information");
         }
     }
 
@@ -65,7 +75,7 @@ public class Account {
     @NotNull
     private String password;
 
-    @Column(unique = true)
+    @Column(unique = true, length = 1200)
     private String email;
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -87,10 +97,4 @@ public class Account {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "account_favorite", joinColumns = @JoinColumn(name = "account_id"))
     private Set<Favorite> favorite = new HashSet<>();
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updateAt;
 }

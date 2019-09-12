@@ -11,6 +11,7 @@ import com.great.deploy.dolpin.domain.Pins;
 import com.great.deploy.dolpin.repository.CelebrityGroupRepository;
 import com.great.deploy.dolpin.repository.CelebrityMemberRepository;
 import com.great.deploy.dolpin.repository.PinsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -20,17 +21,12 @@ import java.util.stream.Collectors;
 @Service
 public class PinServiceImpl implements PinService {
 
+    @Autowired
     private PinsRepository pinsRepository;
+    @Autowired
     private CelebrityMemberRepository celebrityMemberRepository;
+    @Autowired
     private CelebrityGroupRepository celebrityGroupRepository;
-
-    public PinServiceImpl(PinsRepository pinsRepository,
-                          CelebrityMemberRepository celebrityMemberRepository,
-                          CelebrityGroupRepository celebrityGroupRepository) {
-        this.pinsRepository = pinsRepository;
-        this.celebrityMemberRepository = celebrityMemberRepository;
-        this.celebrityGroupRepository = celebrityGroupRepository;
-    }
 
     @Override
     public Pins createPin(Pins pins, String imageUrl) {
@@ -38,14 +34,18 @@ public class PinServiceImpl implements PinService {
         CelebrityMember celebrityMember = null;
         CelebrityGroup celebrityGroup = null;
 
-        if (StringUtils.isEmpty(pins.getCelebrityGroup().getId())) {
-            celebrityMember = celebrityMemberRepository.findById(pins.getCelebrityMember().getId())
-                    .orElseThrow(() -> new ResourceNotFoundException("memberId", "id", "long"));
+
+        Long memberId = pins.getCelebrityMemberId();
+
+
+        if (StringUtils.isEmpty(memberId)) {
+            celebrityMember = celebrityMemberRepository.findById(memberId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Couldn't found memberId"));
         }
 
         if (StringUtils.isEmpty(pins.getCelebrityGroup().getId())) {
             celebrityGroup = celebrityGroupRepository.findById(pins.getCelebrityGroup().getId())
-                    .orElseThrow(() -> new ResourceNotFoundException("groupId", "id", "long"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Couldn't found groupId"));
         }
         return pinsRepository.save(
                 new Pins(
@@ -79,8 +79,9 @@ public class PinServiceImpl implements PinService {
 
     @Override
     public PinDetailResponse getPinDetail(Long pinId) {
+
         Pins pin = pinsRepository.findById(pinId)
-                .orElseThrow(() -> new ResourceNotFoundException("pinId", "id", "long"));
+                .orElseThrow(() -> new ResourceNotFoundException("Couldn't found pinId"));
 
         return new PinDetailResponse(pin.getId(),
                 pin.getTitle(),
@@ -110,7 +111,7 @@ public class PinServiceImpl implements PinService {
     @Override
     public void deletePin(Long pinId) {
         Pins pin = pinsRepository.findById(pinId)
-                .orElseThrow(() -> new ResourceNotFoundException("pinId", "id", "long"));
+                .orElseThrow(() -> new ResourceNotFoundException("Couldn't found pinId"));
         pinsRepository.delete(pin);
     }
 }

@@ -16,6 +16,7 @@ public class CelebrityServiceImpl implements CelebrityService {
 
     @Autowired
     private CelebrityGroupRepository celebrityGroupRepository;
+
     @Autowired
     private CelebrityMemberRepository celebrityMemberRepository;
 
@@ -34,7 +35,6 @@ public class CelebrityServiceImpl implements CelebrityService {
                 celebrityResponse.setPicUrl(celebrityMember.getPicUrl());
                 celebrityResponse.setGroupId(allGroup.getId());
                 celebrityResponse.setGroupName(allGroup.getName());
-
                 response.add(celebrityResponse);
             }
         }
