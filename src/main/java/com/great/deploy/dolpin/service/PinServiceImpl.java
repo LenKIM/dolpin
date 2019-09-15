@@ -1,13 +1,13 @@
 package com.great.deploy.dolpin.service;
 
 import com.amazonaws.services.kms.model.NotFoundException;
+import com.great.deploy.dolpin.domain.CelebrityGroup;
+import com.great.deploy.dolpin.domain.CelebrityMember;
+import com.great.deploy.dolpin.domain.Pins;
 import com.great.deploy.dolpin.dto.PinDetailResponse;
 import com.great.deploy.dolpin.dto.PinRequest;
 import com.great.deploy.dolpin.dto.PinResponse;
 import com.great.deploy.dolpin.exception.ResourceNotFoundException;
-import com.great.deploy.dolpin.domain.CelebrityGroup;
-import com.great.deploy.dolpin.domain.CelebrityMember;
-import com.great.deploy.dolpin.domain.Pins;
 import com.great.deploy.dolpin.repository.CelebrityGroupRepository;
 import com.great.deploy.dolpin.repository.CelebrityMemberRepository;
 import com.great.deploy.dolpin.repository.PinsRepository;
@@ -73,7 +73,55 @@ public class PinServiceImpl implements PinService {
                                 pins.getImgProvider(),
                                 pins.getImgUrl(),
                                 pins.getStartDate(),
-                                pins.getEndDate())
+                                pins.getEndDate(),
+                                pins.getCelebrityMemberId(),
+                                pins.getCelebrityGroupId(),
+                                pins.getComments()
+                        )
+                ).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PinResponse> getMemberPins(Long memberId) {
+        List<Pins> allByCelebrityMemberId = pinsRepository.findByCelebrityMember_Id(memberId);
+        return allByCelebrityMemberId
+                .stream()
+                .map(pins ->
+                        new PinResponse(
+                                pins.getId(),
+                                pins.getTitle(),
+                                pins.getLatitude(),
+                                pins.getLongitude(),
+                                pins.getImgProvider(),
+                                pins.getImgUrl(),
+                                pins.getStartDate(),
+                                pins.getEndDate(),
+                                pins.getCelebrityMemberId(),
+                                pins.getCelebrityGroupId(),
+                                pins.getComments()
+                        )
+                ).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PinResponse> getGroupPins(Long groupId) {
+        List<Pins> allByCelebrityMemberId = pinsRepository.findByCelebrityGroup_Id(groupId);
+        return allByCelebrityMemberId
+                .stream()
+                .map(pins ->
+                        new PinResponse(
+                                pins.getId(),
+                                pins.getTitle(),
+                                pins.getLatitude(),
+                                pins.getLongitude(),
+                                pins.getImgProvider(),
+                                pins.getImgUrl(),
+                                pins.getStartDate(),
+                                pins.getEndDate(),
+                                pins.getCelebrityMemberId(),
+                                pins.getCelebrityGroupId(),
+                                pins.getComments()
+                        )
                 ).collect(Collectors.toList());
     }
 

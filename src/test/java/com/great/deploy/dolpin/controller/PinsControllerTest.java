@@ -5,6 +5,8 @@ import com.great.deploy.dolpin.common.TestDescription;
 import com.great.deploy.dolpin.domain.CelebrityGroup;
 import com.great.deploy.dolpin.domain.CelebrityMember;
 import com.great.deploy.dolpin.domain.Pins;
+import com.great.deploy.dolpin.dto.CelebrityRequest;
+import com.great.deploy.dolpin.dto.CelebrityType;
 import com.great.deploy.dolpin.dto.CreatePinRequest;
 import com.great.deploy.dolpin.dto.PinRequest;
 import com.great.deploy.dolpin.repository.CelebrityGroupRepository;
@@ -72,7 +74,7 @@ public class PinsControllerTest extends BaseControllerTest {
                 MockMvcRequestBuilders
                         .multipart("/api/pins/pin")
                         .file(multipartFile)
-                        .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(true))
+                        .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(false))
                         .param("model", this.objectMapper.writeValueAsString(build))
                         .contentType(MediaType.MULTIPART_FORM_DATA_VALUE);
 
@@ -165,4 +167,93 @@ public class PinsControllerTest extends BaseControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("msg").value("OK"))
                 .andExpect(MockMvcResultMatchers.jsonPath("data.title").value("ILOVESPRING"));
     }
+
+    @Test
+    @TestDescription("get pins By memberId and then success")
+    public void getCelebritiesPinsByMember() throws Exception {
+        //Given
+
+        CelebrityRequest request = CelebrityRequest.builder()
+                .celebrityId(724L)
+                .celebrityType(CelebrityType.MEMBER)
+                .build();
+
+        this.mockMvc.perform(
+                post("/api/pins/pin/celebrity")
+                        .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(false))
+                        .content(this.objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        )
+                .andExpect(MockMvcResultMatchers.jsonPath("code").value("200"))
+                .andExpect(MockMvcResultMatchers.jsonPath("msg").value("OK"))
+        ;
+    }
+
+    @Test
+    @TestDescription("get pins By memberId and then Fail")
+    public void getCelebritiesPinsFail() throws Exception {
+        //Given
+
+        CelebrityRequest request = CelebrityRequest.builder()
+                .celebrityId(23623L)
+                .celebrityType(CelebrityType.MEMBER)
+                .build();
+
+        this.mockMvc.perform(
+                post("/api/pins/pin/celebrity")
+                        .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(false))
+                        .content(this.objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        )
+                .andExpect(MockMvcResultMatchers.jsonPath("code").value("200"))
+                .andExpect(MockMvcResultMatchers.jsonPath("msg").value("OK"))
+                .andExpect(MockMvcResultMatchers.jsonPath("data").isArray())
+        ;
+    }
+
+    @Test
+    @TestDescription("get pins By groupId and then success")
+    public void getCelebritiesPinsByGroup() throws Exception {
+        //Given
+
+        CelebrityRequest request = CelebrityRequest.builder()
+                .celebrityId(153L)
+                .celebrityType(CelebrityType.GROUP)
+                .build();
+
+        this.mockMvc.perform(
+                post("/api/pins/pin/celebrity")
+                        .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(false))
+                        .content(this.objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        )
+                .andExpect(MockMvcResultMatchers.jsonPath("code").value("200"))
+                .andExpect(MockMvcResultMatchers.jsonPath("msg").value("OK"))
+                .andExpect(MockMvcResultMatchers.jsonPath("data").isArray())
+        ;
+    }
+
+    @Test
+    @TestDescription("get pins By groupId and then fail")
+    public void getCelebritiesPinsByGroupThenFail() throws Exception {
+        //Given
+
+        CelebrityRequest request = CelebrityRequest.builder()
+                .celebrityId(15323L)
+                .celebrityType(CelebrityType.GROUP)
+                .build();
+
+        this.mockMvc.perform(
+                post("/api/pins/pin/celebrity")
+                        .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(false))
+                        .content(this.objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        )
+                .andExpect(MockMvcResultMatchers.jsonPath("code").value("200"))
+                .andExpect(MockMvcResultMatchers.jsonPath("msg").value("OK"))
+                .andExpect(MockMvcResultMatchers.jsonPath("data").isEmpty())
+        ;
+    }
+
+
 }

@@ -3,12 +3,10 @@ package com.great.deploy.dolpin.domain;
 import com.great.deploy.dolpin.common.AuditEntity;
 import com.great.deploy.dolpin.dto.CreatePinRequest;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -45,6 +43,10 @@ public class Pins extends AuditEntity {
     private LocalDate startDate;
     private LocalDate endDate;
 
+    // mappedBy 추가
+    @OneToMany(targetEntity = Comment.class, mappedBy = "pins", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
+
     @ManyToOne
     @JoinColumn(name = "celebrity_member_id")
     private CelebrityMember celebrityMember;
@@ -66,11 +68,11 @@ public class Pins extends AuditEntity {
         this.celebrityGroup = celebrityGroup;
     }
 
-    public Long getCelebrityMemberId(){
+    public Long getCelebrityMemberId() {
         return celebrityMember.getId();
     }
 
-    public Long getCelebrityGroupId(){
+    public Long getCelebrityGroupId() {
         return celebrityGroup.getId();
     }
 }

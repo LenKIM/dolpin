@@ -11,6 +11,10 @@ public interface PinService {
 
     List<PinResponse> getAllPins();
 
+    List<PinResponse> getMemberPins(Long memberId);
+
+    List<PinResponse> getGroupPins(Long groupId);
+
     Pins createPin(Pins pins, String imageUrl);
 
     PinDetailResponse getPinDetail(Long pinId);

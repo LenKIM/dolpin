@@ -35,6 +35,7 @@ public class PinsController {
 
     @Autowired
     ObjectMapper objectMapper;
+
     @Autowired
     private AmazonS3ClientService amazonS3ClientService;
 
@@ -77,7 +78,7 @@ public class PinsController {
         if(createPinRequest == CreatePinRequest.EMPTY){
             throw new ResourceNotFoundException("Not Found createPinRequest Model");
         }
-        String imageUrl = null;
+        String imageUrl;
         if (image != null) {
             // upload profile to storage
             imageUrl = amazonS3ClientService.uploadFileToS3Bucket(image, true);
@@ -163,5 +164,25 @@ public class PinsController {
                 HttpStatus.NO_CONTENT.getReasonPhrase(),
                 "SUCCESS DELETE"
         );
+    }
+
+    @PostMapping("/pin/celebrity")
+    public Response<List<PinResponse>> getCelebrities(
+        @ApiIgnore @CurrentUser Account account,
+        @RequestBody CelebrityRequest celebrityRequest
+    ){
+        Account.validateAccount(account);
+
+        Long celebrityId = celebrityRequest.getCelebrityId();
+        CelebrityType celebrityType = celebrityRequest.getCelebrityType();
+        if(celebrityType.equals(CelebrityType.MEMBER)){
+            List<PinResponse> memberPins = pinService.getMemberPins(celebrityId);
+            return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), memberPins);
+        } else if (celebrityType.equals(CelebrityType.GROUP)){
+            List<PinResponse> groupPins = pinService.getGroupPins(celebrityId);
+            return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), groupPins);
+        } else {
+            throw new ResourceNotFoundException("Not Found celebrityRequest");
+        }
     }
 }
