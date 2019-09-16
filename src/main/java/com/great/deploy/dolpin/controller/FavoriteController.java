@@ -42,6 +42,8 @@ public class FavoriteController {
         }
 
         Account savedAccount = Account.saveFavorites(account, favorites.getFavorites());
+        accountService.saveAccount(savedAccount);
+
         FavoriteResponse favoriteResponse = new FavoriteResponse(savedAccount.getFavorite());
         return new Response<>(
                 HttpStatus.ACCEPTED.value(),
