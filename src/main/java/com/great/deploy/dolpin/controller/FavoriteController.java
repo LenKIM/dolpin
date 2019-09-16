@@ -2,7 +2,6 @@ package com.great.deploy.dolpin.controller;
 
 import com.great.deploy.dolpin.account.Account;
 import com.great.deploy.dolpin.account.CurrentUser;
-import com.great.deploy.dolpin.dto.AccountResponse;
 import com.great.deploy.dolpin.dto.FavoriteRequest;
 import com.great.deploy.dolpin.dto.FavoriteResponse;
 import com.great.deploy.dolpin.dto.Response;
@@ -35,19 +34,19 @@ public class FavoriteController {
 
     @PostMapping()
     @ApiOperation(value = "Post current user's favorites Info", response = FavoriteResponseModel.class)
-    public Response<AccountResponse> saveFavorites(@RequestBody FavoriteRequest favorites,
-                                                   @ApiIgnore @CurrentUser Account account) {
+    public Response<FavoriteResponse> saveFavorites(@RequestBody FavoriteRequest favorites,
+                                                    @ApiIgnore @CurrentUser Account account) {
         validateAccount(account);
         if (favorites.getFavorites().size() == 0) {
             throw new BadRequestException("No favorites in Request");
         }
 
         Account savedAccount = Account.saveFavorites(account, favorites.getFavorites());
-
+        FavoriteResponse favoriteResponse = new FavoriteResponse(savedAccount.getFavorite());
         return new Response<>(
                 HttpStatus.ACCEPTED.value(),
                 HttpStatus.ACCEPTED.getReasonPhrase(),
-                Account.ofResponse(savedAccount)
+                favoriteResponse
         );
     }
 }
