@@ -14,6 +14,6 @@ import java.util.Set;
 @AllArgsConstructor
 public class FavoriteResponse {
 
-    private Set<Favorite> celebrites;
+    private Set<Favorite> favorites;
 
 }
