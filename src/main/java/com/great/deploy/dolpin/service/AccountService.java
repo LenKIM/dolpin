@@ -24,7 +24,7 @@ public class AccountService implements UserDetailsService {
     @Transactional
     public Account saveAccount(Account account) {
         account.setPassword(this.passwordEncoder.encode(account.getPassword()));
-        return this.accountRepository.save(account);
+        return this.accountRepository.saveAndFlush(account);
     }
 
     @Override

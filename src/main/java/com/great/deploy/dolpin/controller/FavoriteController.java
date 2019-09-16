@@ -32,7 +32,7 @@ public class FavoriteController {
         return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), new FavoriteResponse(account.getFavorite()));
     }
 
-    @PostMapping()
+    @PostMapping
     @ApiOperation(value = "Post current user's favorites Info", response = FavoriteResponseModel.class)
     public Response<FavoriteResponse> saveFavorites(@RequestBody FavoriteRequest favorites,
                                                     @ApiIgnore @CurrentUser Account account) {
