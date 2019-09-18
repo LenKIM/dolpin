@@ -1,15 +1,15 @@
 package com.great.deploy.dolpin.account;
 
 import com.great.deploy.dolpin.domain.Favorite;
-import com.great.deploy.dolpin.dto.AccountRequest;
 import com.great.deploy.dolpin.dto.AccountResponse;
+import com.great.deploy.dolpin.dto.AccountUpdateRequest;
 import com.great.deploy.dolpin.exception.OAuth2AuthenticationProcessingException;
+import com.great.deploy.dolpin.model.Provider;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,7 +23,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class Account {
 
-    public static Account of(Account oldAccount, AccountRequest newAccount) {
+    public static Account of(Account oldAccount, AccountUpdateRequest newAccount) {
         return new Account(oldAccount.getId(),
                 oldAccount.getPassword(),
                 oldAccount.getEmail(),
@@ -34,6 +34,7 @@ public class Account {
                 newAccount.getActiveRegion(),
                 newAccount.getMedal(),
                 newAccount.getDuckLevel(),
+                oldAccount.getType(),
                 oldAccount.getFavorite(),
                 oldAccount.getCreatedAt(),
                 LocalDateTime.now()
@@ -42,8 +43,8 @@ public class Account {
 
     public static Account saveFavorites(Account account, Set<Favorite> favorite) {
         return new Account(account.getId(),
-                account.getEmail(),
                 account.getPassword(),
+                account.getEmail(),
                 account.getRoles(),
                 account.getName(),
                 account.getImageUrl(),
@@ -51,9 +52,11 @@ public class Account {
                 account.getActiveRegion(),
                 account.getMedal(),
                 account.getDuckLevel(),
+                account.getType(),
                 favorite,
                 account.getCreatedAt(),
                 LocalDateTime.now()
+
         );
     }
 
@@ -66,7 +69,8 @@ public class Account {
                 account.getActiveRegion(),
                 account.getMedal(),
                 account.getDuckLevel(),
-                account.getFavorite());
+                account.getFavorite()
+        );
     }
 
     public static void validateAccount(Account account) {
@@ -79,7 +83,6 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
     private String password;
 
     @Column(unique = true, length = 1200)
@@ -100,6 +103,9 @@ public class Account {
     private String medal;
 
     private String duckLevel;
+
+    @Enumerated(EnumType.STRING)
+    private Provider type;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "account_favorite", joinColumns = @JoinColumn(name = "account_id"))

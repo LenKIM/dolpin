@@ -31,6 +31,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                             "/v2/**",
                             "/definitions/**")
                         .permitAll()
+                    .mvcMatchers(HttpMethod.POST, "/api/user/create**", "/api/user/login**")
+                        .permitAll()
                     .anyRequest()
                         .authenticated()
                     .and()

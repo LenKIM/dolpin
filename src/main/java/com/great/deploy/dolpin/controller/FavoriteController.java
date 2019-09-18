@@ -29,19 +29,27 @@ public class FavoriteController {
     @GetMapping()
     public Response<FavoriteResponse> getFavorites(@ApiIgnore @CurrentUser Account account) {
         validateAccount(account);
-        return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), new FavoriteResponse(account.getFavorite()));
+        return new Response<>(
+                HttpStatus.OK.value(),
+                HttpStatus.OK.getReasonPhrase(),
+                new FavoriteResponse(account.getFavorite()));
     }
 
-    @PostMapping
-    @ApiOperation(value = "Post current user's favorites Info", response = FavoriteResponseModel.class)
-    public Response<FavoriteResponse> saveFavorites(@RequestBody FavoriteRequest favorites,
+    @PutMapping
+    @ApiOperation(value = "Update current user's favorites Info", response = FavoriteResponseModel.class)
+    public Response<FavoriteResponse> updateFavorites(@RequestBody FavoriteRequest favorites,
                                                     @ApiIgnore @CurrentUser Account account) {
+        return getFavoriteResponseResponse(favorites, account);
+    }
+
+    private Response<FavoriteResponse> getFavoriteResponseResponse(@RequestBody FavoriteRequest favorites, @CurrentUser @ApiIgnore Account account) {
         validateAccount(account);
         if (favorites.getFavorites().size() == 0) {
             throw new BadRequestException("No favorites in Request");
         }
 
         Account savedAccount = Account.saveFavorites(account, favorites.getFavorites());
+
         accountService.saveAccount(savedAccount);
 
         FavoriteResponse favoriteResponse = new FavoriteResponse(savedAccount.getFavorite());
