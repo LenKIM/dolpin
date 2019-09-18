@@ -1,24 +1,22 @@
 package com.great.deploy.dolpin.dto;
 
-import io.swagger.annotations.ApiParam;
-import lombok.*;
+import com.great.deploy.dolpin.domain.Favorite;
+import com.great.deploy.dolpin.model.Provider;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Builder
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountRequest {
 
-    private String nickname;
-
-    @ApiParam(value = "Where you live")
-    private String activeRegion;
-
-    @ApiParam(value = "What you have")
-    private String medal;
-
-    private String duckLevel;
-
-
+    String email;
+    String nickname;
+    Provider type;
+    Set<Favorite> favorites;
 }

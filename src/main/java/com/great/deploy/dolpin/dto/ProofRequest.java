@@ -1,18 +1,17 @@
 package com.great.deploy.dolpin.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProofRequest {
 
-    private Long id;
+    private Long pinId;
+    private Integer accountId;
 
-    public ProofRequest(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

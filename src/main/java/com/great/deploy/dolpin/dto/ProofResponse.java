@@ -1,5 +1,7 @@
 package com.great.deploy.dolpin.dto;
 
+import com.great.deploy.dolpin.domain.Visit;
+
 public class ProofResponse {
 
     private boolean result;
