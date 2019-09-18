@@ -1,7 +1,7 @@
 package com.great.deploy.dolpin.config;
 
-import com.great.deploy.dolpin.service.AccountService;
 import com.great.deploy.dolpin.common.AppProperties;
+import com.great.deploy.dolpin.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

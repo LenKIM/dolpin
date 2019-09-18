@@ -31,4 +31,6 @@ public class AppProperties {
     @NotEmpty
     private String clientSecret;
 
+    @NotEmpty
+    private String baseUrl;
 }

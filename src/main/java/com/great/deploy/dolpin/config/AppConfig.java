@@ -2,6 +2,7 @@ package com.great.deploy.dolpin.config;
 
 import com.great.deploy.dolpin.account.Account;
 import com.great.deploy.dolpin.account.AccountRole;
+import com.great.deploy.dolpin.model.Provider;
 import com.great.deploy.dolpin.service.AccountService;
 import com.great.deploy.dolpin.common.AppProperties;
 import org.modelmapper.ModelMapper;
@@ -55,6 +56,7 @@ public class AppConfig {
                         .nickname("여신")
                         .activeRegion("Seoul")
                         .duckLevel("아직 초보")
+                        .type(Provider.SYSTEM)
                         .medal("A+")
                         .email(appProperties.getAdminUsername())
                         .password(appProperties.getAdminPassword())
@@ -72,6 +74,7 @@ public class AppConfig {
                         .imageUrl("https://m.post.naver.com/viewer/postView.nhn?volumeNo=14295665&memberNo=33408012#")
                         .nickname("BTS_L.O.V.E")
                         .activeRegion("Seoul")
+                        .type(Provider.SYSTEM)
                         .duckLevel("이젠나도돌핀!")
                         .medal("동메달")
                         .email(appProperties.getUserUsername())
