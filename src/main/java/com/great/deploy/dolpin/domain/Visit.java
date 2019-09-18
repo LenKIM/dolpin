@@ -1,34 +1,33 @@
 package com.great.deploy.dolpin.domain;
 
 import com.great.deploy.dolpin.common.AuditEntity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@Getter
+@NoArgsConstructor
 @Entity
 @Table(name = "visit")
 public class Visit extends AuditEntity {
 
+    public static Visit of(Long pinId, Integer accountId) {
+        return new Visit(pinId, accountId);
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-
+    private Long id;
     private Long pinId;
+    private Integer accountId;
 
-    private Long userId;
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public Visit(Long pinId) {
+    public Visit(Long pinId, Integer accountId) {
         this.pinId = pinId;
+        this.accountId = accountId;
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public Long getPinId() {
-        return pinId;
-    }
+
+
 }
