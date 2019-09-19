@@ -15,6 +15,7 @@ import com.great.deploy.dolpin.repository.CelebrityGroupRepository;
 import com.great.deploy.dolpin.repository.CelebrityMemberRepository;
 import com.great.deploy.dolpin.service.PinService;
 import com.great.deploy.dolpin.service.s3.AmazonS3ClientService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -55,11 +56,11 @@ public class PinsController {
     public Response<List<PinResponse>> getAllPins(@ApiIgnore @CurrentUser Account account) {
 
         Account.validateAccount(account);
-
+        List<PinResponse> allPins = pinService.getAllPins(account.getId());
         return new Response<>(
                 HttpStatus.ACCEPTED.value(),
                 HttpStatus.ACCEPTED.getReasonPhrase(),
-                pinService.getAllPins()
+                allPins
         );
     }
 
@@ -75,7 +76,7 @@ public class PinsController {
                 .ofNullable(objectMapper.readValue(model, CreatePinRequest.class))
                 .orElse(CreatePinRequest.EMPTY);
 
-        if(createPinRequest == CreatePinRequest.EMPTY){
+        if (createPinRequest == CreatePinRequest.EMPTY) {
             throw new ResourceNotFoundException("Not Found createPinRequest Model");
         }
         String imageUrl;
@@ -99,7 +100,10 @@ public class PinsController {
                 throw new NotSupportException(HttpStatus.NOT_FOUND.value(), "Not Found Group Id");
             }
 
-            Pins pin = pinService.createPin(Pins.of(createPinRequest, celebrityMember, celebrityGroup), imageUrl);
+            Pins pin = pinService.createPin(
+                    Pins.of(
+                            createPinRequest, celebrityMember, celebrityGroup
+                    ), imageUrl);
 
             System.out.println("IMAGE_URL = " + imageUrl);
 
@@ -114,7 +118,7 @@ public class PinsController {
     }
 
     @GetMapping("/pin/{pinId}/detail")
-    public Response<PinDetailResponse> getPinDetail(
+    public Response<PinResponse> getPinDetail(
             @PathVariable @NotBlank Long pinId,
             @ApiIgnore @CurrentUser Account account
     ) {
@@ -122,7 +126,7 @@ public class PinsController {
         return new Response<>(
                 HttpStatus.OK.value(),
                 HttpStatus.OK.getReasonPhrase(),
-                pinService.getPinDetail(pinId)
+                pinService.getPinDetail(pinId, account.getId())
         );
     }
 
@@ -166,20 +170,21 @@ public class PinsController {
         );
     }
 
+    @ApiOperation("pin 들중에 특정 연예인 정보")
     @PostMapping("/pin/celebrity")
     public Response<List<PinResponse>> getCelebrities(
-        @ApiIgnore @CurrentUser Account account,
-        @RequestBody CelebrityRequest celebrityRequest
-    ){
+            @ApiIgnore @CurrentUser Account account,
+            @RequestBody CelebrityRequest celebrityRequest
+    ) {
         Account.validateAccount(account);
 
         Long celebrityId = celebrityRequest.getCelebrityId();
         CelebrityType celebrityType = celebrityRequest.getCelebrityType();
-        if(celebrityType.equals(CelebrityType.MEMBER)){
-            List<PinResponse> memberPins = pinService.getMemberPins(celebrityId);
+        if (celebrityType.equals(CelebrityType.MEMBER)) {
+            List<PinResponse> memberPins = pinService.getMemberPins(celebrityId, account.getId());
             return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), memberPins);
-        } else if (celebrityType.equals(CelebrityType.GROUP)){
-            List<PinResponse> groupPins = pinService.getGroupPins(celebrityId);
+        } else if (celebrityType.equals(CelebrityType.GROUP)) {
+            List<PinResponse> groupPins = pinService.getGroupPins(celebrityId, account.getId());
             return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), groupPins);
         } else {
             throw new ResourceNotFoundException("Not Found celebrityRequest");

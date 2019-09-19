@@ -24,7 +24,8 @@ import java.util.Set;
 public class Account {
 
     public static Account of(Account oldAccount, AccountUpdateRequest newAccount) {
-        return new Account(oldAccount.getId(),
+        return new Account(
+                oldAccount.getId(),
                 oldAccount.getPassword(),
                 oldAccount.getEmail(),
                 oldAccount.getRoles(),
@@ -61,7 +62,8 @@ public class Account {
     }
 
     public static AccountResponse ofResponse(Account account) {
-        return new AccountResponse(account.getId(),
+        return new AccountResponse(
+                account.getId(),
                 account.getEmail(),
                 account.getName(),
                 account.getImageUrl(),

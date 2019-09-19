@@ -70,33 +70,34 @@ public class AccountService implements UserDetailsService {
                 .favorite(favorites)
                 .build();
 
-        Account save = saveAccount(admin);
-        Account.validateAccount(save);
-        AccessToken accessToken = getAuthToken(save, password);
-        return new AccessToken(save, accessToken.getAccessToken(), accessToken.getTokenType(), accessToken.getRefreshToken(), accessToken.getExpiresIn(), accessToken.getScope());
+        Account account = saveAccount(admin);
+        return getAccessToken(account);
     }
 
     public AccessToken login(String email) {
 
         Account account = accountRepository.findByEmail(email);
-        Account.validateAccount(account);
+        return getAccessToken(account);
+    }
 
-        AccessToken accessToken = getAuthToken(account, "password");;
+    private AccessToken getAccessToken(Account account) {
+        Account.validateAccount(account);
+        AccessToken accessToken = getAuthToken(account);
         return new AccessToken(account, accessToken.getAccessToken(), accessToken.getTokenType(), accessToken.getRefreshToken(), accessToken.getExpiresIn(), accessToken.getScope());
     }
 
-    protected AccessToken getAuthToken(Account account, String password) {
+    private AccessToken getAuthToken(Account account) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Basic bXlBcHA6cGFzcw==");
         HttpEntity<String> entity = new HttpEntity<>("", headers);
-        String authURL = appProperties.getBaseUrl() + "/oauth/token?grant_type=password&username=" + account.getEmail() + "&password=" + password;
+        String authURL = appProperties.getBaseUrl() + "/oauth/token?grant_type=password&username=" + account.getEmail() + "&password=password";
         ResponseEntity<String> response = restTemplate.postForEntity(authURL, entity, String.class);
 
         AccessToken accessToken = null;
         try {
-         accessToken = objectMapper.readValue(response.getBody(), AccessToken.class);
+            accessToken = objectMapper.readValue(response.getBody(), AccessToken.class);
         } catch (IOException e) {
             e.printStackTrace();
         }

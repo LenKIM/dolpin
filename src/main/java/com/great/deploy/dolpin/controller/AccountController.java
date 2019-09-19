@@ -43,14 +43,14 @@ public class AccountController {
     @PutMapping
     public Response<AccountResponse> updateCurrentUserInfo(
             @RequestBody AccountUpdateRequest newAccount,
-            @ApiIgnore @CurrentUser Account account) {
+            @ApiIgnore @CurrentUser Account oldAccount) {
 
-        validateAccount(account);
+        validateAccount(oldAccount);
 
         return new Response<>(
                 HttpStatus.OK.value(),
                 HttpStatus.OK.getReasonPhrase(),
-                Account.ofResponse(Account.of(account, newAccount))
+                Account.ofResponse(Account.of(oldAccount, newAccount))
         );
     }
 
@@ -64,6 +64,7 @@ public class AccountController {
                 accountRequest.getNickname(),
                 accountRequest.getFavorites(),
                 accountRequest.getType());
+
         return new Response<>(
                 HttpStatus.CREATED.value(),
                 HttpStatus.CREATED.getReasonPhrase(),
@@ -89,7 +90,6 @@ public class AccountController {
     public Response<Boolean> existedUser(
             @RequestParam String email
     ) {
-
         //TODO email 인증.
         return new Response<>(HttpStatus.ACCEPTED.value(), HttpStatus.ACCEPTED.getReasonPhrase(), accountRepository.existsByEmail(email));
     }

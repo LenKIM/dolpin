@@ -12,8 +12,7 @@ import com.great.deploy.dolpin.dto.PinRequest;
 import com.great.deploy.dolpin.repository.CelebrityGroupRepository;
 import com.great.deploy.dolpin.repository.CelebrityMemberRepository;
 import com.great.deploy.dolpin.repository.PinsRepository;
-import com.great.deploy.dolpin.service.AccountService;
-import com.great.deploy.dolpin.service.PinService;
+import com.great.deploy.dolpin.repository.VisitRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -35,20 +34,18 @@ public class PinsControllerTest extends BaseControllerTest {
     private PinsRepository pinsRepository;
 
     @Autowired
-    private PinService pinService;
-
-    @Autowired
-    private AccountService accountService;
-
+    private VisitRepository visitRepository;
     @Test
     @TestDescription("Get All pins")
 
     public void getAllPins() throws Exception {
+
         this.mockMvc.perform(get("/api/pins")
-                .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(false))
+                .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(true))
         )
             .andExpect(MockMvcResultMatchers.jsonPath("code").value("202"))
-            .andExpect(MockMvcResultMatchers.jsonPath("msg").value("Accepted"));
+            .andExpect(MockMvcResultMatchers.jsonPath("msg").value("Accepted")
+            );
     }
 
     @Test
@@ -254,6 +251,4 @@ public class PinsControllerTest extends BaseControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("data").isEmpty())
         ;
     }
-
-
 }
