@@ -6,7 +6,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Getter
@@ -42,10 +41,6 @@ public class Pins extends AuditEntity {
     private String imgProvider;
     private LocalDate startDate;
     private LocalDate endDate;
-
-    // mappedBy 추가
-    @OneToMany(targetEntity = Comment.class, mappedBy = "pins", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments;
 
     @ManyToOne
     @JoinColumn(name = "celebrity_member_id")
