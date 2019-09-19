@@ -100,7 +100,6 @@ public class PinServiceImpl implements PinService {
                 pin.getEndDate(),
                 pin.getCelebrityMemberId(),
                 pin.getCelebrityGroupId(),
-                pin.getComments(),
                 visits.stream().anyMatch(a -> a.equals(pin.getId()))
         );
     }
@@ -144,7 +143,6 @@ public class PinServiceImpl implements PinService {
                                 pins.getEndDate(),
                                 pins.getCelebrityMemberId(),
                                 pins.getCelebrityGroupId(),
-                                pins.getComments(),
                                 visits.stream().anyMatch(a -> a.equals(pins.getId()))
                         )
                 ).collect(Collectors.toList());

@@ -26,6 +26,5 @@ public class PinResponse {
     private LocalDate endDate;
     private Long member_id;
     private Long group_id;
-    private List<Comment> comments;
     private boolean isPinCertification;
 }
