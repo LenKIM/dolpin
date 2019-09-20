@@ -29,7 +29,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                             "/favicon**",
                             "/csrf",
                             "/v2/**",
-                            "/definitions/**")
+                            "/definitions/**",
+                            "/api/celebrities**")
                         .permitAll()
                     .mvcMatchers(HttpMethod.POST, "/api/user/create**", "/api/user/login**")
                         .permitAll()
