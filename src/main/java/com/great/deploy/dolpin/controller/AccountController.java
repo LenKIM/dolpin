@@ -90,9 +90,9 @@ public class AccountController {
     }
 
     @ApiOperation(value = "check existed user", response = CheckEmailResponse.class)
-    @GetMapping("/check")
+    @PostMapping("/check")
     public Response<Boolean> existedUser(
-            @RequestParam LoginRequest request
+            @RequestBody LoginRequest request
     ) {
         String oauthId = AccountService.getOauthId(request.getEmail(), request.getSnsType(), request.getSnsId());
         return new Response<>(HttpStatus.ACCEPTED.value(), HttpStatus.ACCEPTED.getReasonPhrase(), accountRepository.existsByOauthId(oauthId));
