@@ -57,7 +57,7 @@ public class AccountController {
     }
 
     @ApiOperation(value = "create user by email and sns", response = AccessTokenResponseSwagger.class)
-    @PostMapping("/exist")
+    @PostMapping("/create")
     public Response<AccessTokenResponse> createUser(
             @RequestBody AccountRequest accountRequest
     ) {
@@ -90,7 +90,7 @@ public class AccountController {
     }
 
     @ApiOperation(value = "check existed user", response = CheckEmailResponse.class)
-    @PostMapping("/check")
+    @PostMapping("/exist")
     public Response<Boolean> existedUser(
             @RequestBody LoginRequest request
     ) {
