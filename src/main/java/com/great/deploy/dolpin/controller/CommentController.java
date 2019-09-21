@@ -12,6 +12,7 @@ import com.great.deploy.dolpin.repository.CommentRepository;
 import com.great.deploy.dolpin.repository.PinsRepository;
 import com.great.deploy.dolpin.service.AccountService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,7 @@ public class CommentController {
     @Autowired
     private AccountService accountService;
 
+    @ApiOperation(value = "특정 pin에 대한 복수의 댓글 가져오기", response = CommentListResponse.class)
     @GetMapping("/pins/{pinsId}/comments")
     public CommentListResponse getAllCommentsByPostId(
             @ApiIgnore @CurrentUser Account account,
@@ -52,7 +54,7 @@ public class CommentController {
                         comment -> new CommentResponse(comment.getId(), comment.getContents(), comment.getNickName())
                 ).collect(Collectors.toList()));
     }
-
+    @ApiOperation(value = "특정 pin 댓글 등록", response = CommentResponse.class)
     @PostMapping("/pins/{pinsId}/comments")
     public CommentResponse createComment(
             @ApiIgnore @CurrentUser Account account,
@@ -68,7 +70,7 @@ public class CommentController {
                     return new CommentResponse(savedComment.getId(), savedComment.getContents(), savedComment.getNickName());
                 }).orElseThrow(() -> new ResourceNotFoundException("PostId " + pinsId + " not found"));
     }
-
+    @ApiOperation(value = "특정 pin 댓글 수정", response = CommentResponse.class)
     @PutMapping("/pins/{pinsId}/comments/{commentId}")
     public CommentResponse updateComment(
             @ApiIgnore @CurrentUser Account account,
@@ -90,7 +92,7 @@ public class CommentController {
                     return new CommentResponse(newComment.getId(), newComment.getContents(), newComment.getNickName());
                 }).orElseThrow(() -> new ResourceNotFoundException("CommentId " + commentId + "not found"));
     }
-
+    @ApiOperation(value = "특정 pin 댓글 삭제")
     @DeleteMapping("/pins/{pinsId}/comments/{commentId}")
     public Response<Boolean> deleteComment(
             @ApiIgnore @CurrentUser Account account,
