@@ -22,5 +22,7 @@ public class CreatePinRequest {
     private Double longitude;
     private LocalDate startDate;
     private LocalDate endDate;
+    private String address;
+    private String detailedAddress;
 
 }

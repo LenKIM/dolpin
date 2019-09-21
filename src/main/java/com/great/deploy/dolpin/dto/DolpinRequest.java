@@ -5,14 +5,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+import java.time.LocalDate;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class DolpinRequest {
 
     private Long celebrityId;
     private CelebrityType celebrityType;
-
-    private String imgProvider;
-    private String latitude;
-    private String longitude;
-//    아이돌 /  위치검색+상세위치 / 날짜 입력 /
+    private String address;
+    private String detailedAddress;
+    private LocalDate startDate;
+    private LocalDate endDate;
 }

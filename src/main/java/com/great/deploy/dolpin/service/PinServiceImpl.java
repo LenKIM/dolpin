@@ -53,6 +53,8 @@ public class PinServiceImpl implements PinService {
         }
         return pinsRepository.save(
                 new Pins(
+                        pins.getAddress(),
+                        pins.getDetailedAddress(),
                         pins.getLatitude(),
                         pins.getLongitude(),
                         pins.getTitle(),
@@ -61,7 +63,8 @@ public class PinServiceImpl implements PinService {
                         pins.getStartDate(),
                         pins.getEndDate(),
                         celebrityMember,
-                        celebrityGroup)
+                        celebrityGroup
+                        )
         );
     }
 
@@ -100,7 +103,9 @@ public class PinServiceImpl implements PinService {
                 pin.getEndDate(),
                 pin.getCelebrityMemberId(),
                 pin.getCelebrityGroupId(),
-                visits.stream().anyMatch(a -> a.equals(pin.getId()))
+                visits.stream().anyMatch(a -> a.equals(pin.getId())),
+                pin.getAddress(),
+                pin.getDetailedAddress()
         );
     }
 
@@ -115,6 +120,8 @@ public class PinServiceImpl implements PinService {
                             pin.setLongitude(pinRequest.getLongitude());
                             pin.setStartDate(pinRequest.getStartDate());
                             pin.setEndDate(pinRequest.getEndDate());
+                            pin.setAddress(pinRequest.getAddress());
+                            pin.setDetailedAddress(pinRequest.getDetailedAddress());
                             return pinsRepository.save(pin);
                         }
                 ).orElseThrow(() -> new NotFoundException("Not Fount pin ID " + pinId));
@@ -143,7 +150,9 @@ public class PinServiceImpl implements PinService {
                                 pins.getEndDate(),
                                 pins.getCelebrityMemberId(),
                                 pins.getCelebrityGroupId(),
-                                visits.stream().anyMatch(a -> a.equals(pins.getId()))
+                                visits.stream().anyMatch(a -> a.equals(pins.getId())),
+                                pins.getAddress(),
+                                pins.getDetailedAddress()
                         )
                 ).collect(Collectors.toList());
     }

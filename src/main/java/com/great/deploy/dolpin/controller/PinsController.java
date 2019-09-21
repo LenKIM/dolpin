@@ -56,11 +56,10 @@ public class PinsController {
     public Response<List<PinResponse>> getAllPins(@ApiIgnore @CurrentUser Account account) {
 
         Account.validateAccount(account);
-        List<PinResponse> allPins = pinService.getAllPins(account.getId());
         return new Response<>(
                 HttpStatus.ACCEPTED.value(),
                 HttpStatus.ACCEPTED.getReasonPhrase(),
-                allPins
+                pinService.getAllPins(account.getId())
         );
     }
 
@@ -102,7 +101,7 @@ public class PinsController {
 
             Pins pin = pinService.createPin(
                     Pins.of(
-                            createPinRequest, celebrityMember, celebrityGroup
+                            createPinRequest, celebrityMember, celebrityGroup, createPinRequest.getAddress(), createPinRequest.getDetailedAddress()
                     ), imageUrl);
 
             System.out.println("IMAGE_URL = " + imageUrl);

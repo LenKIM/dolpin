@@ -3,10 +3,14 @@ package com.great.deploy.dolpin.controller;
 import com.great.deploy.dolpin.account.Account;
 import com.great.deploy.dolpin.account.CurrentUser;
 import com.great.deploy.dolpin.domain.Visit;
+import com.great.deploy.dolpin.dto.DolpinRequest;
 import com.great.deploy.dolpin.dto.ProofRequest;
 import com.great.deploy.dolpin.dto.ProofResponse;
 import com.great.deploy.dolpin.dto.Response;
 import com.great.deploy.dolpin.exception.ResourceNotFoundException;
+import com.great.deploy.dolpin.model.Celebrity;
+import com.great.deploy.dolpin.model.PositingPeriod;
+import com.great.deploy.dolpin.model.PostedAddress;
 import com.great.deploy.dolpin.service.ReportService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,14 +47,17 @@ public class DolpinController {
         return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), response);
     }
 
-//    @ApiOperation(value = "아이돌 광고 제보 API")
-//    @PostMapping("/dolpin")
-//    public Response<ProofResponse> idolPinAuthentication(
-//            @ApiIgnore @CurrentUser Account account,
-//            @RequestBody DolpinRequest request
-//    ) {
-//        Account.validateAccount(account);
-//
-//        return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), response);
-//    }
+    @ApiOperation(value = "아이돌 광고 제보 API")
+    @PostMapping("/dolpin")
+    public Response<Boolean> dolpinIdol(
+            @ApiIgnore @CurrentUser Account account,
+            @RequestBody DolpinRequest request
+    ) {
+        Account.validateAccount(account);
+        Celebrity celebrity = new Celebrity(request.getCelebrityId(), request.getCelebrityType());
+        PostedAddress address = new PostedAddress(request.getAddress(), request.getDetailedAddress());
+        PositingPeriod period = new PositingPeriod(request.getStartDate(), request.getEndDate());
+        reportService.dolpin(celebrity, address, period);
+        return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), true);
+    }
 }

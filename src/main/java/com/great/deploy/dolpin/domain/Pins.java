@@ -17,8 +17,10 @@ import java.time.LocalDate;
 @Table(name = "pins")
 public class Pins extends AuditEntity {
 
-    public static Pins of(CreatePinRequest pinRequest, CelebrityMember celebrityMember, CelebrityGroup celebrityGroup) {
+    public static Pins of(CreatePinRequest pinRequest, CelebrityMember celebrityMember, CelebrityGroup celebrityGroup, String address, String detailedAddress) {
         return new Pins(
+                pinRequest.getAddress(),
+                pinRequest.getDetailedAddress(),
                 pinRequest.getLatitude(),
                 pinRequest.getLongitude(),
                 pinRequest.getTitle(),
@@ -42,6 +44,9 @@ public class Pins extends AuditEntity {
     private LocalDate startDate;
     private LocalDate endDate;
 
+    private String address;
+    private String detailedAddress;
+
     @ManyToOne
     @JoinColumn(name = "celebrity_member_id")
     private CelebrityMember celebrityMember;
@@ -50,7 +55,7 @@ public class Pins extends AuditEntity {
     @JoinColumn(name = "celebrity_group_id")
     private CelebrityGroup celebrityGroup;
 
-    public Pins(Double latitude, Double longitude, String title, String imgUrl, String imgProvider,
+    public Pins(String address, String detailedAddress, Double latitude, Double longitude, String title, String imgUrl, String imgProvider,
                 LocalDate startDate, LocalDate endDate, CelebrityMember celebrityMember, CelebrityGroup celebrityGroup) {
         this.latitude = latitude;
         this.longitude = longitude;
@@ -61,6 +66,8 @@ public class Pins extends AuditEntity {
         this.endDate = endDate;
         this.celebrityMember = celebrityMember;
         this.celebrityGroup = celebrityGroup;
+        this.address = address;
+        this.detailedAddress = detailedAddress;
     }
 
     public Long getCelebrityMemberId() {
