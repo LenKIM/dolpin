@@ -42,9 +42,24 @@ public class AccountService implements UserDetailsService {
     ObjectMapper objectMapper;
 
 
+    public static String getOauthId(String email, Provider snsType, String snsId) {
+        String oauthId;
+        if (email.isEmpty()) {
+            oauthId = snsType + snsId;
+        } else {
+            oauthId = email;
+        }
+        return oauthId;
+    }
+
     @Transactional
     public Account saveAccount(Account account) {
         account.setPassword(this.passwordEncoder.encode(account.getPassword()));
+        return this.accountRepository.save(account);
+    }
+
+    @Transactional
+    public Account updateAccount(Account account) {
         return this.accountRepository.save(account);
     }
 
@@ -55,16 +70,11 @@ public class AccountService implements UserDetailsService {
         return new AccountAdapter(account);
     }
 
-    public AccessToken create(String email, String nickname, Set<Favorite> favorites, Provider SNSType, String SNSId) {
+    public AccessToken create(String email, String nickname, Set<Favorite> favorites, Provider snsType, String snsId) {
 
         final Set<AccountRole> adminRoles = new HashSet<>();
         adminRoles.add(AccountRole.USER);
-        String OAuthId;
-        if (email.isEmpty()) {
-            OAuthId = SNSType + SNSId;
-        } else {
-            OAuthId = email;
-        }
+        String oauthId = getOauthId(email, snsType, snsId);
 
         String password = "password";
         Account admin = Account.builder()
@@ -73,9 +83,9 @@ public class AccountService implements UserDetailsService {
                 .password(password)
                 .roles(adminRoles)
                 .favorites(favorites)
-                .snsType(SNSType)
-                .snsId(SNSId)
-                .oauthId(OAuthId)
+                .snsType(snsType)
+                .snsId(snsId)
+                .oauthId(oauthId)
                 .build();
 
         Account account = saveAccount(admin);

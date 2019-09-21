@@ -3,7 +3,6 @@ package com.great.deploy.dolpin.controller;
 import com.great.deploy.dolpin.account.Account;
 import com.great.deploy.dolpin.account.CurrentUser;
 import com.great.deploy.dolpin.dto.*;
-import com.great.deploy.dolpin.model.Provider;
 import com.great.deploy.dolpin.repository.AccountRepository;
 import com.great.deploy.dolpin.service.AccountService;
 import com.great.deploy.dolpin.swagger.AccessTokenResponseSwagger;
@@ -51,7 +50,9 @@ public class AccountController {
         return new Response<>(
                 HttpStatus.OK.value(),
                 HttpStatus.OK.getReasonPhrase(),
-                Account.ofResponse(Account.of(oldAccount, newAccount))
+                Account.ofResponse(
+                        accountService.updateAccount(Account.of(oldAccount, newAccount))
+                )
         );
     }
 
@@ -79,16 +80,7 @@ public class AccountController {
     public Response<AccessTokenResponse> loginUser(
             @RequestBody LoginRequest request
     ) {
-        String email = request.getEmail();
-        String snsId = request.getSnsId();
-        Provider snsType = request.getSnsType();
-        String oauthId;
-        if(email.isEmpty()){
-            oauthId = snsType + snsId;
-        } else {
-            oauthId = email;
-        }
-
+        String oauthId = AccountService.getOauthId(request.getEmail(), request.getSnsType(), request.getSnsId());
         AccessToken account = accountService.login(oauthId);
         return new Response<>(
                 HttpStatus.OK.value(),
@@ -102,15 +94,7 @@ public class AccountController {
     public Response<Boolean> existedUser(
             @RequestParam LoginRequest request
     ) {
-        String email = request.getEmail();
-        String snsId = request.getSnsId();
-        Provider snsType = request.getSnsType();
-        String oauthId;
-        if(email.isEmpty()){
-            oauthId = snsType + snsId;
-        } else {
-            oauthId = email;
-        }
+        String oauthId = AccountService.getOauthId(request.getEmail(), request.getSnsType(), request.getSnsId());
         return new Response<>(HttpStatus.ACCEPTED.value(), HttpStatus.ACCEPTED.getReasonPhrase(), accountRepository.existsByOauthId(oauthId));
     }
 
