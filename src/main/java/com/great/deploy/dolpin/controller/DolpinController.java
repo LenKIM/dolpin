@@ -47,9 +47,10 @@ public class DolpinController {
 //    @PostMapping("/dolpin")
 //    public Response<ProofResponse> idolPinAuthentication(
 //            @ApiIgnore @CurrentUser Account account,
-//            @RequestBody ProofRequest request
+//            @RequestBody DolpinRequest request
 //    ) {
 //        Account.validateAccount(account);
+//
 //        return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), response);
 //    }
 }

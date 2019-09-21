@@ -50,9 +50,9 @@ public class FavoriteController {
 
         Account savedAccount = Account.saveFavorites(account, favorites.getFavorites());
 
-        accountService.saveAccount(savedAccount);
+        Account newAccount = accountService.saveAccount(savedAccount);
 
-        FavoriteResponse favoriteResponse = new FavoriteResponse(savedAccount.getFavorite());
+        FavoriteResponse favoriteResponse = new FavoriteResponse(newAccount.getFavorite());
         return new Response<>(
                 HttpStatus.ACCEPTED.value(),
                 HttpStatus.ACCEPTED.getReasonPhrase(),
