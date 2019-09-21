@@ -8,9 +8,11 @@ import lombok.Setter;
 
 import java.util.Set;
 
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class FavoriteRequest {
 
-    Set<Favorite> favorites;
+    private Set<Favorite> favorites;
 }

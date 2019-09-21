@@ -10,7 +10,6 @@ import lombok.*;
 public class CelebrityRequest {
 
     private Long celebrityId;
-
     private CelebrityType celebrityType;
 
 }

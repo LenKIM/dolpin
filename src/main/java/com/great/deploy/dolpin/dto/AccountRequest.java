@@ -15,9 +15,9 @@ import java.util.Set;
 @AllArgsConstructor
 public class AccountRequest {
 
-    String email;
-    String nickname;
-    Provider snsType;
-    String snsId;
-    Set<Favorite> favorites;
+    private String email;
+    private String nickname;
+    private Provider snsType;
+    private String snsId;
+    private Set<Favorite> favorites;
 }

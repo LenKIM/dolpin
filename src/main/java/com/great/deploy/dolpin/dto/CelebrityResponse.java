@@ -7,7 +7,10 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Setter @Getter @NoArgsConstructor @AllArgsConstructor
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CelebrityResponse {
 
     private Long id;

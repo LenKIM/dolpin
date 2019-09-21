@@ -30,10 +30,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                             "/csrf",
                             "/v2/**",
                             "/definitions/**",
-                            "/api/celebrities**",
-                            "/api/user/check**")
+                            "/api/celebrities**")
                         .permitAll()
-                    .mvcMatchers(HttpMethod.POST, "/api/user/create**", "/api/user/login**")
+                    .mvcMatchers(HttpMethod.POST, "/api/user/create**", "/api/user/login**", "/api/user/check**")
                         .permitAll()
                     .anyRequest()
                         .authenticated()

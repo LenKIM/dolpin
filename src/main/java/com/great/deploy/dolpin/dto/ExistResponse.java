@@ -6,11 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
 public class ExistResponse {
 
-    boolean isExisted;
-    Provider snsType;
+    private boolean isExisted;
+    private Provider snsType;
 }

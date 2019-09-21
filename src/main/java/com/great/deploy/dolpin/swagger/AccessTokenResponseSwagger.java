@@ -1,6 +1,5 @@
 package com.great.deploy.dolpin.swagger;
 
-import com.great.deploy.dolpin.dto.AccessToken;
 import com.great.deploy.dolpin.dto.AccessTokenResponse;
 import com.great.deploy.dolpin.dto.Response;
 

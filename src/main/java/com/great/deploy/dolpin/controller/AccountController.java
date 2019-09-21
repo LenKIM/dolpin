@@ -8,7 +8,6 @@ import com.great.deploy.dolpin.repository.AccountRepository;
 import com.great.deploy.dolpin.service.AccountService;
 import com.great.deploy.dolpin.swagger.AccessTokenResponseSwagger;
 import com.great.deploy.dolpin.swagger.AccountResponseSwagger;
-import com.great.deploy.dolpin.swagger.CheckEmailResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +89,7 @@ public class AccountController {
         );
     }
 
-    @ApiOperation(value = "check existed user", response = CheckEmailResponse.class)
+    @ApiOperation(value = "check existed user", response = ExistResponse.class)
     @PostMapping("/exist")
     public Response<ExistResponse> existedUser(
             @RequestBody LoginRequest request

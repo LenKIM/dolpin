@@ -14,11 +14,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class AccessToken extends Account {
 
-    String accessToken;
-    String tokenType;
-    String refreshToken;
-    Integer expiresIn;
-    String scope;
+    private String accessToken;
+    private String tokenType;
+    private String refreshToken;
+    private Integer expiresIn;
+    private String scope;
 
     public AccessToken(Account account, String accessToken, String tokenType, String refreshToken, Integer expiresIn, String scope) {
         super(account.getId(), account.getPassword(), account.getEmail(), account.getRoles(), account.getName(), account.getImageUrl(), account.getNickname(), account.getActiveRegion(), account.getMedal(), account.getDuckLevel(), account.getSnsType(), account.getSnsId(), account.getOauthId(), account.getFavorites(), account.getCreatedAt(), LocalDateTime.now());
@@ -29,7 +29,6 @@ public class AccessToken extends Account {
         this.scope = scope;
     }
 }
-
 
 //{
 //        "access_token": "e377ab2b-1909-4c72-a2e6-a5ff88cc0313",
