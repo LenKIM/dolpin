@@ -23,8 +23,8 @@ public class AccessTokenResponse {
     private String activeRegion;
     private String medal;
     private String duckLevel;
-    private Provider SNSType;
-    private String SNSId;
+    private Provider snsType;
+    private String snsId;
     private Set<Favorite> favorites;
     private String accessToken;
 
