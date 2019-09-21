@@ -5,7 +5,6 @@ import com.great.deploy.dolpin.account.CurrentUser;
 import com.great.deploy.dolpin.dto.FavoriteRequest;
 import com.great.deploy.dolpin.dto.FavoriteResponse;
 import com.great.deploy.dolpin.dto.Response;
-import com.great.deploy.dolpin.exception.BadRequestException;
 import com.great.deploy.dolpin.service.AccountService;
 import com.great.deploy.dolpin.swagger.FavoriteResponseModel;
 import io.swagger.annotations.Api;
@@ -38,20 +37,10 @@ public class FavoriteController {
     @PutMapping
     @ApiOperation(value = "Update current user's favorites Info", response = FavoriteResponseModel.class)
     public Response<FavoriteResponse> updateFavorites(@RequestBody FavoriteRequest favorites,
-                                                    @ApiIgnore @CurrentUser Account account) {
-        return getFavoriteResponseResponse(favorites, account);
-    }
-
-    private Response<FavoriteResponse> getFavoriteResponseResponse(@RequestBody FavoriteRequest favorites, @CurrentUser @ApiIgnore Account account) {
+                                                      @ApiIgnore @CurrentUser Account account) {
         validateAccount(account);
-        if (favorites.getFavorites().size() == 0) {
-            throw new BadRequestException("No favorites in Request");
-        }
-
-        Account savedAccount = Account.saveFavorites(account, favorites.getFavorites());
-
-        Account newAccount = accountService.saveAccount(savedAccount);
-
+        Account savedAccount = Account.changeFavorites(account, favorites.getFavorites());
+        Account newAccount = accountService.updateAccount(savedAccount);
         FavoriteResponse favoriteResponse = new FavoriteResponse(newAccount.getFavorites());
         return new Response<>(
                 HttpStatus.ACCEPTED.value(),

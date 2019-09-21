@@ -44,7 +44,7 @@ public class Account {
                 );
     }
 
-    public static Account saveFavorites(Account account, Set<Favorite> favorite) {
+    public static Account changeFavorites(Account account, Set<Favorite> favorite) {
         return new Account(account.getId(),
                 account.getPassword(),
                 account.getEmail(),

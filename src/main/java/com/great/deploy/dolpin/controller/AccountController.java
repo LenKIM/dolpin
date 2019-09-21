@@ -57,7 +57,7 @@ public class AccountController {
     }
 
     @ApiOperation(value = "create user by email and sns", response = AccessTokenResponseSwagger.class)
-    @PostMapping("/create")
+    @PostMapping("/exist")
     public Response<AccessTokenResponse> createUser(
             @RequestBody AccountRequest accountRequest
     ) {
