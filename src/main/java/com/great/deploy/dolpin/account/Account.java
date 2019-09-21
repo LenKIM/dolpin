@@ -111,7 +111,7 @@ public class Account {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "account_favorite", joinColumns = @JoinColumn(name = "account_id"))
-    private Set<Favorite> favorite = new HashSet<>();
+    private Set<Favorite> favorites = new HashSet<>();
 
     @CreationTimestamp
     private LocalDateTime createdAt;
