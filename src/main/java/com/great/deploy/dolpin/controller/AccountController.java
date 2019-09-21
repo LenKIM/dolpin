@@ -3,6 +3,7 @@ package com.great.deploy.dolpin.controller;
 import com.great.deploy.dolpin.account.Account;
 import com.great.deploy.dolpin.account.CurrentUser;
 import com.great.deploy.dolpin.dto.*;
+import com.great.deploy.dolpin.model.Provider;
 import com.great.deploy.dolpin.repository.AccountRepository;
 import com.great.deploy.dolpin.service.AccountService;
 import com.great.deploy.dolpin.swagger.AccessTokenResponseSwagger;
@@ -91,11 +92,18 @@ public class AccountController {
 
     @ApiOperation(value = "check existed user", response = CheckEmailResponse.class)
     @PostMapping("/exist")
-    public Response<Boolean> existedUser(
+    public Response<ExistResponse> existedUser(
             @RequestBody LoginRequest request
     ) {
         String oauthId = AccountService.getOauthId(request.getEmail(), request.getSnsType(), request.getSnsId());
-        return new Response<>(HttpStatus.ACCEPTED.value(), HttpStatus.ACCEPTED.getReasonPhrase(), accountRepository.existsByOauthId(oauthId));
+        Account account = accountRepository.findByOauthId(oauthId);
+        ExistResponse existResponse;
+        if (account == null) {
+            existResponse = new ExistResponse(false, Provider.NONE);
+        } else {
+            existResponse = new ExistResponse(true, account.getSnsType());
+        }
+        return new Response<>(HttpStatus.ACCEPTED.value(), HttpStatus.ACCEPTED.getReasonPhrase(), existResponse);
     }
 
 }
