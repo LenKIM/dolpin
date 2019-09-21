@@ -68,8 +68,8 @@ public class FavoriteControllerTest extends BaseControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("code").value("202"))
                 .andExpect(jsonPath("msg").value("Accepted"))
-                .andExpect(jsonPath("data.favorite[0].memberId").value("9"))
-                .andExpect(jsonPath("data.favorite[0].groupId").value("8"));
+                .andExpect(jsonPath("data.favorites[0].memberId").value("9"))
+                .andExpect(jsonPath("data.favorites[0].groupId").value("8"));
     }
 }
 //

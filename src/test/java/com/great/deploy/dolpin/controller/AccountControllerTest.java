@@ -108,7 +108,7 @@ public class AccountControllerTest extends BaseControllerTest {
                 .nickname("BTS_LOVE")
                 .imageUrl("Https://aaaa.com")
                 .name("김정규")
-                .favorite(favoriteSet)
+                .favorites(favoriteSet)
                 .roles(accountRoles)
                 .build();
 
@@ -177,7 +177,7 @@ public class AccountControllerTest extends BaseControllerTest {
                 .nickname("BTS_LOVE")
                 .imageUrl("Https://aaaa.com")
                 .name("김정규")
-                .favorite(favoriteSet)
+                .favorites(favoriteSet)
                 .roles(accountRoles)
                 .build();
 

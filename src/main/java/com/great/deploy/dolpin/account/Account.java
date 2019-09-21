@@ -36,7 +36,7 @@ public class Account {
                 newAccount.getMedal(),
                 newAccount.getDuckLevel(),
                 oldAccount.getType(),
-                oldAccount.getFavorite(),
+                oldAccount.getFavorites(),
                 oldAccount.getCreatedAt(),
                 LocalDateTime.now()
                 );
@@ -71,7 +71,7 @@ public class Account {
                 account.getActiveRegion(),
                 account.getMedal(),
                 account.getDuckLevel(),
-                account.getFavorite()
+                account.getFavorites()
         );
     }
 

@@ -18,7 +18,7 @@ public class AccessToken extends Account {
     String scope;
 
     public AccessToken(Account account, String accessToken, String tokenType, String refreshToken, Integer expiresIn, String scope) {
-        super(account.getId(), account.getPassword(), account.getEmail(), account.getRoles(), account.getName(), account.getImageUrl(), account.getNickname(), account.getActiveRegion(), account.getMedal(), account.getDuckLevel(), account.getType(), account.getFavorite(), account.getCreatedAt(), LocalDateTime.now());
+        super(account.getId(), account.getPassword(), account.getEmail(), account.getRoles(), account.getName(), account.getImageUrl(), account.getNickname(), account.getActiveRegion(), account.getMedal(), account.getDuckLevel(), account.getType(), account.getFavorites(), account.getCreatedAt(), LocalDateTime.now());
         this.accessToken = accessToken;
         this.tokenType = tokenType;
         this.refreshToken = refreshToken;

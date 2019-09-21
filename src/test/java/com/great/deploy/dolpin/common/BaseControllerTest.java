@@ -85,7 +85,7 @@ public class BaseControllerTest {
                     .nickname("BTS_LOVE")
                     .imageUrl("Https://aaaa.com")
                     .name("김정규")
-                    .favorite(favoriteSet)
+                    .favorites(favoriteSet)
                     .roles(accountRoles)
                     .build();
 

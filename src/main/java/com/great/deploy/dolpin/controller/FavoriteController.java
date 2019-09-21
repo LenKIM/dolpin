@@ -32,7 +32,7 @@ public class FavoriteController {
         return new Response<>(
                 HttpStatus.OK.value(),
                 HttpStatus.OK.getReasonPhrase(),
-                new FavoriteResponse(account.getFavorite()));
+                new FavoriteResponse(account.getFavorites()));
     }
 
     @PutMapping
@@ -52,7 +52,7 @@ public class FavoriteController {
 
         Account newAccount = accountService.saveAccount(savedAccount);
 
-        FavoriteResponse favoriteResponse = new FavoriteResponse(newAccount.getFavorite());
+        FavoriteResponse favoriteResponse = new FavoriteResponse(newAccount.getFavorites());
         return new Response<>(
                 HttpStatus.ACCEPTED.value(),
                 HttpStatus.ACCEPTED.getReasonPhrase(),

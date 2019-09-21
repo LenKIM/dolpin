@@ -67,7 +67,7 @@ public class AccountService implements UserDetailsService {
                 .password(password)
                 .roles(adminRoles)
                 .type(provider)
-                .favorite(favorites)
+                .favorites(favorites)
                 .build();
 
         Account account = saveAccount(admin);
