@@ -1,16 +1,26 @@
 package com.great.deploy.dolpin.controller;
 
+import com.great.deploy.dolpin.account.Account;
+import com.great.deploy.dolpin.account.CurrentUser;
 import com.great.deploy.dolpin.domain.Comment;
+import com.great.deploy.dolpin.dto.CommentListResponse;
+import com.great.deploy.dolpin.dto.CommentRequest;
+import com.great.deploy.dolpin.dto.CommentResponse;
 import com.great.deploy.dolpin.dto.Response;
 import com.great.deploy.dolpin.exception.ResourceNotFoundException;
 import com.great.deploy.dolpin.repository.CommentRepository;
 import com.great.deploy.dolpin.repository.PinsRepository;
+import com.great.deploy.dolpin.service.AccountService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Api(value = "CommentController", description = "특정 Pin's Comment API.")
 @RestController
@@ -23,25 +33,51 @@ public class CommentController {
     @Autowired
     private PinsRepository pinsRepository;
 
+    @Autowired
+    private AccountService accountService;
+
     @GetMapping("/pins/{pinsId}/comments")
-    public Comment getAllCommentsByPostId(@PathVariable(value = "pinsId") Long pinsId) {
-        return commentRepository.findByPinsId(pinsId);
+    public CommentListResponse getAllCommentsByPostId(
+            @ApiIgnore @CurrentUser Account account,
+            @PathVariable(value = "pinsId") Long pinsId) {
+
+        Account.validateAccount(account);
+
+        List<Comment> pins = commentRepository.findAllByPinsId(pinsId);
+
+        pins.sort(Comparator.comparing(Comment::getCreateAt).reversed());
+
+        return new CommentListResponse(
+                pins.stream().map(
+                        comment -> new CommentResponse(comment.getId(), comment.getContents(), comment.getNickName())
+                ).collect(Collectors.toList()));
     }
 
     @PostMapping("/pins/{pinsId}/comments")
-    public Comment createComment(@PathVariable(value = "pinsId") Long pinsId,
-                                 @Valid @RequestBody Comment comment) {
+    public CommentResponse createComment(
+            @ApiIgnore @CurrentUser Account account,
+            @PathVariable(value = "pinsId") Long pinsId,
+            @Valid @RequestBody CommentRequest request) {
+
+        Account.validateAccount(account);
+
         return pinsRepository.findById(pinsId)
                 .map(pins -> {
-                    comment.setPins(pins);
-                    return commentRepository.save(comment);
+                    Comment comment = new Comment(pins, request.getContents(), request.getAccountId(), request.getNickName());
+                    Comment savedComment = commentRepository.save(comment);
+                    return new CommentResponse(savedComment.getId(), savedComment.getContents(), savedComment.getNickName());
                 }).orElseThrow(() -> new ResourceNotFoundException("PostId " + pinsId + " not found"));
     }
 
     @PutMapping("/pins/{pinsId}/comments/{commentId}")
-    public Comment updateComment(@PathVariable(value = "pinsId") Long pinsId,
-                                 @PathVariable(value = "commentId") Long commentId,
-                                 @Valid @RequestBody Comment commentRequest) {
+    public CommentResponse updateComment(
+            @ApiIgnore @CurrentUser Account account,
+            @PathVariable(value = "pinsId") Long pinsId,
+            @PathVariable(value = "commentId") Long commentId,
+            @Valid @RequestBody CommentRequest commentRequest) {
+
+        Account.validateAccount(account);
+
         if (!pinsRepository.existsById(pinsId)) {
             throw new ResourceNotFoundException("PostId " + pinsId + " not found");
         }
@@ -50,13 +86,17 @@ public class CommentController {
                 .map(comment -> {
                     comment.setContents(commentRequest.getContents());
                     comment.setAccountId(commentRequest.getAccountId());
-                    return commentRepository.save(comment);
+                    Comment newComment = commentRepository.save(comment);
+                    return new CommentResponse(newComment.getId(), newComment.getContents(), newComment.getNickName());
                 }).orElseThrow(() -> new ResourceNotFoundException("CommentId " + commentId + "not found"));
     }
 
     @DeleteMapping("/pins/{pinsId}/comments/{commentId}")
-    public Response<Boolean> deleteComment(@PathVariable(value = "pinsId") Long postId,
-                                           @PathVariable(value = "commentId") Long commentId) {
+    public Response<Boolean> deleteComment(
+            @ApiIgnore @CurrentUser Account account,
+            @PathVariable(value = "pinsId") Long postId,
+            @PathVariable(value = "commentId") Long commentId) {
+        Account.validateAccount(account);
         return commentRepository.findByIdAndPinsId(commentId, postId)
                 .map(comment -> {
                     commentRepository.delete(comment);
