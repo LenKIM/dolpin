@@ -103,7 +103,6 @@ public class AccountService implements UserDetailsService {
     }
 
     private AccessToken getAccessToken(Account account) {
-        Account.validateAccount(account);
         AccessToken accessToken = getAuthToken(account);
         return new AccessToken(account, accessToken.getAccessToken(), accessToken.getTokenType(), accessToken.getRefreshToken(), accessToken.getExpiresIn(), accessToken.getScope());
     }
