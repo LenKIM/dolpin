@@ -28,10 +28,11 @@ public class FavoriteController {
     @GetMapping()
     public Response<FavoriteResponse> getFavorites(@ApiIgnore @CurrentUser Account account) {
         validateAccount(account);
+
         return new Response<>(
                 HttpStatus.OK.value(),
                 HttpStatus.OK.getReasonPhrase(),
-                new FavoriteResponse(account.getFavorites()));
+                new FavoriteResponse(accountService.getFavorite(account.getId())));
     }
 
     @PutMapping

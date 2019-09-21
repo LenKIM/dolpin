@@ -41,6 +41,10 @@ public class AccountService implements UserDetailsService {
     @Autowired
     ObjectMapper objectMapper;
 
+    public Set<Favorite> getFavorite(Integer accountId){
+        Account account = accountRepository.findById(accountId).get();
+        return account.getFavorites();
+    }
 
     public static String getOauthId(String email, Provider snsType, String snsId) {
         String oauthId;

@@ -13,5 +13,5 @@ import lombok.Setter;
 public class ExistResponse {
 
     private boolean isExisted;
-    private Provider snsType;
+    private Provider snsType; //스네이크 케이스로 내려감.
 }
