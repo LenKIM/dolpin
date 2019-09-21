@@ -97,7 +97,6 @@ public class AccountService implements UserDetailsService {
     }
 
     public AccessToken login(String oauthId) {
-
         Account account = accountRepository.findByOauthId(oauthId);
         return getAccessToken(account);
     }
@@ -113,7 +112,7 @@ public class AccountService implements UserDetailsService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Basic bXlBcHA6cGFzcw==");
         HttpEntity<String> entity = new HttpEntity<>("", headers);
-        String authURL = appProperties.getBaseUrl() + "/oauth/token?grant_type=password&username=" + account.getEmail() + "&password=password";
+        String authURL = appProperties.getBaseUrl() + "/oauth/token?grant_type=password&username=" + account.getOauthId() + "&password=password";
         ResponseEntity<String> response = restTemplate.postForEntity(authURL, entity, String.class);
 
         AccessToken accessToken = null;
