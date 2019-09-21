@@ -29,7 +29,7 @@ public class Comment {
     private Pins pins;
 
     private String contents;
-    private String accountId;
+    private Long accountId;
     private String nickName;
 
     @CreationTimestamp
@@ -37,7 +37,7 @@ public class Comment {
     @UpdateTimestamp
     private LocalDateTime updateAt;
 
-    public Comment(Pins pins, String contents, String accountId, String nickName) {
+    public Comment(Pins pins, String contents, Long accountId, String nickName) {
         this.pins = pins;
         this.contents = contents;
         this.accountId = accountId;

@@ -12,6 +12,7 @@ import lombok.Setter;
 public class CommentResponse {
 
     private Long id;
+    private Long accountId;
     private String contents;
     private String nickName;
 }
