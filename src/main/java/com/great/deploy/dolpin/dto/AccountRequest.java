@@ -17,6 +17,7 @@ public class AccountRequest {
 
     String email;
     String nickname;
-    Provider type;
+    Provider snsType;
+    String snsId;
     Set<Favorite> favorites;
 }

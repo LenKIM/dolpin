@@ -56,13 +56,14 @@ public class AppConfig {
                         .nickname("여신")
                         .activeRegion("Seoul")
                         .duckLevel("아직 초보")
-                        .type(Provider.SYSTEM)
+                        .snsType(Provider.SYSTEM)
                         .medal("A+")
                         .email(appProperties.getAdminUsername())
                         .password(appProperties.getAdminPassword())
                         .roles(adminRoles)
                         .createdAt(LocalDateTime.now())
                         .updateAt(LocalDateTime.now())
+                        .oauthId("admin")
                         .build();
 
                 accountService.saveAccount(admin);
@@ -74,7 +75,7 @@ public class AppConfig {
                         .imageUrl("https://m.post.naver.com/viewer/postView.nhn?volumeNo=14295665&memberNo=33408012#")
                         .nickname("BTS_L.O.V.E")
                         .activeRegion("Seoul")
-                        .type(Provider.SYSTEM)
+                        .snsType(Provider.SYSTEM)
                         .duckLevel("이젠나도돌핀!")
                         .medal("동메달")
                         .email(appProperties.getUserUsername())
@@ -82,6 +83,7 @@ public class AppConfig {
                         .createdAt(LocalDateTime.now())
                         .updateAt(LocalDateTime.now())
                         .roles(userRoles)
+                        .oauthId("user")
                         .build();
 
                 accountService.saveAccount(user);

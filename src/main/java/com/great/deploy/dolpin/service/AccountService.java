@@ -50,15 +50,21 @@ public class AccountService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Account account = accountRepository.findByEmail(username);
+        Account account = accountRepository.findByOauthId(username);
         Account.validateAccount(account);
         return new AccountAdapter(account);
     }
 
-    public AccessToken create(String email, String nickname, Set<Favorite> favorites, Provider provider) {
+    public AccessToken create(String email, String nickname, Set<Favorite> favorites, Provider SNSType, String SNSId) {
 
         final Set<AccountRole> adminRoles = new HashSet<>();
         adminRoles.add(AccountRole.USER);
+        String OAuthId;
+        if (email.isEmpty()) {
+            OAuthId = SNSType + SNSId;
+        } else {
+            OAuthId = email;
+        }
 
         String password = "password";
         Account admin = Account.builder()
@@ -66,17 +72,19 @@ public class AccountService implements UserDetailsService {
                 .email(email)
                 .password(password)
                 .roles(adminRoles)
-                .type(provider)
                 .favorites(favorites)
+                .snsType(SNSType)
+                .snsId(SNSId)
+                .oauthId(OAuthId)
                 .build();
 
         Account account = saveAccount(admin);
         return getAccessToken(account);
     }
 
-    public AccessToken login(String email) {
+    public AccessToken login(String oauthId) {
 
-        Account account = accountRepository.findByEmail(email);
+        Account account = accountRepository.findByOauthId(oauthId);
         return getAccessToken(account);
     }
 

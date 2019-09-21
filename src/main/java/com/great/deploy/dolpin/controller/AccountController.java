@@ -3,9 +3,10 @@ package com.great.deploy.dolpin.controller;
 import com.great.deploy.dolpin.account.Account;
 import com.great.deploy.dolpin.account.CurrentUser;
 import com.great.deploy.dolpin.dto.*;
+import com.great.deploy.dolpin.model.Provider;
 import com.great.deploy.dolpin.repository.AccountRepository;
 import com.great.deploy.dolpin.service.AccountService;
-import com.great.deploy.dolpin.swagger.AccessTokenResponse;
+import com.great.deploy.dolpin.swagger.AccessTokenResponseSwagger;
 import com.great.deploy.dolpin.swagger.AccountResponseSwagger;
 import com.great.deploy.dolpin.swagger.CheckEmailResponse;
 import io.swagger.annotations.Api;
@@ -54,44 +55,63 @@ public class AccountController {
         );
     }
 
-    @ApiOperation(value = "create user by email and sns", response = AccessTokenResponse.class)
+    @ApiOperation(value = "create user by email and sns", response = AccessTokenResponseSwagger.class)
     @PostMapping("/create")
-    public Response<AccessToken> createUser(
+    public Response<AccessTokenResponse> createUser(
             @RequestBody AccountRequest accountRequest
     ) {
         AccessToken account = accountService.create(
                 accountRequest.getEmail(),
                 accountRequest.getNickname(),
                 accountRequest.getFavorites(),
-                accountRequest.getType());
+                accountRequest.getSnsType(),
+                accountRequest.getSnsId());
 
         return new Response<>(
                 HttpStatus.CREATED.value(),
                 HttpStatus.CREATED.getReasonPhrase(),
-                account
+                AccessTokenResponse.of(account)
         );
     }
 
-    @ApiOperation(value = "login user by email if user existed", response = AccessTokenResponse.class)
+    @ApiOperation(value = "login user by email if user existed", response = AccessTokenResponseSwagger.class)
     @PostMapping("/login")
-    public Response<AccessToken> loginUser(
-            @RequestBody String email
+    public Response<AccessTokenResponse> loginUser(
+            @RequestBody LoginRequest request
     ) {
-        AccessToken account = accountService.login(email);
+        String email = request.getEmail();
+        String snsId = request.getSnsId();
+        Provider snsType = request.getSnsType();
+        String oauthId;
+        if(email.isEmpty()){
+            oauthId = snsType + snsId;
+        } else {
+            oauthId = email;
+        }
+
+        AccessToken account = accountService.login(oauthId);
         return new Response<>(
                 HttpStatus.OK.value(),
                 HttpStatus.OK.getReasonPhrase(),
-                account
+                AccessTokenResponse.of(account)
         );
     }
 
-    @ApiOperation(value = "check existed user email", response = CheckEmailResponse.class)
+    @ApiOperation(value = "check existed user", response = CheckEmailResponse.class)
     @GetMapping("/check")
     public Response<Boolean> existedUser(
-            @RequestParam String email
+            @RequestParam LoginRequest request
     ) {
-        //TODO email 인증.
-        return new Response<>(HttpStatus.ACCEPTED.value(), HttpStatus.ACCEPTED.getReasonPhrase(), accountRepository.existsByEmail(email));
+        String email = request.getEmail();
+        String snsId = request.getSnsId();
+        Provider snsType = request.getSnsType();
+        String oauthId;
+        if(email.isEmpty()){
+            oauthId = snsType + snsId;
+        } else {
+            oauthId = email;
+        }
+        return new Response<>(HttpStatus.ACCEPTED.value(), HttpStatus.ACCEPTED.getReasonPhrase(), accountRepository.existsByOauthId(oauthId));
     }
 
 }

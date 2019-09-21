@@ -8,7 +8,10 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AccessToken extends Account {
 
     String accessToken;
@@ -18,7 +21,7 @@ public class AccessToken extends Account {
     String scope;
 
     public AccessToken(Account account, String accessToken, String tokenType, String refreshToken, Integer expiresIn, String scope) {
-        super(account.getId(), account.getPassword(), account.getEmail(), account.getRoles(), account.getName(), account.getImageUrl(), account.getNickname(), account.getActiveRegion(), account.getMedal(), account.getDuckLevel(), account.getType(), account.getFavorites(), account.getCreatedAt(), LocalDateTime.now());
+        super(account.getId(), account.getPassword(), account.getEmail(), account.getRoles(), account.getName(), account.getImageUrl(), account.getNickname(), account.getActiveRegion(), account.getMedal(), account.getDuckLevel(), account.getSnsType(), account.getSnsId(), account.getOauthId(), account.getFavorites(), account.getCreatedAt(), LocalDateTime.now());
         this.accessToken = accessToken;
         this.tokenType = tokenType;
         this.refreshToken = refreshToken;

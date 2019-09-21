@@ -35,7 +35,9 @@ public class Account {
                 newAccount.getActiveRegion(),
                 newAccount.getMedal(),
                 newAccount.getDuckLevel(),
-                oldAccount.getType(),
+                oldAccount.getSnsType(),
+                oldAccount.getSnsId(),
+                oldAccount.getOauthId(),
                 oldAccount.getFavorites(),
                 oldAccount.getCreatedAt(),
                 LocalDateTime.now()
@@ -53,11 +55,12 @@ public class Account {
                 account.getActiveRegion(),
                 account.getMedal(),
                 account.getDuckLevel(),
-                account.getType(),
+                account.getSnsType(),
+                account.getSnsId(),
+                account.getOauthId(),
                 favorite,
                 account.getCreatedAt(),
                 LocalDateTime.now()
-
         );
     }
 
@@ -107,7 +110,10 @@ public class Account {
     private String duckLevel;
 
     @Enumerated(EnumType.STRING)
-    private Provider type;
+    private Provider snsType;
+    private String snsId;
+
+    private String oauthId;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "account_favorite", joinColumns = @JoinColumn(name = "account_id"))

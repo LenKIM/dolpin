@@ -140,7 +140,7 @@ public class AccountControllerTest extends BaseControllerTest {
                 .email("joneg@gamil.com")
                 .favorites(favoriteSet)
                 .nickname("신사동호라이")
-                .type(Provider.FACEBOOK)
+                .snsType(Provider.FACEBOOK)
                 .build();
 
         this.mockMvc.perform(
