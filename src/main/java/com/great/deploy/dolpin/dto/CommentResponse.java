@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,4 +19,6 @@ public class CommentResponse {
     private String nickName;
     private int likeItCount;
     private boolean recommended;
+    private LocalDateTime createAt;
+    private LocalDateTime updateAt;
 }
