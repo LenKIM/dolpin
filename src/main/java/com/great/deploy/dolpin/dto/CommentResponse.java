@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class CommentResponse {
 
     private Long id;
-    private Long accountId;
+    private Integer accountId;
     private String contents;
     private String nickName;
     private int likeItCount;

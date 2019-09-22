@@ -69,10 +69,10 @@ public class CommentControllerTest extends BaseControllerTest {
         Pins two = Pins.of(build, celebrityMember, celebrityGroup, address, detailedAddress);
         Pins save = pinsRepository.save(two);
 
-        Comment comment01 = new Comment(save, "하", 1L, "DolKing");
-        Comment comment02 = new Comment(save, "하하", 1L, "DolKing");
-        Comment comment03 = new Comment(save, "하하하", 1L, "DolKing");
-        Comment comment04 = new Comment(save, "하하하하", 1L, "DolKing");
+        Comment comment01 = new Comment(save, "하", 1, "DolKing");
+        Comment comment02 = new Comment(save, "하하", 1, "DolKing");
+        Comment comment03 = new Comment(save, "하하하", 1, "DolKing");
+        Comment comment04 = new Comment(save, "하하하하", 1, "DolKing");
         commentRepository.save(comment01);
         commentRepository.save(comment02);
         commentRepository.save(comment03);
@@ -111,10 +111,10 @@ public class CommentControllerTest extends BaseControllerTest {
         Pins two = Pins.of(build, celebrityMember, celebrityGroup, address, detailedAddress);
         Pins save = pinsRepository.save(two);
 
-        Comment comment01 = new Comment(save, "하", 1L, "DolKing");
-        Comment comment02 = new Comment(save, "하하", 1L, "DolKing");
-        Comment comment03 = new Comment(save, "하하하", 1L, "DolKing");
-        Comment comment04 = new Comment(save, "하하하하", 1L, "DolKing");
+        Comment comment01 = new Comment(save, "하", 1, "DolKing");
+        Comment comment02 = new Comment(save, "하하", 1, "DolKing");
+        Comment comment03 = new Comment(save, "하하하", 1, "DolKing");
+        Comment comment04 = new Comment(save, "하하하하", 1, "DolKing");
         commentRepository.save(comment01);
         commentRepository.save(comment02);
         commentRepository.save(comment03);
@@ -123,7 +123,7 @@ public class CommentControllerTest extends BaseControllerTest {
 //        @PathVariable(value = "pinsId") Long pinsId,
 //        @Valid @RequestBody CommentRequest request
 
-        CommentRequest commentRequest = new CommentRequest(1L, "호","돌핀이");
+        CommentRequest commentRequest = new CommentRequest(1, "호","돌핀이");
 
         this.mockMvc.perform(
                 post("/api/pins/" + save.getId() + "/comments")
@@ -162,10 +162,10 @@ public class CommentControllerTest extends BaseControllerTest {
         Pins two = Pins.of(build, celebrityMember, celebrityGroup, address, detailedAddress);
         Pins save = pinsRepository.save(two);
 
-        Comment comment01 = new Comment(save, "하", 1L, "DolKing");
-        Comment comment02 = new Comment(save, "하하", 1L, "DolKing");
-        Comment comment03 = new Comment(save, "하하하", 1L, "DolKing");
-        Comment comment04 = new Comment(save, "하하하하", 1L, "DolKing");
+        Comment comment01 = new Comment(save, "하", 1, "DolKing");
+        Comment comment02 = new Comment(save, "하하", 1, "DolKing");
+        Comment comment03 = new Comment(save, "하하하", 1, "DolKing");
+        Comment comment04 = new Comment(save, "하하하하", 1, "DolKing");
         commentRepository.save(comment01);
         commentRepository.save(comment02);
         commentRepository.save(comment03);
@@ -174,7 +174,7 @@ public class CommentControllerTest extends BaseControllerTest {
 //        @PathVariable(value = "pinsId") Long pinsId,
 //        @Valid @RequestBody CommentRequest request
 
-        CommentRequest commentRequest = new CommentRequest(1L, "호","돌핀이");
+        CommentRequest commentRequest = new CommentRequest(1, "호","돌핀이");
 ///pins/{pinsId}/comments/{commentId}
         this.mockMvc.perform(
                 put("/api/pins/" + save.getId() + "/comments/" + saveComment.getId())
@@ -213,10 +213,10 @@ public class CommentControllerTest extends BaseControllerTest {
         Pins two = Pins.of(build, celebrityMember, celebrityGroup, address, detailedAddress);
         Pins save = pinsRepository.save(two);
 
-        Comment comment01 = new Comment(save, "하", 1L, "DolKing");
-        Comment comment02 = new Comment(save, "하하", 1L, "DolKing");
-        Comment comment03 = new Comment(save, "하하하", 1L, "DolKing");
-        Comment comment04 = new Comment(save, "하하하하", 1L, "DolKing");
+        Comment comment01 = new Comment(save, "하", 1, "DolKing");
+        Comment comment02 = new Comment(save, "하하", 1, "DolKing");
+        Comment comment03 = new Comment(save, "하하하", 1, "DolKing");
+        Comment comment04 = new Comment(save, "하하하하", 1, "DolKing");
         commentRepository.save(comment01);
         commentRepository.save(comment02);
         commentRepository.save(comment03);

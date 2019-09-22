@@ -20,10 +20,16 @@ public class LikeIt {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {
+            CascadeType.MERGE,
+            CascadeType.REFRESH
+    })
     private Comment comment;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {
+            CascadeType.MERGE,
+            CascadeType.REFRESH
+    })
     private Account account;
 
     public LikeIt(Comment comment, Account account) {

@@ -38,23 +38,26 @@ public class LikeItController {
                                               @RequestBody LikeItRequest likeItRequest) {
         Account.validateAccount(account);
         Long commentId = likeItRequest.getCommentId();
+        // @CurrntUser가 가져오는 건 캐시된 account를 가져옴.
+        Account accountId = accountRepository.findById(likeItRequest.getAccountId()).orElseThrow(() -> new BadRequestException("Not Found Account Id"));
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new BadRequestException("NOT FOUND commentId"));
-        LikeIt likeIt = new LikeIt(comment, account);
+        LikeIt likeIt = new LikeIt(comment, accountId);
         LikeIt save = likeItRepository.save(likeIt);
-        commentRepository.save(save.getComment());
-        LikeItResponse likeItResponse = new LikeItResponse(true, account.getNickname(), save.getComment().getRecommendCount());
+        Comment save1 = commentRepository.save(save.getComment());
+        LikeItResponse likeItResponse = new LikeItResponse(true, account.getNickname(), save1.getRecommendCount());
         return new Response<>(HttpStatus.ACCEPTED.value(), HttpStatus.ACCEPTED.getReasonPhrase(), likeItResponse);
     }
 
     @DeleteMapping
     public Response<LikeItResponse> cancelLikeIt(@ApiIgnore @CurrentUser Account account,
-                                          @RequestBody Long commentId){
+                                                 @RequestBody Long commentId){
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new BadRequestException("Not found CommentId"));
+
         LikeIt likeIt = likeItRepository.findByCommentAndAccount(comment, account);
         likeItRepository.delete(likeIt);
         commentRepository.save(comment);
-        LikeItResponse likeItResponse = new LikeItResponse(true, account.getNickname(), likeIt.getComment().getRecommendCount());
+        LikeItResponse likeItResponse = new LikeItResponse(false, account.getNickname(), likeIt.getComment().getRecommendCount());
         return new Response<>(HttpStatus.ACCEPTED.value(), HttpStatus.ACCEPTED.getReasonPhrase(), likeItResponse);
     }
 }
