@@ -211,24 +211,24 @@ public class CommentControllerTest extends BaseControllerTest {
                 .build();
 
         Pins two = Pins.of(build, celebrityMember, celebrityGroup, address, detailedAddress);
-        Pins save = pinsRepository.save(two);
+        Pins pin = pinsRepository.save(two);
 
-        Comment comment01 = new Comment(save, "하", 1, "DolKing");
-        Comment comment02 = new Comment(save, "하하", 1, "DolKing");
-        Comment comment03 = new Comment(save, "하하하", 1, "DolKing");
-        Comment comment04 = new Comment(save, "하하하하", 1, "DolKing");
+        Comment comment01 = new Comment(pin, "하", 1, "DolKing");
+        Comment comment02 = new Comment(pin, "하하", 1, "DolKing");
+        Comment comment03 = new Comment(pin, "하하하", 1, "DolKing");
+        Comment comment04 = new Comment(pin, "하하하하", 1, "DolKing");
         commentRepository.save(comment01);
         commentRepository.save(comment02);
         commentRepository.save(comment03);
-        Comment saveComment = commentRepository.save(comment04);
+        Comment comment = commentRepository.save(comment04);
 
         this.mockMvc.perform(
-                delete("/api/pins/" + save.getId() + "/comments/" + saveComment.getId())
+                delete("/api/pins/" + pin.getId() + "/comments/" + comment.getId())
                         .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(true))
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
         ).andDo(print())
                 .andExpect(MockMvcResultMatchers.jsonPath("code").value("200"))
                 .andExpect(MockMvcResultMatchers.jsonPath("msg").value("OK"))
-                .andExpect(MockMvcResultMatchers.jsonPath("data").value("true"));
+                .andExpect(MockMvcResultMatchers.jsonPath("data").value(true));
     }
 }

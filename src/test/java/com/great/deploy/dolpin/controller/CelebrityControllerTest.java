@@ -44,7 +44,7 @@ public class CelebrityControllerTest extends BaseControllerTest {
     public void getCelebrityMember() throws Exception {
 
         this.mockMvc.perform(get("/api/celebrities")
-                .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(false)
+                .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(true )
         ))
                 .andDo(print())
                 .andExpect(status().isOk())

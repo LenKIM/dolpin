@@ -8,6 +8,7 @@ import com.great.deploy.dolpin.common.TestDescription;
 import com.great.deploy.dolpin.domain.Favorite;
 import com.great.deploy.dolpin.dto.AccountRequest;
 import com.great.deploy.dolpin.dto.AccountUpdateRequest;
+import com.great.deploy.dolpin.dto.LoginRequest;
 import com.great.deploy.dolpin.model.Provider;
 import com.great.deploy.dolpin.repository.AccountRepository;
 import com.great.deploy.dolpin.service.AccountService;
@@ -108,16 +109,19 @@ public class AccountControllerTest extends BaseControllerTest {
                 .nickname("BTS_LOVE")
                 .imageUrl("Https://aaaa.com")
                 .name("김정규")
+                .oauthId(email)
+                .snsId("123123")
+                .snsType(Provider.SYSTEM)
                 .favorites(favoriteSet)
                 .roles(accountRoles)
                 .build();
 
         this.accountService.saveAccount(len);
-
+        LoginRequest request = new LoginRequest(email, Provider.SYSTEM, "123123");
         this.mockMvc.perform(
-                get("/api/user/check")
+                post("/api/user/exist")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .param("email", email)
+                        .content(this.objectMapper.writeValueAsString(request))
         ).andExpect(status().isOk())
                 .andExpect(jsonPath("code").value("202"))
                 .andExpect(jsonPath("msg").value("Accepted"))
@@ -151,7 +155,7 @@ public class AccountControllerTest extends BaseControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("code").value("201"))
                 .andExpect(jsonPath("msg").value("Created"))
-                .andExpect(jsonPath("data.id").exists());
+                .andExpect(jsonPath("data.account_id").exists());
     }
 
     @Test
@@ -167,10 +171,11 @@ public class AccountControllerTest extends BaseControllerTest {
         Set<AccountRole> accountRoles = Stream.of(AccountRole.ADMIN, AccountRole.USER)
                 .collect(Collectors.toSet());
 
-        String email = "user2@gmail.com";
+        String email = "user@gmail.com";
+        String password = "user";
         Account len = Account.builder()
                 .email(email)
-                .password("password")
+                .password(password)
                 .medal("넌최고의팬텀이야")
                 .duckLevel("달인덕")
                 .activeRegion("서울")
@@ -178,15 +183,18 @@ public class AccountControllerTest extends BaseControllerTest {
                 .imageUrl("Https://aaaa.com")
                 .name("김정규")
                 .favorites(favoriteSet)
+                .oauthId(email)
+                .snsType(Provider.SYSTEM)
+                .snsId("123123")
                 .roles(accountRoles)
                 .build();
-
         this.accountService.saveAccount(len);
 
+        LoginRequest request = new LoginRequest(email, Provider.SYSTEM, "123123");
         this.mockMvc.perform(
                 post("/api/user/login")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content(email)
+                        .content(this.objectMapper.writeValueAsString(request))
         ).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("code").value("200"))

@@ -3,7 +3,6 @@ package com.great.deploy.dolpin.controller;
 import com.great.deploy.dolpin.account.Account;
 import com.great.deploy.dolpin.account.CurrentUser;
 import com.great.deploy.dolpin.domain.Comment;
-import com.great.deploy.dolpin.domain.LikeIt;
 import com.great.deploy.dolpin.dto.CommentListResponse;
 import com.great.deploy.dolpin.dto.CommentRequest;
 import com.great.deploy.dolpin.dto.CommentResponse;
@@ -125,8 +124,6 @@ public class CommentController {
         return commentRepository.findByIdAndPinsId(commentId, pinId)
                 .map(comment -> {
                     commentRepository.delete(comment);
-                    LikeIt likeIt = likeItRepository.findByCommentAndAccount(comment, account);
-                    likeItRepository.delete(likeIt);
                     return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), true);
                 }).orElseThrow(() -> new ResourceNotFoundException("Comment not found with id " + commentId + " and pinsId " + pinId));
     }
