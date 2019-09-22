@@ -3,12 +3,14 @@ package com.great.deploy.dolpin.controller;
 import com.great.deploy.dolpin.account.Account;
 import com.great.deploy.dolpin.account.CurrentUser;
 import com.great.deploy.dolpin.domain.Comment;
+import com.great.deploy.dolpin.domain.LikeIt;
 import com.great.deploy.dolpin.dto.CommentListResponse;
 import com.great.deploy.dolpin.dto.CommentRequest;
 import com.great.deploy.dolpin.dto.CommentResponse;
 import com.great.deploy.dolpin.dto.Response;
 import com.great.deploy.dolpin.exception.ResourceNotFoundException;
 import com.great.deploy.dolpin.repository.CommentRepository;
+import com.great.deploy.dolpin.repository.LikeItRepository;
 import com.great.deploy.dolpin.repository.PinsRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,9 +35,12 @@ public class CommentController {
     @Autowired
     private PinsRepository pinsRepository;
 
+    @Autowired
+    private LikeItRepository likeItRepository;
+
     @ApiOperation(value = "특정 pin에 대한 복수의 댓글 가져오기", response = CommentListResponse.class)
     @GetMapping("/pins/{pinsId}/comments")
-    public CommentListResponse getAllCommentsByPostId(
+    public Response<CommentListResponse> getAllCommentsByPostId(
             @ApiIgnore @CurrentUser Account account,
             @PathVariable(value = "pinsId") Long pinsId) {
 
@@ -43,32 +48,41 @@ public class CommentController {
 
         List<Comment> pins = commentRepository.findAllByPinsId(pinsId);
         pins.sort(Comparator.comparing(Comment::getCreateAt).reversed());
-        return new CommentListResponse(
-                pins.stream().map(
-                        comment -> new CommentResponse(comment.getId(), comment.getAccountId(), comment.getContents(), comment.getNickName())
-                ).collect(Collectors.toList()));
+
+        return new Response<>(
+                HttpStatus.OK.value(),
+                HttpStatus.OK.getReasonPhrase(),
+                new CommentListResponse(
+                        pins.stream().map(
+                                comment -> {
+                                    boolean isRecommended = likeItRepository.findByCommentAndAccount(comment, account) != null;
+                                    return new CommentResponse(comment.getId(), comment.getAccountId(), comment.getContents(), comment.getNickName(), comment.getRecommendCount(), isRecommended);
+                                }
+                        ).collect(Collectors.toList()))
+        );
     }
 
     @ApiOperation(value = "특정 pin 댓글 등록", response = CommentResponse.class)
     @PostMapping("/pins/{pinsId}/comments")
-    public CommentResponse createComment(
+    public Response<CommentResponse> createComment(
             @ApiIgnore @CurrentUser Account account,
             @PathVariable(value = "pinsId") Long pinsId,
             @Valid @RequestBody CommentRequest request) {
 
         Account.validateAccount(account);
 
-        return pinsRepository.findById(pinsId)
+        return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), pinsRepository.findById(pinsId)
                 .map(pins -> {
                     Comment comment = new Comment(pins, request.getContents(), request.getAccountId(), request.getNickName());
                     Comment savedComment = commentRepository.save(comment);
-                    return new CommentResponse(savedComment.getId(), savedComment.getAccountId(), savedComment.getContents(), savedComment.getNickName());
-                }).orElseThrow(() -> new ResourceNotFoundException("PostId " + pinsId + " not found"));
+                    boolean isRecommended = likeItRepository.findByCommentAndAccount(savedComment, account) != null;
+                    return new CommentResponse(savedComment.getId(), savedComment.getAccountId(), savedComment.getContents(), savedComment.getNickName(), savedComment.getRecommendCount(), isRecommended);
+                }).orElseThrow(() -> new ResourceNotFoundException("PostId " + pinsId + " not found")));
     }
 
     @ApiOperation(value = "특정 pin 댓글 수정", response = CommentResponse.class)
     @PutMapping("/pins/{pinsId}/comments/{commentId}")
-    public CommentResponse updateComment(
+    public Response<CommentResponse> updateComment(
             @ApiIgnore @CurrentUser Account account,
             @PathVariable(value = "pinsId") Long pinsId,
             @PathVariable(value = "commentId") Long commentId,
@@ -80,13 +94,14 @@ public class CommentController {
             throw new ResourceNotFoundException("PostId " + pinsId + " not found");
         }
 
-        return commentRepository.findById(commentId)
+        return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(),commentRepository.findById(commentId)
                 .map(comment -> {
                     comment.setContents(commentRequest.getContents());
                     comment.setAccountId(commentRequest.getAccountId());
                     Comment newComment = commentRepository.save(comment);
-                    return new CommentResponse(newComment.getId(), newComment.getAccountId(), newComment.getContents(), newComment.getNickName());
-                }).orElseThrow(() -> new ResourceNotFoundException("CommentId " + commentId + "not found"));
+                    boolean isRecommended = likeItRepository.findByCommentAndAccount(newComment, account) != null;
+                    return new CommentResponse(newComment.getId(), newComment.getAccountId(), newComment.getContents(), newComment.getNickName(), newComment.getRecommendCount(), isRecommended);
+                }).orElseThrow(() -> new ResourceNotFoundException("CommentId " + commentId + "not found")));
     }
 
     @ApiOperation(value = "특정 pin 댓글 삭제")
@@ -99,6 +114,8 @@ public class CommentController {
         return commentRepository.findByIdAndPinsId(commentId, postId)
                 .map(comment -> {
                     commentRepository.delete(comment);
+                    LikeIt likeIt = likeItRepository.findByCommentAndAccount(comment, account);
+                    likeItRepository.delete(likeIt);
                     return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), true);
                 }).orElseThrow(() -> new ResourceNotFoundException("Comment not found with id " + commentId + " and pinsId " + postId));
     }

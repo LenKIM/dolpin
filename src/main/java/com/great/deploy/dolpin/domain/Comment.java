@@ -31,6 +31,20 @@ public class Comment {
     private String contents;
     private Long accountId;
     private String nickName;
+    private int recommendCount;
+
+    @Transient
+    private boolean recommended;
+
+    public void increaseRecommendCount() {
+        recommendCount++;
+    }
+
+    public void decreaseRecommendCount() {
+        if (recommendCount > 0) {
+            recommendCount--;
+        }
+    }
 
     @CreationTimestamp
     private LocalDateTime createAt;

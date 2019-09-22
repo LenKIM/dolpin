@@ -15,4 +15,6 @@ public class CommentResponse {
     private Long accountId;
     private String contents;
     private String nickName;
+    private int likeItCount;
+    private boolean recommended;
 }

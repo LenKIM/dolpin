@@ -86,6 +86,7 @@ public class BaseControllerTest {
                     .imageUrl("Https://aaaa.com")
                     .name("김정규")
                     .favorites(favoriteSet)
+                    .oauthId(email)
                     .roles(accountRoles)
                     .build();
 

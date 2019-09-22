@@ -97,6 +97,8 @@ public class PinsControllerTest extends BaseControllerTest {
         //Given
         CelebrityGroup celebrityGroup = celebrityGroupRepository.findById(1L).get();
         CelebrityMember celebrityMember = celebrityMemberRepository.findById(1L).get();
+        String address = "강남역 8번출구";
+        String detailedAddress = "계단 오른쪽";
 
         CreatePinRequest build = CreatePinRequest
                 .builder()
@@ -111,8 +113,8 @@ public class PinsControllerTest extends BaseControllerTest {
                 .longitude(126.979677D)
                 .build();
 
-        Pins one = Pins.of(build, celebrityMember, celebrityGroup);
-        Pins two = Pins.of(build, celebrityMember, celebrityGroup);
+        Pins one = Pins.of(build, celebrityMember, celebrityGroup, address, detailedAddress);
+        Pins two = Pins.of(build, celebrityMember, celebrityGroup, address, detailedAddress);
         Pins save = pinsRepository.save(one);
         pinsRepository.save(two);
 
@@ -128,7 +130,8 @@ public class PinsControllerTest extends BaseControllerTest {
         //Given
         CelebrityGroup celebrityGroup = celebrityGroupRepository.findById(1L).get();
         CelebrityMember celebrityMember = celebrityMemberRepository.findById(1L).get();
-
+        String address = "강남역 8번출구";
+        String detailedAddress = "계단 오른쪽";
         CreatePinRequest build = CreatePinRequest
                 .builder()
                 .title("ILOVEBTS")
@@ -142,7 +145,7 @@ public class PinsControllerTest extends BaseControllerTest {
                 .longitude(126.979677D)
                 .build();
 
-        Pins tempPin = Pins.of(build, celebrityMember, celebrityGroup);
+        Pins tempPin = Pins.of(build, celebrityMember, celebrityGroup, address, detailedAddress);
         Pins save = pinsRepository.save(tempPin);
 
         PinRequest pinRequest = PinRequest.builder()
