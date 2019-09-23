@@ -1,10 +1,10 @@
 package com.great.deploy.dolpin.swagger;
 
-import com.great.deploy.dolpin.dto.AccessTokenResponse;
+import com.great.deploy.dolpin.dto.AccountWithTokenResponse;
 import com.great.deploy.dolpin.dto.Response;
 
-public class AccessTokenResponseSwagger extends Response<AccessTokenResponse> {
-    public AccessTokenResponseSwagger(int code, String msg, AccessTokenResponse data) {
+public class AccessTokenResponseSwagger extends Response<AccountWithTokenResponse> {
+    public AccessTokenResponseSwagger(int code, String msg, AccountWithTokenResponse data) {
         super(code, msg, data);
     }
 }

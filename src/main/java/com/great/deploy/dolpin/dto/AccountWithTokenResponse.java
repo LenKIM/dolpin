@@ -13,7 +13,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccessTokenResponse {
+public class AccountWithTokenResponse {
 
     private Integer accountId;
     private String email;
@@ -28,8 +28,8 @@ public class AccessTokenResponse {
     private Set<Favorite> favorites;
     private String accessToken;
 
-    public static AccessTokenResponse of(AccessToken account) {
-        return new AccessTokenResponse(
+    public static AccountWithTokenResponse of(AccountWithToken account) {
+        return new AccountWithTokenResponse(
                 account.getId(),
                 account.getEmail(),
                 account.getName(),

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccessToken extends Account {
+public class AccountWithToken extends Account {
 
     private String accessToken;
     private String tokenType;
@@ -20,7 +20,7 @@ public class AccessToken extends Account {
     private Integer expiresIn;
     private String scope;
 
-    public AccessToken(Account account, String accessToken, String tokenType, String refreshToken, Integer expiresIn, String scope) {
+    public AccountWithToken(Account account, String accessToken, String tokenType, String refreshToken, Integer expiresIn, String scope) {
         super(account.getId(), account.getPassword(), account.getEmail(), account.getRoles(), account.getName(), account.getImageUrl(), account.getNickname(), account.getActiveRegion(), account.getMedal(), account.getDuckLevel(), account.getSnsType(), account.getSnsId(), account.getOauthId(), account.getFavorites(), account.getCreatedAt(), LocalDateTime.now());
         this.accessToken = accessToken;
         this.tokenType = tokenType;

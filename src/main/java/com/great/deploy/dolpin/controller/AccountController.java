@@ -58,10 +58,10 @@ public class AccountController {
 
     @ApiOperation(value = "create user by email and sns", response = AccessTokenResponseSwagger.class)
     @PostMapping("/create")
-    public Response<AccessTokenResponse> createUser(
+    public Response<AccountWithTokenResponse> createUser(
             @RequestBody AccountRequest accountRequest
     ) {
-        AccessToken account = accountService.create(
+        AccountWithToken account = accountService.create(
                 accountRequest.getEmail(),
                 accountRequest.getNickname(),
                 accountRequest.getFavorites(),
@@ -71,21 +71,21 @@ public class AccountController {
         return new Response<>(
                 HttpStatus.CREATED.value(),
                 HttpStatus.CREATED.getReasonPhrase(),
-                AccessTokenResponse.of(account)
+                AccountWithTokenResponse.of(account)
         );
     }
 
     @ApiOperation(value = "login user by email if user existed", response = AccessTokenResponseSwagger.class)
     @PostMapping("/login")
-    public Response<AccessTokenResponse> loginUser(
+    public Response<AccountWithTokenResponse> loginUser(
             @RequestBody LoginRequest request
     ) {
         String oauthId = AccountService.getOauthId(request.getEmail(), request.getSnsType(), request.getSnsId());
-        AccessToken account = accountService.login(oauthId);
+        AccountWithToken account = accountService.login(oauthId);
         return new Response<>(
                 HttpStatus.OK.value(),
                 HttpStatus.OK.getReasonPhrase(),
-                AccessTokenResponse.of(account)
+                AccountWithTokenResponse.of(account)
         );
     }
 

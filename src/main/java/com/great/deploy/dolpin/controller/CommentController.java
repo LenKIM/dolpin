@@ -86,7 +86,8 @@ public class CommentController {
                                                 boolean isRecommended = likeItRepository.findByCommentAndAccount(comment, account) != null;
                                                 return new CommentResponse(comment.getId(), comment.getAccountId(), comment.getContents(), comment.getNickName(), comment.getRecommendCount(), isRecommended, comment.getCreateAt(), comment.getUpdateAt());
                                             }
-                                    ).collect(Collectors.toList()));
+                                    ).collect(Collectors.toList())
+                            );
                         }).orElseThrow(() -> new ResourceNotFoundException("PostId " + pinsId + " not found")));
     }
 

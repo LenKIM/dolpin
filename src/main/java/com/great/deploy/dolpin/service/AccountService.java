@@ -6,7 +6,7 @@ import com.great.deploy.dolpin.account.AccountAdapter;
 import com.great.deploy.dolpin.account.AccountRole;
 import com.great.deploy.dolpin.common.AppProperties;
 import com.great.deploy.dolpin.domain.Favorite;
-import com.great.deploy.dolpin.dto.AccessToken;
+import com.great.deploy.dolpin.dto.AccountWithToken;
 import com.great.deploy.dolpin.model.Provider;
 import com.great.deploy.dolpin.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +74,7 @@ public class AccountService implements UserDetailsService {
         return new AccountAdapter(account);
     }
 
-    public AccessToken create(String email, String nickname, Set<Favorite> favorites, Provider snsType, String snsId) {
+    public AccountWithToken create(String email, String nickname, Set<Favorite> favorites, Provider snsType, String snsId) {
 
         final Set<AccountRole> adminRoles = new HashSet<>();
         adminRoles.add(AccountRole.USER);
@@ -96,17 +96,17 @@ public class AccountService implements UserDetailsService {
         return getAccessToken(account);
     }
 
-    public AccessToken login(String oauthId) {
+    public AccountWithToken login(String oauthId) {
         Account account = accountRepository.findByOauthId(oauthId);
         return getAccessToken(account);
     }
 
-    private AccessToken getAccessToken(Account account) {
-        AccessToken accessToken = getAuthToken(account);
-        return new AccessToken(account, accessToken.getAccessToken(), accessToken.getTokenType(), accessToken.getRefreshToken(), accessToken.getExpiresIn(), accessToken.getScope());
+    private AccountWithToken getAccessToken(Account account) {
+        AccountWithToken accountWithToken = getAuthToken(account);
+        return new AccountWithToken(account, accountWithToken.getAccessToken(), accountWithToken.getTokenType(), accountWithToken.getRefreshToken(), accountWithToken.getExpiresIn(), accountWithToken.getScope());
     }
 
-    private AccessToken getAuthToken(Account account) {
+    private AccountWithToken getAuthToken(Account account) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -115,13 +115,13 @@ public class AccountService implements UserDetailsService {
         String authURL = appProperties.getBaseUrl() + "/oauth/token?grant_type=password&username=" + account.getOauthId() + "&password=password";
         ResponseEntity<String> response = restTemplate.postForEntity(authURL, entity, String.class);
 
-        AccessToken accessToken = null;
+        AccountWithToken accountWithToken = null;
         try {
-            accessToken = objectMapper.readValue(response.getBody(), AccessToken.class);
+            accountWithToken = objectMapper.readValue(response.getBody(), AccountWithToken.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return accessToken;
+        return accountWithToken;
     }
 }
 
