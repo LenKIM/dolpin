@@ -6,14 +6,15 @@ import com.great.deploy.dolpin.account.AccountAdapter;
 import com.great.deploy.dolpin.account.AccountRole;
 import com.great.deploy.dolpin.common.AppProperties;
 import com.great.deploy.dolpin.domain.Favorite;
+import com.great.deploy.dolpin.dto.AccessToken;
 import com.great.deploy.dolpin.dto.AccountWithToken;
+import com.great.deploy.dolpin.exception.BadRequestException;
+import com.great.deploy.dolpin.exception.NonAuthorizationException;
+import com.great.deploy.dolpin.exception.ResourceNotFoundException;
 import com.great.deploy.dolpin.model.Provider;
 import com.great.deploy.dolpin.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,8 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -41,9 +42,10 @@ public class AccountService implements UserDetailsService {
     @Autowired
     ObjectMapper objectMapper;
 
-    public Set<Favorite> getFavorite(Integer accountId){
-        Account account = accountRepository.findById(accountId).get();
-        return account.getFavorites();
+    public Set<Favorite> getFavorite(Integer accountId) {
+        return accountRepository.findById(accountId).map(
+                Account::getFavorites
+        ).orElseThrow(() -> new NonAuthorizationException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase()));
     }
 
     public static String getOauthId(String email, Provider snsType, String snsId) {
@@ -102,11 +104,12 @@ public class AccountService implements UserDetailsService {
     }
 
     private AccountWithToken getAccessToken(Account account) {
-        AccountWithToken accountWithToken = getAuthToken(account);
-        return new AccountWithToken(account, accountWithToken.getAccessToken(), accountWithToken.getTokenType(), accountWithToken.getRefreshToken(), accountWithToken.getExpiresIn(), accountWithToken.getScope());
+        AccessToken accessToken = Optional.of(getAuthToken(account)).orElseThrow(() -> new ResourceNotFoundException("Not found Account"));
+        return new AccountWithToken(account, accessToken);
     }
 
-    private AccountWithToken getAuthToken(Account account) {
+    private AccessToken getAuthToken(Account account) {
+        Account.validateAccount(account);
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -115,11 +118,11 @@ public class AccountService implements UserDetailsService {
         String authURL = appProperties.getBaseUrl() + "/oauth/token?grant_type=password&username=" + account.getOauthId() + "&password=password";
         ResponseEntity<String> response = restTemplate.postForEntity(authURL, entity, String.class);
 
-        AccountWithToken accountWithToken = null;
+        AccessToken accountWithToken = null;
         try {
-            accountWithToken = objectMapper.readValue(response.getBody(), AccountWithToken.class);
-        } catch (IOException e) {
-            e.printStackTrace();
+            accountWithToken = objectMapper.readValue(response.getBody(), AccessToken.class);
+        } catch (Exception e) {
+            throw new BadRequestException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
         }
         return accountWithToken;
     }

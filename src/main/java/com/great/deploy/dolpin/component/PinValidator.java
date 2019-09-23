@@ -10,7 +10,6 @@ public class PinValidator {
     public void validate(PinRequest createPinRequest, Errors errors){
         if (createPinRequest.getEndDate().isBefore(createPinRequest.getStartDate())){
             errors.rejectValue("endDate", "wrongValue", "need to duble check");
-
         }
     }
 }

@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public class NonAuthorizationException extends DolpinException {
 
+
     public NonAuthorizationException(int errorCode, String errorMsg) {
         super(errorCode, errorMsg);
     }

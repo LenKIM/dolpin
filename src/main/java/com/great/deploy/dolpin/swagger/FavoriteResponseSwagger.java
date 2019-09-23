@@ -5,8 +5,8 @@ import com.great.deploy.dolpin.dto.Response;
 import io.swagger.annotations.ApiModel;
 
 @ApiModel
-public class FavoriteResponseModel extends Response<FavoriteResponse> {
-    public FavoriteResponseModel(int code, String msg, FavoriteResponse data) {
+public class FavoriteResponseSwagger extends Response<FavoriteResponse> {
+    public FavoriteResponseSwagger(int code, String msg, FavoriteResponse data) {
         super(code, msg, data);
     }
 }

@@ -129,6 +129,45 @@ public class AccountControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @TestDescription("계정이 존재하지 않을 떄.")
+    public void checkEmailAndFail() throws Exception {
+        Set<Favorite> favoriteSet = new HashSet<>();
+        favoriteSet.add(new Favorite(1L, 1L));
+        favoriteSet.add(new Favorite(2L, 1L));
+        favoriteSet.add(new Favorite(3L, 1L));
+
+        Set<AccountRole> accountRoles = Stream.of(AccountRole.ADMIN, AccountRole.USER)
+                .collect(Collectors.toSet());
+        String email = "sdjhkahkx@gmail.com";
+        Account len = Account.builder()
+                .email(email)
+                .password("password")
+                .medal("넌최고의팬텀이야")
+                .duckLevel("달인덕")
+                .activeRegion("서울")
+                .nickname("BTS_LOVE")
+                .imageUrl("Https://aaaa.com")
+                .name("김정규")
+                .snsId("123123")
+                .snsType(Provider.TWITTER)
+                .favorites(favoriteSet)
+                .roles(accountRoles)
+                .build();
+
+        this.accountService.saveAccount(len);
+        LoginRequest request = new LoginRequest(email, Provider.SYSTEM, "1236218748");
+        this.mockMvc.perform(
+                post("/api/user/exist")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(this.objectMapper.writeValueAsString(request))
+        ).andExpect(status().isOk())
+                .andExpect(jsonPath("code").value("202"))
+                .andExpect(jsonPath("msg").value("Accepted"))
+                .andExpect(jsonPath("data.sns_type").value("NONE"))
+                .andExpect(jsonPath("data.existed").value("false"));
+    }
+
+    @Test
     @TestDescription("singUp By email")
     public void signUpByEmail() throws Exception {
 
@@ -172,7 +211,7 @@ public class AccountControllerTest extends BaseControllerTest {
                 .collect(Collectors.toSet());
 
         String email = "user@gmail.com";
-        String password = "user";
+        String password = "password";
         Account len = Account.builder()
                 .email(email)
                 .password(password)
@@ -199,6 +238,49 @@ public class AccountControllerTest extends BaseControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("code").value("200"))
                 .andExpect(jsonPath("msg").value("OK"))
-                .andExpect(jsonPath("data.id").exists());
+                .andExpect(jsonPath("data.account_id").exists());
+    }
+
+    @Test
+    @TestDescription("로그인실패_이메일이 안맞음.")
+    public void signInFailByEmail() throws Exception {
+
+        Set<Favorite> favoriteSet = new HashSet<>();
+        favoriteSet.add(new Favorite(1L, 1L));
+        favoriteSet.add(new Favorite(2L, 1L));
+        favoriteSet.add(new Favorite(3L, 1L));
+
+
+        Set<AccountRole> accountRoles = Stream.of(AccountRole.ADMIN, AccountRole.USER)
+                .collect(Collectors.toSet());
+
+        String email = "user22@gmail.com";
+        String password = "password";
+        Account len = Account.builder()
+                .email(email)
+                .password(password)
+                .medal("넌최고의팬텀이야")
+                .duckLevel("달인덕")
+                .activeRegion("서울")
+                .nickname("BTS_LOVE")
+                .imageUrl("Https://aaaa.com")
+                .name("김정규")
+                .favorites(favoriteSet)
+                .oauthId(email)
+                .snsType(Provider.SYSTEM)
+                .snsId("123123")
+                .roles(accountRoles)
+                .build();
+        this.accountService.saveAccount(len);
+
+        LoginRequest request = new LoginRequest("user@gmail.com", Provider.SYSTEM, "123123");
+        this.mockMvc.perform(
+                post("/api/user/login")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(this.objectMapper.writeValueAsString(request))
+        ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("code").value("1401"))
+                .andExpect(jsonPath("msg").value("Need Check Account Information"));
     }
 }

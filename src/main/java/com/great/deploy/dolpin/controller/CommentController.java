@@ -37,7 +37,7 @@ public class CommentController {
     @Autowired
     private LikeItRepository likeItRepository;
 
-    @ApiOperation(value = "특정 pin에 대한 복수의 댓글 가져오기", response = CommentListResponse.class)
+    @ApiOperation(value = "특정 Pin 복수의 댓글 가져오기", response = CommentListResponse.class)
     @GetMapping("/pins/{pinsId}/comments")
     public Response<CommentListResponse> getAllCommentsByPostId(
             @ApiIgnore @CurrentUser Account account,
@@ -53,10 +53,7 @@ public class CommentController {
                 HttpStatus.OK.getReasonPhrase(),
                 new CommentListResponse(
                         comments.stream().map(
-                                comment -> {
-                                    boolean isRecommended = likeItRepository.findByCommentAndAccount(comment, account) != null;
-                                    return new CommentResponse(comment.getId(), comment.getAccountId(), comment.getContents(), comment.getNickName(), comment.getRecommendCount(), isRecommended, comment.getCreateAt(), comment.getUpdateAt());
-                                }
+                                comment -> new CommentResponse(comment, likeItRepository.findByCommentAndAccount(comment, account) != null)
                         ).collect(Collectors.toList()))
         );
     }
@@ -84,7 +81,7 @@ public class CommentController {
                                     comments.stream().map(
                                             comment -> {
                                                 boolean isRecommended = likeItRepository.findByCommentAndAccount(comment, account) != null;
-                                                return new CommentResponse(comment.getId(), comment.getAccountId(), comment.getContents(), comment.getNickName(), comment.getRecommendCount(), isRecommended, comment.getCreateAt(), comment.getUpdateAt());
+                                                return new CommentResponse(comment, isRecommended);
                                             }
                                     ).collect(Collectors.toList())
                             );
@@ -111,7 +108,7 @@ public class CommentController {
                     comment.setAccountId(commentRequest.getAccountId());
                     Comment newComment = commentRepository.save(comment);
                     boolean isRecommended = likeItRepository.findByCommentAndAccount(newComment, account) != null;
-                    return new CommentResponse(newComment.getId(), newComment.getAccountId(), newComment.getContents(), newComment.getNickName(), newComment.getRecommendCount(), isRecommended, newComment.getCreateAt(), newComment.getUpdateAt());
+                    return new CommentResponse(newComment, isRecommended);
                 }).orElseThrow(() -> new ResourceNotFoundException("CommentId " + commentId + "not found")));
     }
 

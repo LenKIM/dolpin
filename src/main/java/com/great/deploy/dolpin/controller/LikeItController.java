@@ -39,12 +39,12 @@ public class LikeItController {
         Account.validateAccount(account);
         Long commentId = likeItRequest.getCommentId();
         // @CurrntUser가 가져오는 건 캐시된 account를 가져옴.
-        Account accountId = accountRepository.findById(likeItRequest.getAccountId()).orElseThrow(() -> new BadRequestException("Not Found Account Id"));
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new BadRequestException("NOT FOUND commentId"));
+        Account accountId = accountRepository.findById(likeItRequest.getAccountId()).orElseThrow(() -> new BadRequestException(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase() + " => Account Id"));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new BadRequestException(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase() + " => Comment Id"));
         LikeIt likeIt = new LikeIt(comment, accountId);
-        LikeIt save = likeItRepository.save(likeIt);
-        Comment save1 = commentRepository.save(save.getComment());
-        LikeItResponse likeItResponse = new LikeItResponse(true, account.getNickname(), save1.getRecommendCount());
+        LikeIt newLikeIt = likeItRepository.save(likeIt);
+        Comment newComment = commentRepository.save(newLikeIt.getComment());
+        LikeItResponse likeItResponse = new LikeItResponse(true, account.getNickname(), newComment.getRecommendCount());
         return new Response<>(HttpStatus.ACCEPTED.value(), HttpStatus.ACCEPTED.getReasonPhrase(), likeItResponse);
     }
 

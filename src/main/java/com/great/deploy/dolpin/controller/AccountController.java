@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.util.Optional;
+
 import static com.great.deploy.dolpin.account.Account.validateAccount;
 
 @Api(value = "AccountController", description = "About USER API")
@@ -95,14 +97,10 @@ public class AccountController {
             @RequestBody LoginRequest request
     ) {
         String oauthId = AccountService.getOauthId(request.getEmail(), request.getSnsType(), request.getSnsId());
-        Account account = accountRepository.findByOauthId(oauthId);
+        Account account = Optional.ofNullable(accountRepository.findByOauthId(oauthId)).orElse(Account.EMPTY);
         ExistResponse existResponse;
-        if (account == null) {
-            existResponse = new ExistResponse(false, Provider.NONE);
-        } else {
-            existResponse = new ExistResponse(true, account.getSnsType());
-        }
+        if (account == Account.EMPTY) existResponse = new ExistResponse(false, Provider.NONE);
+        else existResponse = new ExistResponse(true, account.getSnsType());
         return new Response<>(HttpStatus.ACCEPTED.value(), HttpStatus.ACCEPTED.getReasonPhrase(), existResponse);
     }
-
 }

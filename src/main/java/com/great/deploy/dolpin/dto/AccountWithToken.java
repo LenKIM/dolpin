@@ -20,13 +20,13 @@ public class AccountWithToken extends Account {
     private Integer expiresIn;
     private String scope;
 
-    public AccountWithToken(Account account, String accessToken, String tokenType, String refreshToken, Integer expiresIn, String scope) {
+    public AccountWithToken(Account account, AccessToken token) {
         super(account.getId(), account.getPassword(), account.getEmail(), account.getRoles(), account.getName(), account.getImageUrl(), account.getNickname(), account.getActiveRegion(), account.getMedal(), account.getDuckLevel(), account.getSnsType(), account.getSnsId(), account.getOauthId(), account.getFavorites(), account.getCreatedAt(), LocalDateTime.now());
-        this.accessToken = accessToken;
-        this.tokenType = tokenType;
-        this.refreshToken = refreshToken;
-        this.expiresIn = expiresIn;
-        this.scope = scope;
+        this.accessToken = token.getAccessToken();
+        this.tokenType = token.getTokenType();
+        this.refreshToken = token.getRefreshToken();
+        this.expiresIn = token.getExpiresIn();
+        this.scope = token.getScope();
     }
 }
 

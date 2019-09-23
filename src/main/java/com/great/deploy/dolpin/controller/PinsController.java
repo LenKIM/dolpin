@@ -132,17 +132,13 @@ public class PinsController {
     @PutMapping("/pin/{pinId}")
     public Response<Pins> modifyPin(
             @PathVariable @NotBlank Long pinId,
-            @RequestBody @Valid PinRequest pinRequest, Errors errors,
+            @RequestBody @Valid PinRequest request, Errors errors,
             @ApiIgnore @CurrentUser Account account) {
 
-        if (errors.hasErrors()) {
-            throw new BadRequestException("fail to modify pin");
-        }
-
-        pinValidator.validate(pinRequest, errors);
+        pinValidator.validate(request, errors);
 
         if (errors.hasErrors()) {
-            throw new BadRequestException("fail to modify pin");
+            throw new BadRequestException(HttpStatus.BAD_REQUEST.value(),HttpStatus.BAD_REQUEST.getReasonPhrase());
         }
 
         Account.validateAccount(account);
@@ -150,7 +146,7 @@ public class PinsController {
         return new Response<>(
                 HttpStatus.OK.value(),
                 HttpStatus.OK.getReasonPhrase(),
-                pinService.modifyPin(pinId, pinRequest)
+                pinService.modifyPin(pinId, request)
         );
     }
 
@@ -186,7 +182,7 @@ public class PinsController {
             List<PinResponse> groupPins = pinService.getGroupPins(celebrityId, account.getId());
             return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), groupPins);
         } else {
-            throw new ResourceNotFoundException("Not Found celebrityRequest");
+            throw new ResourceNotFoundException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase() + " => CelebrityType");
         }
     }
 }

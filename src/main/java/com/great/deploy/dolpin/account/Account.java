@@ -23,6 +23,8 @@ import java.util.Set;
 @AllArgsConstructor
 public class Account {
 
+    public static Account EMPTY = new Account();
+
     public static Account of(Account oldAccount, AccountUpdateRequest newAccount) {
         return new Account(
                 oldAccount.getId(),
@@ -111,6 +113,7 @@ public class Account {
 
     @Enumerated(EnumType.STRING)
     private Provider snsType;
+
     private String snsId;
 
     private String oauthId;

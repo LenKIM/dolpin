@@ -2,5 +2,5 @@ package com.great.deploy.dolpin.model;
 
 public enum Provider {
 
-    FACEBOOK, TWEETER, SYSTEM, NONE
+    FACEBOOK, TWITTER, SYSTEM, NONE
 }

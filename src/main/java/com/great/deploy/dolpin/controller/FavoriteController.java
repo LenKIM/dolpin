@@ -6,7 +6,7 @@ import com.great.deploy.dolpin.dto.FavoriteRequest;
 import com.great.deploy.dolpin.dto.FavoriteResponse;
 import com.great.deploy.dolpin.dto.Response;
 import com.great.deploy.dolpin.service.AccountService;
-import com.great.deploy.dolpin.swagger.FavoriteResponseModel;
+import com.great.deploy.dolpin.swagger.FavoriteResponseSwagger;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class FavoriteController {
     @Autowired
     AccountService accountService;
 
-    @ApiOperation(value = "Get current user's favorites Info", response = FavoriteResponseModel.class)
+    @ApiOperation(value = "Get current user's favorites Info", response = FavoriteResponseSwagger.class)
     @GetMapping()
     public Response<FavoriteResponse> getFavorites(@ApiIgnore @CurrentUser Account account) {
         validateAccount(account);
@@ -36,7 +36,7 @@ public class FavoriteController {
     }
 
     @PutMapping
-    @ApiOperation(value = "Update current user's favorites Info", response = FavoriteResponseModel.class)
+    @ApiOperation(value = "Update current user's favorites Info", response = FavoriteResponseSwagger.class)
     public Response<FavoriteResponse> updateFavorites(@RequestBody FavoriteRequest favorites,
                                                       @ApiIgnore @CurrentUser Account account) {
         validateAccount(account);

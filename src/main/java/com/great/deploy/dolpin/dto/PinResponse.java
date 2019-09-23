@@ -1,5 +1,6 @@
 package com.great.deploy.dolpin.dto;
 
+import com.great.deploy.dolpin.domain.Pins;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PinResponse {
-
 
     private Long id;
     private String title;
@@ -27,4 +27,21 @@ public class PinResponse {
     private boolean isPinCertification;
     private String address;
     private String detailedAddress;
+
+    public PinResponse(Pins pin, boolean isVisited) {
+        new PinResponse(
+                pin.getId(),
+                pin.getTitle(),
+                pin.getLatitude(),
+                pin.getLongitude(),
+                pin.getImgProvider(),
+                pin.getImgUrl(),
+                pin.getStartDate(),
+                pin.getEndDate(),
+                pin.getCelebrityMemberId(),
+                pin.getCelebrityGroupId(),
+                isVisited,
+                pin.getAddress(),
+                pin.getDetailedAddress());
+    }
 }

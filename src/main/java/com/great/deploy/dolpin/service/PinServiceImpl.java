@@ -1,6 +1,5 @@
 package com.great.deploy.dolpin.service;
 
-import com.amazonaws.services.kms.model.NotFoundException;
 import com.great.deploy.dolpin.domain.CelebrityGroup;
 import com.great.deploy.dolpin.domain.CelebrityMember;
 import com.great.deploy.dolpin.domain.Pins;
@@ -13,6 +12,7 @@ import com.great.deploy.dolpin.repository.CelebrityMemberRepository;
 import com.great.deploy.dolpin.repository.PinsRepository;
 import com.great.deploy.dolpin.repository.VisitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -44,28 +44,14 @@ public class PinServiceImpl implements PinService {
 
         if (StringUtils.isEmpty(memberId)) {
             celebrityMember = celebrityMemberRepository.findById(memberId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Couldn't found memberId"));
+                    .orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase() + " memberId => memberId"));
         }
 
         if (StringUtils.isEmpty(groupId)) {
             celebrityGroup = celebrityGroupRepository.findById(groupId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Couldn't found groupId"));
+                    .orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase() + " groupId => groupId"));
         }
-        return pinsRepository.save(
-                new Pins(
-                        pins.getAddress(),
-                        pins.getDetailedAddress(),
-                        pins.getLatitude(),
-                        pins.getLongitude(),
-                        pins.getTitle(),
-                        imageUrl,
-                        pins.getImgProvider(),
-                        pins.getStartDate(),
-                        pins.getEndDate(),
-                        celebrityMember,
-                        celebrityGroup
-                        )
-        );
+        return pinsRepository.save(new Pins(pins, imageUrl, celebrityMember, celebrityGroup));
     }
 
     @Override
@@ -89,23 +75,9 @@ public class PinServiceImpl implements PinService {
     @Override
     public PinResponse getPinDetail(Long pinId, Integer accountId) {
         Pins pin = pinsRepository.findById(pinId)
-                .orElseThrow(() -> new ResourceNotFoundException("Couldn't found pinId"));
-
+                .orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase() + "pinId => " + pinId));
         List<Long> visits = visitRepository.findAllByAccountId(accountId).stream().map(Visit::getPinId).collect(Collectors.toList());
-
-        return new PinResponse(pin.getId(),
-                pin.getTitle(),
-                pin.getLatitude(),
-                pin.getLongitude(),
-                pin.getImgProvider(),
-                pin.getImgUrl(),
-                pin.getStartDate(),
-                pin.getEndDate(),
-                pin.getCelebrityMemberId(),
-                pin.getCelebrityGroupId(),
-                visits.stream().anyMatch(a -> a.equals(pin.getId())),
-                pin.getAddress(),
-                pin.getDetailedAddress()
+        return new PinResponse(pin, visits.stream().anyMatch(visit -> visit.equals(pin.getId()))
         );
     }
 
@@ -113,24 +85,16 @@ public class PinServiceImpl implements PinService {
     public Pins modifyPin(Long pinId, PinRequest pinRequest) {
         return pinsRepository.findById(pinId)
                 .map(pin -> {
-                            pin.setTitle(pinRequest.getTitle());
-                            pin.setImgUrl(pinRequest.getImgUrl());
-                            pin.setImgProvider(pinRequest.getImgProvider());
-                            pin.setLatitude(pinRequest.getLatitude());
-                            pin.setLongitude(pinRequest.getLongitude());
-                            pin.setStartDate(pinRequest.getStartDate());
-                            pin.setEndDate(pinRequest.getEndDate());
-                            pin.setAddress(pinRequest.getAddress());
-                            pin.setDetailedAddress(pinRequest.getDetailedAddress());
+                            pin.setDate(pinRequest);
                             return pinsRepository.save(pin);
                         }
-                ).orElseThrow(() -> new NotFoundException("Not Fount pin ID " + pinId));
+                ).orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase() + "pinId =>" + pinId));
     }
 
     @Override
     public void deletePin(Long pinId) {
         Pins pin = pinsRepository.findById(pinId)
-                .orElseThrow(() -> new ResourceNotFoundException("Couldn't found pinId"));
+                .orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase() + "pinId =>" + pinId));
         pinsRepository.delete(pin);
     }
 
@@ -138,22 +102,6 @@ public class PinServiceImpl implements PinService {
         List<Long> visits = visitRepository.findAllByAccountId(accountId).stream().map(Visit::getPinId).collect(Collectors.toList());
 
         return allPins.stream()
-                .map(pins ->
-                        new PinResponse(
-                                pins.getId(),
-                                pins.getTitle(),
-                                pins.getLatitude(),
-                                pins.getLongitude(),
-                                pins.getImgProvider(),
-                                pins.getImgUrl(),
-                                pins.getStartDate(),
-                                pins.getEndDate(),
-                                pins.getCelebrityMemberId(),
-                                pins.getCelebrityGroupId(),
-                                visits.stream().anyMatch(a -> a.equals(pins.getId())),
-                                pins.getAddress(),
-                                pins.getDetailedAddress()
-                        )
-                ).collect(Collectors.toList());
+                .map(pins -> new PinResponse(pins, visits.stream().anyMatch(visit -> visit.equals(pins.getId())))).collect(Collectors.toList());
     }
 }

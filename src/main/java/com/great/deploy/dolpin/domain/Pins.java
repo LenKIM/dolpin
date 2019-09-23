@@ -2,6 +2,7 @@ package com.great.deploy.dolpin.domain;
 
 import com.great.deploy.dolpin.common.AuditEntity;
 import com.great.deploy.dolpin.dto.CreatePinRequest;
+import com.great.deploy.dolpin.dto.PinRequest;
 import lombok.*;
 
 import javax.persistence.*;
@@ -70,11 +71,37 @@ public class Pins extends AuditEntity {
         this.detailedAddress = detailedAddress;
     }
 
+    public Pins(Pins pins, String imageUrl, CelebrityMember celebrityMember, CelebrityGroup celebrityGroup) {
+        new Pins(pins.getAddress(),
+                pins.getDetailedAddress(),
+                pins.getLatitude(),
+                pins.getLongitude(),
+                pins.getTitle(),
+                imageUrl,
+                pins.getImgProvider(),
+                pins.getStartDate(),
+                pins.getEndDate(),
+                celebrityMember,
+                celebrityGroup);
+    }
+
     public Long getCelebrityMemberId() {
         return celebrityMember.getId();
     }
 
     public Long getCelebrityGroupId() {
         return celebrityGroup.getId();
+    }
+
+    public void setDate(PinRequest pinRequest) {
+        this.setTitle(pinRequest.getTitle());
+        this.setImgUrl(pinRequest.getImgUrl());
+        this.setImgProvider(pinRequest.getImgProvider());
+        this.setLatitude(pinRequest.getLatitude());
+        this.setLongitude(pinRequest.getLongitude());
+        this.setStartDate(pinRequest.getStartDate());
+        this.setEndDate(pinRequest.getEndDate());
+        this.setAddress(pinRequest.getAddress());
+        this.setDetailedAddress(pinRequest.getDetailedAddress());
     }
 }
