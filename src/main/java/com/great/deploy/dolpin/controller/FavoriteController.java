@@ -4,7 +4,7 @@ import com.great.deploy.dolpin.account.Account;
 import com.great.deploy.dolpin.account.CurrentUser;
 import com.great.deploy.dolpin.dto.FavoriteRequest;
 import com.great.deploy.dolpin.dto.FavoriteResponse;
-import com.great.deploy.dolpin.dto.Response;
+import com.great.deploy.dolpin.dto.model.Response;
 import com.great.deploy.dolpin.service.AccountService;
 import com.great.deploy.dolpin.swagger.FavoriteResponseSwagger;
 import io.swagger.annotations.Api;

@@ -2,7 +2,7 @@ package com.great.deploy.dolpin.config;
 
 import com.great.deploy.dolpin.account.Account;
 import com.great.deploy.dolpin.account.AccountRole;
-import com.great.deploy.dolpin.model.Provider;
+import com.great.deploy.dolpin.dto.model.Provider;
 import com.great.deploy.dolpin.service.AccountService;
 import com.great.deploy.dolpin.common.AppProperties;
 import org.modelmapper.ModelMapper;

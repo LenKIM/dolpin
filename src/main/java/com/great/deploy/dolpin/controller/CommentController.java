@@ -6,7 +6,7 @@ import com.great.deploy.dolpin.domain.Comment;
 import com.great.deploy.dolpin.dto.CommentListResponse;
 import com.great.deploy.dolpin.dto.CommentRequest;
 import com.great.deploy.dolpin.dto.CommentResponse;
-import com.great.deploy.dolpin.dto.Response;
+import com.great.deploy.dolpin.dto.model.Response;
 import com.great.deploy.dolpin.exception.ResourceNotFoundException;
 import com.great.deploy.dolpin.repository.CommentRepository;
 import com.great.deploy.dolpin.repository.LikeItRepository;
@@ -85,7 +85,7 @@ public class CommentController {
                                             }
                                     ).collect(Collectors.toList())
                             );
-                        }).orElseThrow(() -> new ResourceNotFoundException("PostId " + pinsId + " not found")));
+                        }).orElseThrow(() -> new ResourceNotFoundException("해당 핀을 찾을 수 없습니다.")));
     }
 
     @ApiOperation(value = "특정 pin 댓글 수정", response = CommentResponse.class)
@@ -99,7 +99,7 @@ public class CommentController {
         Account.validateAccount(account);
 
         if (!pinsRepository.existsById(pinsId)) {
-            throw new ResourceNotFoundException("PostId " + pinsId + " not found");
+            throw new ResourceNotFoundException("해당 핀을 찾을 수 없습니다.");
         }
 
         return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), commentRepository.findById(commentId)
@@ -109,7 +109,7 @@ public class CommentController {
                     Comment newComment = commentRepository.save(comment);
                     boolean isRecommended = likeItRepository.findByCommentAndAccount(newComment, account) != null;
                     return new CommentResponse(newComment, isRecommended);
-                }).orElseThrow(() -> new ResourceNotFoundException("CommentId " + commentId + "not found")));
+                }).orElseThrow(() -> new ResourceNotFoundException("해당 댓글을 찾을 수 없습니다.")));
     }
 
     @ApiOperation(value = "특정 pin 댓글 삭제")
@@ -123,6 +123,6 @@ public class CommentController {
                 .map(comment -> {
                     commentRepository.delete(comment);
                     return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), true);
-                }).orElseThrow(() -> new ResourceNotFoundException("Comment not found with id " + commentId + " and pinsId " + pinId));
+                }).orElseThrow(() -> new ResourceNotFoundException("댓글을 찾을 수 없습니다."));
     }
 }

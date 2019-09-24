@@ -1,7 +1,7 @@
 package com.great.deploy.dolpin.controller;
 
 import com.great.deploy.dolpin.dto.CelebrityResponse;
-import com.great.deploy.dolpin.dto.Response;
+import com.great.deploy.dolpin.dto.model.Response;
 import com.great.deploy.dolpin.service.CelebrityService;
 import com.great.deploy.dolpin.swagger.CelebrityListResponse;
 import io.swagger.annotations.Api;

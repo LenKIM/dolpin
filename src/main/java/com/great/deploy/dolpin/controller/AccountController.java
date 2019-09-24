@@ -3,7 +3,8 @@ package com.great.deploy.dolpin.controller;
 import com.great.deploy.dolpin.account.Account;
 import com.great.deploy.dolpin.account.CurrentUser;
 import com.great.deploy.dolpin.dto.*;
-import com.great.deploy.dolpin.model.Provider;
+import com.great.deploy.dolpin.dto.model.Provider;
+import com.great.deploy.dolpin.dto.model.Response;
 import com.great.deploy.dolpin.repository.AccountRepository;
 import com.great.deploy.dolpin.service.AccountService;
 import com.great.deploy.dolpin.swagger.AccessTokenResponseSwagger;
@@ -58,12 +59,12 @@ public class AccountController {
         );
     }
 
-    @ApiOperation(value = "create user by email and sns", response = AccessTokenResponseSwagger.class)
+    @ApiOperation(value = "createUser user by email and sns", response = AccessTokenResponseSwagger.class)
     @PostMapping("/create")
     public Response<AccountWithTokenResponse> createUser(
             @RequestBody AccountRequest accountRequest
     ) {
-        AccountWithToken account = accountService.create(
+        AccountWithToken account = accountService.createUser(
                 accountRequest.getEmail(),
                 accountRequest.getNickname(),
                 accountRequest.getFavorites(),
@@ -82,8 +83,10 @@ public class AccountController {
     public Response<AccountWithTokenResponse> loginUser(
             @RequestBody LoginRequest request
     ) {
-        String oauthId = AccountService.getOauthId(request.getEmail(), request.getSnsType(), request.getSnsId());
-        AccountWithToken account = accountService.login(oauthId);
+        String email = request.getEmail();
+        Provider snsType = request.getSnsType();
+        String snsId = request.getSnsId();
+        AccountWithToken account = accountService.login(email, snsType, snsId);
         return new Response<>(
                 HttpStatus.OK.value(),
                 HttpStatus.OK.getReasonPhrase(),

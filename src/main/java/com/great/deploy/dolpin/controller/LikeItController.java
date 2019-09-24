@@ -6,7 +6,7 @@ import com.great.deploy.dolpin.domain.Comment;
 import com.great.deploy.dolpin.domain.LikeIt;
 import com.great.deploy.dolpin.dto.LikeItRequest;
 import com.great.deploy.dolpin.dto.LikeItResponse;
-import com.great.deploy.dolpin.dto.Response;
+import com.great.deploy.dolpin.dto.model.Response;
 import com.great.deploy.dolpin.exception.BadRequestException;
 import com.great.deploy.dolpin.repository.AccountRepository;
 import com.great.deploy.dolpin.repository.CommentRepository;
@@ -39,8 +39,8 @@ public class LikeItController {
         Account.validateAccount(account);
         Long commentId = likeItRequest.getCommentId();
         // @CurrntUser가 가져오는 건 캐시된 account를 가져옴.
-        Account accountId = accountRepository.findById(likeItRequest.getAccountId()).orElseThrow(() -> new BadRequestException(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase() + " => Account Id"));
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new BadRequestException(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase() + " => Comment Id"));
+        Account accountId = accountRepository.findById(likeItRequest.getAccountId()).orElseThrow(() -> new BadRequestException("Account Id"));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new BadRequestException(" Comment Id"));
         LikeIt likeIt = new LikeIt(comment, accountId);
         LikeIt newLikeIt = likeItRepository.save(likeIt);
         Comment newComment = commentRepository.save(newLikeIt.getComment());

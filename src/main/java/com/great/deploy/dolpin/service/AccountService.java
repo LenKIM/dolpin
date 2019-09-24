@@ -11,7 +11,7 @@ import com.great.deploy.dolpin.dto.AccountWithToken;
 import com.great.deploy.dolpin.exception.BadRequestException;
 import com.great.deploy.dolpin.exception.NonAuthorizationException;
 import com.great.deploy.dolpin.exception.ResourceNotFoundException;
-import com.great.deploy.dolpin.model.Provider;
+import com.great.deploy.dolpin.dto.model.Provider;
 import com.great.deploy.dolpin.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -45,7 +45,7 @@ public class AccountService implements UserDetailsService {
     public Set<Favorite> getFavorite(Integer accountId) {
         return accountRepository.findById(accountId).map(
                 Account::getFavorites
-        ).orElseThrow(() -> new NonAuthorizationException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase()));
+        ).orElseThrow(() -> new NonAuthorizationException("not found accountId: " + accountId));
     }
 
     public static String getOauthId(String email, Provider snsType, String snsId) {
@@ -76,13 +76,14 @@ public class AccountService implements UserDetailsService {
         return new AccountAdapter(account);
     }
 
-    public AccountWithToken create(String email, String nickname, Set<Favorite> favorites, Provider snsType, String snsId) {
+    public AccountWithToken createUser(String email, String nickname, Set<Favorite> favorites, Provider snsType, String snsId) {
 
         final Set<AccountRole> adminRoles = new HashSet<>();
         adminRoles.add(AccountRole.USER);
-        String oauthId = getOauthId(email, snsType, snsId);
 
+        String oauthId = getOauthId(email, snsType, snsId);
         String password = "password";
+
         Account admin = Account.builder()
                 .nickname(nickname)
                 .email(email)
@@ -98,7 +99,8 @@ public class AccountService implements UserDetailsService {
         return getAccessToken(account);
     }
 
-    public AccountWithToken login(String oauthId) {
+    public AccountWithToken login(String email, Provider snsType, String snsId) {
+        String oauthId = AccountService.getOauthId(email, snsType, snsId);
         Account account = accountRepository.findByOauthId(oauthId);
         return getAccessToken(account);
     }
@@ -118,11 +120,11 @@ public class AccountService implements UserDetailsService {
         String authURL = appProperties.getBaseUrl() + "/oauth/token?grant_type=password&username=" + account.getOauthId() + "&password=password";
         ResponseEntity<String> response = restTemplate.postForEntity(authURL, entity, String.class);
 
-        AccessToken accountWithToken = null;
+        AccessToken accountWithToken;
         try {
             accountWithToken = objectMapper.readValue(response.getBody(), AccessToken.class);
         } catch (Exception e) {
-            throw new BadRequestException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            throw new BadRequestException("accessToken not valid");
         }
         return accountWithToken;
     }

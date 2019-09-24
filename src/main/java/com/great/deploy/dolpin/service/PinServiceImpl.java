@@ -12,7 +12,6 @@ import com.great.deploy.dolpin.repository.CelebrityMemberRepository;
 import com.great.deploy.dolpin.repository.PinsRepository;
 import com.great.deploy.dolpin.repository.VisitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -44,12 +43,12 @@ public class PinServiceImpl implements PinService {
 
         if (StringUtils.isEmpty(memberId)) {
             celebrityMember = celebrityMemberRepository.findById(memberId)
-                    .orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase() + " memberId => memberId"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Not found memberId => memberId"));
         }
 
         if (StringUtils.isEmpty(groupId)) {
             celebrityGroup = celebrityGroupRepository.findById(groupId)
-                    .orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase() + " groupId => groupId"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Not found memberId => memberId"));
         }
         return pinsRepository.save(new Pins(pins, imageUrl, celebrityMember, celebrityGroup));
     }
@@ -75,7 +74,7 @@ public class PinServiceImpl implements PinService {
     @Override
     public PinResponse getPinDetail(Long pinId, Integer accountId) {
         Pins pin = pinsRepository.findById(pinId)
-                .orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase() + "pinId => " + pinId));
+                .orElseThrow(() -> new ResourceNotFoundException("pinId => " + pinId));
         List<Long> visits = visitRepository.findAllByAccountId(accountId).stream().map(Visit::getPinId).collect(Collectors.toList());
         return new PinResponse(pin, visits.stream().anyMatch(visit -> visit.equals(pin.getId()))
         );
@@ -88,13 +87,13 @@ public class PinServiceImpl implements PinService {
                             pin.setDate(pinRequest);
                             return pinsRepository.save(pin);
                         }
-                ).orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase() + "pinId =>" + pinId));
+                ).orElseThrow(() -> new ResourceNotFoundException("pinId =>" + pinId));
     }
 
     @Override
     public void deletePin(Long pinId) {
         Pins pin = pinsRepository.findById(pinId)
-                .orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase() + "pinId =>" + pinId));
+                .orElseThrow(() -> new ResourceNotFoundException("pinId =>" + pinId));
         pinsRepository.delete(pin);
     }
 

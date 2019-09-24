@@ -6,11 +6,12 @@ import com.great.deploy.dolpin.domain.Visit;
 import com.great.deploy.dolpin.dto.DolpinRequest;
 import com.great.deploy.dolpin.dto.ProofRequest;
 import com.great.deploy.dolpin.dto.ProofResponse;
-import com.great.deploy.dolpin.dto.Response;
+import com.great.deploy.dolpin.dto.model.Response;
+import com.great.deploy.dolpin.exception.NonAuthorizationException;
 import com.great.deploy.dolpin.exception.ResourceNotFoundException;
-import com.great.deploy.dolpin.model.Celebrity;
-import com.great.deploy.dolpin.model.PositingPeriod;
-import com.great.deploy.dolpin.model.PostedAddress;
+import com.great.deploy.dolpin.dto.model.Celebrity;
+import com.great.deploy.dolpin.dto.model.PositingPeriod;
+import com.great.deploy.dolpin.dto.model.PostedAddress;
 import com.great.deploy.dolpin.service.ReportService;
 import com.great.deploy.dolpin.swagger.DolpinResponse;
 import com.great.deploy.dolpin.swagger.ProofResponseSwagger;
@@ -39,11 +40,16 @@ public class DolpinController {
             @RequestBody ProofRequest request
     ) {
         Account.validateAccount(account);
+
+
         Visit visit = reportService.proof(request);
+        if(visit == Visit.NOT_FOUND){
+            throw new NonAuthorizationException("인증되지 않은 핀 정보입니다.");
+        }
         Integer accountId = visit.getAccountId();
         Integer id = account.getId();
         if (!accountId.equals(id)) {
-            throw new ResourceNotFoundException("Not Matching pin account Id");
+            throw new ResourceNotFoundException("계정을 찾을 수 없습니다.");
         }
         return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), new ProofResponse(true));
     }

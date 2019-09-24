@@ -8,6 +8,8 @@ import com.great.deploy.dolpin.domain.CelebrityGroup;
 import com.great.deploy.dolpin.domain.CelebrityMember;
 import com.great.deploy.dolpin.domain.Pins;
 import com.great.deploy.dolpin.dto.*;
+import com.great.deploy.dolpin.dto.model.CelebrityType;
+import com.great.deploy.dolpin.dto.model.Response;
 import com.great.deploy.dolpin.exception.BadRequestException;
 import com.great.deploy.dolpin.exception.NotSupportException;
 import com.great.deploy.dolpin.exception.ResourceNotFoundException;
@@ -88,7 +90,7 @@ public class PinsController {
                     .orElse(null);
 
             if (celebrityMember == null) {
-                throw new NotSupportException(HttpStatus.NOT_FOUND.value(), "Not Found Member Id");
+                throw new NotSupportException("Not Found Member Id ");
             }
 
             CelebrityGroup celebrityGroup = celebrityGroupRepository
@@ -96,7 +98,7 @@ public class PinsController {
                     .orElse(null);
 
             if (celebrityGroup == null) {
-                throw new NotSupportException(HttpStatus.NOT_FOUND.value(), "Not Found Group Id");
+                throw new NotSupportException("Not Found Group Id ");
             }
 
             Pins pin = pinService.createPin(
@@ -138,7 +140,7 @@ public class PinsController {
         pinValidator.validate(request, errors);
 
         if (errors.hasErrors()) {
-            throw new BadRequestException(HttpStatus.BAD_REQUEST.value(),HttpStatus.BAD_REQUEST.getReasonPhrase());
+            throw new BadRequestException("Something wrong with pin request");
         }
 
         Account.validateAccount(account);
@@ -182,7 +184,7 @@ public class PinsController {
             List<PinResponse> groupPins = pinService.getGroupPins(celebrityId, account.getId());
             return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), groupPins);
         } else {
-            throw new ResourceNotFoundException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase() + " => CelebrityType");
+            throw new ResourceNotFoundException("Something wrong CelebrityType");
         }
     }
 }
