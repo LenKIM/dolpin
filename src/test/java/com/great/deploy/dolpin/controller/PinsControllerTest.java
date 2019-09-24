@@ -6,7 +6,7 @@ import com.great.deploy.dolpin.domain.CelebrityGroup;
 import com.great.deploy.dolpin.domain.CelebrityMember;
 import com.great.deploy.dolpin.domain.Pins;
 import com.great.deploy.dolpin.dto.CelebrityRequest;
-import com.great.deploy.dolpin.dto.CelebrityType;
+import com.great.deploy.dolpin.dto.model.CelebrityType;
 import com.great.deploy.dolpin.dto.CreatePinRequest;
 import com.great.deploy.dolpin.dto.PinRequest;
 import com.great.deploy.dolpin.repository.CelebrityGroupRepository;

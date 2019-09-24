@@ -9,7 +9,7 @@ import com.great.deploy.dolpin.domain.Favorite;
 import com.great.deploy.dolpin.dto.AccountRequest;
 import com.great.deploy.dolpin.dto.AccountUpdateRequest;
 import com.great.deploy.dolpin.dto.LoginRequest;
-import com.great.deploy.dolpin.model.Provider;
+import com.great.deploy.dolpin.dto.model.Provider;
 import com.great.deploy.dolpin.repository.AccountRepository;
 import com.great.deploy.dolpin.service.AccountService;
 import org.junit.Before;
@@ -187,7 +187,7 @@ public class AccountControllerTest extends BaseControllerTest {
                 .build();
 
         this.mockMvc.perform(
-                post("/api/user/create")
+                post("/api/user/createUser")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(this.objectMapper.writeValueAsString(testAccount))
         ).andDo(print())

@@ -18,6 +18,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class DolpinControllerTest extends BaseControllerTest {
 
@@ -64,5 +66,43 @@ public class DolpinControllerTest extends BaseControllerTest {
         )
                 .andExpect(MockMvcResultMatchers.jsonPath("code").value("200"))
                 .andExpect(MockMvcResultMatchers.jsonPath("msg").value("OK"));
+    }
+
+    @Test
+    public void 방문인증_실패하기() throws Exception {
+
+        //Given
+        CelebrityGroup celebrityGroup = celebrityGroupRepository.findById(1L).get();
+        CelebrityMember celebrityMember = celebrityMemberRepository.findById(1L).get();
+        String address = "강남역 8번출구";
+        String detailedAddress = "계단 오른쪽";
+
+        CreatePinRequest build = CreatePinRequest
+                .builder()
+                .title("ILOVEBTS")
+                .groupId(1L)
+                .memberId(2L)
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.of(2019, 10, 5))
+                .imgUrl("ABCASDAJSDK")
+                .imgProvider("IMAGEPROVIDER")
+                .latitude(37.564494D)
+                .longitude(126.979677D)
+                .build();
+
+        Pins two = Pins.of(build, celebrityMember, celebrityGroup, address, detailedAddress);
+        pinsRepository.save(two);
+
+        ProofRequest request = new ProofRequest(212L, 3);
+        this.mockMvc.perform(
+                post("/api/report/proof")
+                        .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(true))
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(this.objectMapper.writeValueAsString(request))
+        )
+                .andDo(print())
+                .andExpect(status().isUnauthorized())
+                .andExpect(MockMvcResultMatchers.jsonPath("code").value("401"))
+                .andExpect(MockMvcResultMatchers.jsonPath("msg").value("인증되지 않은 핀 정보입니다."));
     }
 }
