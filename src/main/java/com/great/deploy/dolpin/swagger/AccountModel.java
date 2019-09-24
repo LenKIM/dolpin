@@ -1,7 +1,7 @@
 package com.great.deploy.dolpin.swagger;
 
 import com.great.deploy.dolpin.account.Account;
-import com.great.deploy.dolpin.dto.Response;
+import com.great.deploy.dolpin.dto.model.Response;
 
 public class AccountModel extends Response<Account> {
 

@@ -1,6 +1,6 @@
 package com.great.deploy.dolpin.swagger;
 
-import com.great.deploy.dolpin.dto.Response;
+import com.great.deploy.dolpin.dto.model.Response;
 
 public class DolpinResponse extends Response<Boolean>{
 

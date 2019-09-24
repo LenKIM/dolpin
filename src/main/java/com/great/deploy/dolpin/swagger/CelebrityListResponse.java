@@ -1,7 +1,7 @@
 package com.great.deploy.dolpin.swagger;
 
 import com.great.deploy.dolpin.dto.CelebrityResponse;
-import com.great.deploy.dolpin.dto.Response;
+import com.great.deploy.dolpin.dto.model.Response;
 import io.swagger.annotations.ApiModel;
 
 import java.util.List;
