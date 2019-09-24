@@ -2,20 +2,27 @@ package com.great.deploy.dolpin.exception.model;
 
 public class ErrorInfo {
 
-    private int errorCode;
+    private int code;
     private String msg;
+    private String data;
 
-    public ErrorInfo(int errorCode, String msg) {
-        this.errorCode = errorCode;
+    public ErrorInfo(int code, String msg, String data) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+    }
+
+    public ErrorInfo(int code, String msg) {
+        this.code = code;
         this.msg = msg;
     }
 
-    public int getErrorCode() {
-        return errorCode;
+    public int getCode() {
+        return code;
     }
 
-    public void setErrorCode(int errorCode) {
-        this.errorCode = errorCode;
+    public void setCode(int code) {
+        this.code = code;
     }
 
     public String getMsg() {
@@ -24,5 +31,13 @@ public class ErrorInfo {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
     }
 }

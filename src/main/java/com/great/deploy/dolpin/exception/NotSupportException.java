@@ -3,8 +3,12 @@ package com.great.deploy.dolpin.exception;
 
 public class NotSupportException extends DolpinException {
 
-    public NotSupportException(int errorCode, String errorMsg) {
-        super(errorCode, errorMsg);
+    public NotSupportException(String data) {
+        super(data);
+    }
+
+    public NotSupportException(int code, String msg, String data) {
+        super(code, msg, data);
     }
 
     public int getErrorCode() {

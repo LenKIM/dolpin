@@ -4,8 +4,12 @@ import org.springframework.http.HttpStatus;
 
 public class InvalidStatusException extends DolpinException {
 
-    public InvalidStatusException(int errorCode, String errorMsg) {
-        super(errorCode, errorMsg);
+    public InvalidStatusException(String data) {
+        super(data);
+    }
+
+    public InvalidStatusException(int code, String msg, String data) {
+        super(code, msg, data);
     }
 
     public int getErrorCode() {

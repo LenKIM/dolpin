@@ -2,45 +2,69 @@ package com.great.deploy.dolpin.exception;
 
 public class DolpinException extends RuntimeException {
 
-    protected int errorCode;
-    protected String errorMsg;
+    protected int code;
+    protected String msg;
+    protected String data;
 
-    public DolpinException(String message) {
+    public DolpinException(String data) {
+        this.data = data;
+    }
+
+    public DolpinException(int code, String msg, String data) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+    }
+
+    public DolpinException(String message, int code, String msg, String data) {
         super(message);
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
     }
 
-    public DolpinException(int errorCode, String message, String errorMsg) {
-        super(message);
-        this.errorCode = errorCode;
-        this.errorMsg = errorMsg;
-    }
-
-    public DolpinException(int errorCode, String errorMsg) {
-        this.errorCode = errorCode;
-        this.errorMsg = errorMsg;
-    }
-
-    public DolpinException(String message, int errorCode, String errorMsg) {
-        super(message);
-        this.errorCode = errorCode;
-        this.errorMsg = errorMsg;
-    }
-
-    public DolpinException(String message, Throwable cause, int errorCode, String errorMsg) {
+    public DolpinException(String message, Throwable cause, int code, String msg, String data) {
         super(message, cause);
-        this.errorCode = errorCode;
-        this.errorMsg = errorMsg;
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
     }
 
-    public DolpinException(Throwable cause, int errorCode, String errorMsg) {
+    public DolpinException(Throwable cause, int code, String msg, String data) {
         super(cause);
-        this.errorCode = errorCode;
-        this.errorMsg = errorMsg;
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
     }
 
-    public DolpinException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, int errorCode, String errorMsg) {
+    public DolpinException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, int code, String msg, String data) {
         super(message, cause, enableSuppression, writableStackTrace);
-        this.errorCode = errorCode;
-        this.errorMsg = errorMsg;
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
     }
 }
