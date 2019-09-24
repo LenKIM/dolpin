@@ -1,7 +1,7 @@
 package com.great.deploy.dolpin.dto;
 
 import com.great.deploy.dolpin.domain.Favorite;
-import com.great.deploy.dolpin.model.Provider;
+import com.great.deploy.dolpin.dto.model.Provider;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

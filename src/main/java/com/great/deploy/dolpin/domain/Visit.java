@@ -12,6 +12,8 @@ import javax.persistence.*;
 @Table(name = "visit")
 public class Visit extends AuditEntity {
 
+    public static final Visit NOT_FOUND = new Visit(null, null);
+
     public static Visit of(Long pinId, Integer accountId) {
         return new Visit(pinId, accountId);
     }
@@ -26,8 +28,4 @@ public class Visit extends AuditEntity {
         this.pinId = pinId;
         this.accountId = accountId;
     }
-
-
-
-
 }

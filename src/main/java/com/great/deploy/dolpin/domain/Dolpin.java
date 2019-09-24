@@ -1,10 +1,10 @@
 package com.great.deploy.dolpin.domain;
 
 import com.great.deploy.dolpin.common.AuditEntity;
-import com.great.deploy.dolpin.dto.CelebrityType;
-import com.great.deploy.dolpin.model.Celebrity;
-import com.great.deploy.dolpin.model.PositingPeriod;
-import com.great.deploy.dolpin.model.PostedAddress;
+import com.great.deploy.dolpin.dto.model.CelebrityType;
+import com.great.deploy.dolpin.dto.model.Celebrity;
+import com.great.deploy.dolpin.dto.model.PositingPeriod;
+import com.great.deploy.dolpin.dto.model.PostedAddress;
 
 import javax.persistence.*;
 import java.time.LocalDate;

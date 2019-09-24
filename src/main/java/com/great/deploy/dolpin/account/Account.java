@@ -4,7 +4,7 @@ import com.great.deploy.dolpin.domain.Favorite;
 import com.great.deploy.dolpin.dto.AccountResponse;
 import com.great.deploy.dolpin.dto.AccountUpdateRequest;
 import com.great.deploy.dolpin.exception.OAuth2AuthenticationProcessingException;
-import com.great.deploy.dolpin.model.Provider;
+import com.great.deploy.dolpin.dto.model.Provider;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;

@@ -51,4 +51,15 @@ public class CelebrityMember{
     public CelebrityGroup getCelebrityGroup() {
         return celebrityGroup;
     }
+
+    @Override
+    public String toString() {
+        return "CelebrityMember{" +
+                "id=" + id +
+                ", birthday=" + birthday +
+                ", name='" + name + '\'' +
+                ", picUrl='" + picUrl + '\'' +
+                ", celebrityGroup=" + celebrityGroup +
+                '}';
+    }
 }

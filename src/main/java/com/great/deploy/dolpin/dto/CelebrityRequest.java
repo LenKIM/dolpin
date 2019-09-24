@@ -1,5 +1,6 @@
 package com.great.deploy.dolpin.dto;
 
+import com.great.deploy.dolpin.dto.model.CelebrityType;
 import lombok.*;
 
 @Getter
