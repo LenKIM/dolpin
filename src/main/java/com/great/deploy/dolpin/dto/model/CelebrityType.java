@@ -1,4 +1,4 @@
-package com.great.deploy.dolpin.dto;
+package com.great.deploy.dolpin.dto.model;
 
 public enum CelebrityType {
 

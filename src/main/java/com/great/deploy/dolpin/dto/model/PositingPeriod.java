@@ -1,4 +1,4 @@
-package com.great.deploy.dolpin.model;
+package com.great.deploy.dolpin.dto.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

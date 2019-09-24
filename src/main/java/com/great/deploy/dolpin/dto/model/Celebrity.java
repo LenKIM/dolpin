@@ -1,4 +1,4 @@
-package com.great.deploy.dolpin.model;
+package com.great.deploy.dolpin.dto.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostedAddress {
+public class Celebrity {
 
-    private String address;
-    private String detailedAddress;
+    private Long celebrityId;
+    private CelebrityType celebrityType;
 }
