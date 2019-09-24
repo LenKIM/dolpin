@@ -30,10 +30,10 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = OAuth2AuthenticationProcessingException.class)
-    public ResponseEntity<ErrorInfo> ResourceNotFound(OAuth2AuthenticationProcessingException exception) {
+    public ResponseEntity<ErrorInfo> OAuth2AuthenticationProcessing(OAuth2AuthenticationProcessingException exception) {
         return ResponseEntity
                 .status(4001)
-                .body(new ErrorInfo(4001, exception.getMessage()));
+                .body(new ErrorInfo(4001, exception.getMessage(), "로그인이 실패했습니다."));
     }
 
     @ExceptionHandler(value = ResourceNotFoundException.class)

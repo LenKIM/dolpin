@@ -50,7 +50,7 @@ public class AccountService implements UserDetailsService {
 
     public static String getOauthId(String email, Provider snsType, String snsId) {
         String oauthId;
-        if (email.isEmpty()) {
+        if (email.equals("")) {
             oauthId = snsType + snsId;
         } else {
             oauthId = email;
@@ -80,6 +80,10 @@ public class AccountService implements UserDetailsService {
 
         final Set<AccountRole> adminRoles = new HashSet<>();
         adminRoles.add(AccountRole.USER);
+
+        if(!Provider.isContain(snsType)){
+            throw new ResourceNotFoundException("허가된 SNS 로그인이 아닙니다.");
+        }
 
         String oauthId = getOauthId(email, snsType, snsId);
         String password = "password";

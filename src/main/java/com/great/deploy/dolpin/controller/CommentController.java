@@ -44,7 +44,7 @@ public class CommentController {
             @PathVariable(value = "pinsId") Long pinsId) {
 
         Account.validateAccount(account);
-
+        pinsRepository.findById(pinsId).orElseThrow(() -> new ResourceNotFoundException("해당 핀을 찾을 수 없습니다."));
         List<Comment> comments = commentRepository.findAllByPinsId(pinsId);
         comments.sort(Comparator.comparing(Comment::getCreateAt).reversed());
 
@@ -66,7 +66,7 @@ public class CommentController {
             @Valid @RequestBody CommentRequest request) {
 
         Account.validateAccount(account);
-
+        pinsRepository.findById(pinsId).orElseThrow(() -> new ResourceNotFoundException("해당 핀을 찾을 수 없습니다."));
         return new Response<>(
                 HttpStatus.OK.value(),
                 HttpStatus.OK.getReasonPhrase(),
@@ -97,10 +97,7 @@ public class CommentController {
             @Valid @RequestBody CommentRequest commentRequest) {
 
         Account.validateAccount(account);
-
-        if (!pinsRepository.existsById(pinsId)) {
-            throw new ResourceNotFoundException("해당 핀을 찾을 수 없습니다.");
-        }
+        pinsRepository.findById(pinsId).orElseThrow(() -> new ResourceNotFoundException("해당 핀을 찾을 수 없습니다."));
 
         return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), commentRepository.findById(commentId)
                 .map(comment -> {
@@ -119,6 +116,7 @@ public class CommentController {
             @PathVariable(value = "pinsId") Long pinId,
             @PathVariable(value = "commentId") Long commentId) {
         Account.validateAccount(account);
+        pinsRepository.findById(pinId).orElseThrow(() -> new ResourceNotFoundException("해당 핀을 찾을 수 없습니다."));
         return commentRepository.findByIdAndPinsId(commentId, pinId)
                 .map(comment -> {
                     commentRepository.delete(comment);

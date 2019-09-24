@@ -54,20 +54,4 @@ public class CelebrityControllerTest extends BaseControllerTest {
                 .andExpect(jsonPath("data[0].name").exists())
                 .andExpect(jsonPath("data[0].birthday").exists());
     }
-
-    @Test
-    @TestDescription("연예인 개인 정보 가져오기 실패")
-    public void getCelebrityFail() throws Exception {
-
-        this.mockMvc.perform(get("/api/celebrities")
-                .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(true )
-                ))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("code").value("200"))
-                .andExpect(jsonPath("msg").value("OK"))
-                .andExpect(jsonPath("data[0].id").exists())
-                .andExpect(jsonPath("data[0].name").exists())
-                .andExpect(jsonPath("data[0].birthday").exists());
-    }
 }

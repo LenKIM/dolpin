@@ -6,6 +6,7 @@ import com.great.deploy.dolpin.dto.FavoriteRequest;
 import com.great.deploy.dolpin.dto.FavoriteResponse;
 import com.great.deploy.dolpin.dto.model.Response;
 import com.great.deploy.dolpin.service.AccountService;
+import com.great.deploy.dolpin.service.FavoriteService;
 import com.great.deploy.dolpin.swagger.FavoriteResponseSwagger;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,6 +24,8 @@ public class FavoriteController {
 
     @Autowired
     AccountService accountService;
+    @Autowired
+    FavoriteService favoriteService;
 
     @ApiOperation(value = "Get current user's favorites Info", response = FavoriteResponseSwagger.class)
     @GetMapping()
@@ -40,6 +43,16 @@ public class FavoriteController {
     public Response<FavoriteResponse> updateFavorites(@RequestBody FavoriteRequest favorites,
                                                       @ApiIgnore @CurrentUser Account account) {
         validateAccount(account);
+
+
+//        boolean validateGroups = favoriteService.isValidateGroups(favorites.getFavorites().stream()
+//                .map(Favorite::getGroupId).collect(Collectors.toList()));
+//        boolean validateMembers = favoriteService.isValidateMembers(favorites.getFavorites().stream()
+//                .map(Favorite::getMemberId).collect(Collectors.toList()));
+//
+//        if(!validateGroups && !validateMembers){
+//            throw new ResourceNotFoundException("유효하지 않는 연예인 정보 입니다.");
+//        }
         Account savedAccount = Account.changeFavorites(account, favorites.getFavorites());
         Account newAccount = accountService.updateAccount(savedAccount);
         FavoriteResponse favoriteResponse = new FavoriteResponse(newAccount.getFavorites());

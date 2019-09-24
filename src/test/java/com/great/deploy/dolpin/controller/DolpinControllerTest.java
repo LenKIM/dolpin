@@ -103,6 +103,7 @@ public class DolpinControllerTest extends BaseControllerTest {
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andExpect(MockMvcResultMatchers.jsonPath("code").value("401"))
-                .andExpect(MockMvcResultMatchers.jsonPath("msg").value("인증되지 않은 핀 정보입니다."));
+                .andExpect(MockMvcResultMatchers.jsonPath("msg").value("인증되지 않은 핀 정보입니다."))
+                .andExpect(MockMvcResultMatchers.jsonPath("data").exists());
     }
 }

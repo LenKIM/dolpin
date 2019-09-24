@@ -11,6 +11,11 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CommentRequest {
 
+    public CommentRequest(Integer accountId, String contents) {
+        this.accountId = accountId;
+        this.contents = contents;
+    }
+
     private Integer accountId;
     private String contents;
     private String nickName;

@@ -11,6 +11,8 @@ import com.great.deploy.dolpin.swagger.AccessTokenResponseSwagger;
 import com.great.deploy.dolpin.swagger.AccountResponseSwagger;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -79,6 +81,9 @@ public class AccountController {
     }
 
     @ApiOperation(value = "login user by email if user existed", response = AccessTokenResponseSwagger.class)
+    @ApiResponses({
+            @ApiResponse(code=200, message = "로그인 성공"),
+            @ApiResponse(code=4001, message = "로그인 실패")})
     @PostMapping("/login")
     public Response<AccountWithTokenResponse> loginUser(
             @RequestBody LoginRequest request

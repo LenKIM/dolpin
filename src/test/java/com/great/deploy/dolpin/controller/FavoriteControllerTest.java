@@ -68,8 +68,35 @@ public class FavoriteControllerTest extends BaseControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("code").value("202"))
                 .andExpect(jsonPath("msg").value("Accepted"))
-                .andExpect(jsonPath("data.favorites[0].memberId").value("9"))
-                .andExpect(jsonPath("data.favorites[0].groupId").value("8"));
+                .andExpect(jsonPath("data.favorites[0].member_id").value("9"))
+                .andExpect(jsonPath("data.favorites[0].group_id").value("8"));
+    }
+
+    @Test
+    @TestDescription("Favorite update fail")
+    public void favoriteUpdateFail() throws Exception {
+
+        Set<Favorite> favoriteSet = new HashSet<>();
+        favoriteSet.add(new Favorite(9123124L, 8123124L));
+        favoriteSet.add(new Favorite(10L, 8L));
+        favoriteSet.add(new Favorite(11L, 8L));
+        favoriteSet.add(new Favorite(122123L, 8L));
+        favoriteSet.add(new Favorite(13L, 8L));
+        favoriteSet.add(new Favorite(14L, 8L));
+
+        FavoriteRequest favoriteRequest = new FavoriteRequest(favoriteSet);
+
+        this.mockMvc.perform(
+                put("/api/favorite/user")
+                        .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(true))
+                        .content(this.objectMapper.writeValueAsBytes(favoriteRequest))
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("code").value("202"))
+                .andExpect(jsonPath("msg").value("Accepted"))
+                .andExpect(jsonPath("data.favorites[0].member_id").value("9"))
+                .andExpect(jsonPath("data.favorites[0].group_id").value("8"));
     }
 }
 //

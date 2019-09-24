@@ -125,7 +125,9 @@ public class AccountControllerTest extends BaseControllerTest {
         ).andExpect(status().isOk())
                 .andExpect(jsonPath("code").value("202"))
                 .andExpect(jsonPath("msg").value("Accepted"))
-                .andExpect(jsonPath("data").value("true"));
+                .andExpect(jsonPath("data.sns_type").value("SYSTEM"))
+                .andExpect(jsonPath("data.existed").value("true"))
+        ;
     }
 
     @Test
@@ -168,7 +170,7 @@ public class AccountControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @TestDescription("singUp By email")
+    @TestDescription("회원가입 성공  ")
     public void signUpByEmail() throws Exception {
 
         Set<Favorite> favoriteSet = new HashSet<>();
@@ -187,7 +189,7 @@ public class AccountControllerTest extends BaseControllerTest {
                 .build();
 
         this.mockMvc.perform(
-                post("/api/user/createUser")
+                post("/api/user/create")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(this.objectMapper.writeValueAsString(testAccount))
         ).andDo(print())
@@ -279,8 +281,10 @@ public class AccountControllerTest extends BaseControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(this.objectMapper.writeValueAsString(request))
         ).andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("code").value("1401"))
-                .andExpect(jsonPath("msg").value("Need Check Account Information"));
+                .andExpect(status().is(4001))
+                .andExpect(jsonPath("code").value("4001"))
+                .andExpect(jsonPath("msg").value("Need Check Account Information"))
+                .andExpect(jsonPath("data").exists())
+        ;
     }
 }

@@ -34,7 +34,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                         )
                         .permitAll()
                     .mvcMatchers(HttpMethod.POST,
-                            "/api/user/createUser**",
+                            "/api/user/create**",
                             "/api/user/login**",
                             "/api/user/exist**"
                         )
