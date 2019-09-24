@@ -29,19 +29,18 @@ public class PinResponse {
     private String detailedAddress;
 
     public PinResponse(Pins pin, boolean isVisited) {
-        new PinResponse(
-                pin.getId(),
-                pin.getTitle(),
-                pin.getLatitude(),
-                pin.getLongitude(),
-                pin.getImgProvider(),
-                pin.getImgUrl(),
-                pin.getStartDate(),
-                pin.getEndDate(),
-                pin.getCelebrityMemberId(),
-                pin.getCelebrityGroupId(),
-                isVisited,
-                pin.getAddress(),
-                pin.getDetailedAddress());
+        this.id = pin.getId();
+        this.title = pin.getTitle();
+        this.latitude = pin.getLatitude();
+        this.longitude = pin.getLongitude();
+        this.imgProvider = pin.getImgProvider();
+        this.imgUrl = pin.getImgUrl();
+        this.startDate = pin.getStartDate();
+        this.endDate = pin.getEndDate();
+        this.member_id = pin.getCelebrityMemberId();
+        this.group_id = pin.getCelebrityGroupId();
+        this.isPinCertification = isVisited;
+        this.address = pin.getAddress();
+        this.detailedAddress = pin.getDetailedAddress();
     }
 }

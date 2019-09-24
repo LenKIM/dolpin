@@ -2,9 +2,11 @@ package com.great.deploy.dolpin.controller;
 
 import com.great.deploy.dolpin.account.Account;
 import com.great.deploy.dolpin.account.CurrentUser;
+import com.great.deploy.dolpin.domain.Favorite;
 import com.great.deploy.dolpin.dto.FavoriteRequest;
 import com.great.deploy.dolpin.dto.FavoriteResponse;
 import com.great.deploy.dolpin.dto.model.Response;
+import com.great.deploy.dolpin.exception.ResourceNotFoundException;
 import com.great.deploy.dolpin.service.AccountService;
 import com.great.deploy.dolpin.service.FavoriteService;
 import com.great.deploy.dolpin.swagger.FavoriteResponseSwagger;
@@ -14,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.stream.Collectors;
 
 import static com.great.deploy.dolpin.account.Account.validateAccount;
 
@@ -44,15 +48,14 @@ public class FavoriteController {
                                                       @ApiIgnore @CurrentUser Account account) {
         validateAccount(account);
 
+        boolean validateGroups = favoriteService.isValidateGroups(favorites.getFavorites().stream()
+                .map(Favorite::getGroupId).collect(Collectors.toList()));
+        boolean validateMembers = favoriteService.isValidateMembers(favorites.getFavorites().stream()
+                .map(Favorite::getMemberId).collect(Collectors.toList()));
 
-//        boolean validateGroups = favoriteService.isValidateGroups(favorites.getFavorites().stream()
-//                .map(Favorite::getGroupId).collect(Collectors.toList()));
-//        boolean validateMembers = favoriteService.isValidateMembers(favorites.getFavorites().stream()
-//                .map(Favorite::getMemberId).collect(Collectors.toList()));
-//
-//        if(!validateGroups && !validateMembers){
-//            throw new ResourceNotFoundException("유효하지 않는 연예인 정보 입니다.");
-//        }
+        if(!(validateGroups || validateMembers)){
+            throw new ResourceNotFoundException("유효하지 않는 연예인 정보 입니다.");
+        }
         Account savedAccount = Account.changeFavorites(account, favorites.getFavorites());
         Account newAccount = accountService.updateAccount(savedAccount);
         FavoriteResponse favoriteResponse = new FavoriteResponse(newAccount.getFavorites());

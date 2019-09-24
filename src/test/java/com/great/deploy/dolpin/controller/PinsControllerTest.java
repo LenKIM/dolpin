@@ -44,7 +44,7 @@ public class PinsControllerTest extends BaseControllerTest {
                 .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(true))
         )
             .andExpect(MockMvcResultMatchers.jsonPath("code").value("202"))
-            .andExpect(MockMvcResultMatchers.jsonPath("msg").value("Accepted")
+            .andExpect(MockMvcResultMatchers.jsonPath("msg").value("Accep123ted")
             );
     }
 

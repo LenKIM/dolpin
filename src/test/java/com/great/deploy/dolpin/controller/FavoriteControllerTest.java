@@ -68,8 +68,7 @@ public class FavoriteControllerTest extends BaseControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("code").value("202"))
                 .andExpect(jsonPath("msg").value("Accepted"))
-                .andExpect(jsonPath("data.favorites[0].member_id").value("9"))
-                .andExpect(jsonPath("data.favorites[0].group_id").value("8"));
+                .andExpect(jsonPath("data.favorites").isArray());
     }
 
     @Test
@@ -92,11 +91,9 @@ public class FavoriteControllerTest extends BaseControllerTest {
                         .content(this.objectMapper.writeValueAsBytes(favoriteRequest))
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
         ).andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("code").value("202"))
-                .andExpect(jsonPath("msg").value("Accepted"))
-                .andExpect(jsonPath("data.favorites[0].member_id").value("9"))
-                .andExpect(jsonPath("data.favorites[0].group_id").value("8"));
+                .andExpect(jsonPath("code").value("404"))
+                .andExpect(jsonPath("msg").value("Not Found"))
+                .andExpect(jsonPath("data").exists());
     }
 }
 //
