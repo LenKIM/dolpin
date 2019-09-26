@@ -7,6 +7,7 @@ import com.great.deploy.dolpin.dto.CommentListResponse;
 import com.great.deploy.dolpin.dto.CommentRequest;
 import com.great.deploy.dolpin.dto.CommentResponse;
 import com.great.deploy.dolpin.dto.model.Response;
+import com.great.deploy.dolpin.exception.BadRequestException;
 import com.great.deploy.dolpin.exception.ResourceNotFoundException;
 import com.great.deploy.dolpin.repository.CommentRepository;
 import com.great.deploy.dolpin.repository.LikeItRepository;
@@ -15,6 +16,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -94,9 +96,15 @@ public class CommentController {
             @ApiIgnore @CurrentUser Account account,
             @PathVariable(value = "pinsId") Long pinsId,
             @PathVariable(value = "commentId") Long commentId,
-            @Valid @RequestBody CommentRequest commentRequest) {
+            @Valid @RequestBody CommentRequest commentRequest,
+            Errors errors) {
+
+        if (errors.hasErrors()) {
+            throw new BadRequestException("null 체크 필요");
+        }
 
         Account.validateAccount(account);
+
         pinsRepository.findById(pinsId).orElseThrow(() -> new ResourceNotFoundException("해당 핀을 찾을 수 없습니다."));
 
         return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), commentRepository.findById(commentId)

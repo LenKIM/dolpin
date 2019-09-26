@@ -5,6 +5,7 @@ import com.great.deploy.dolpin.account.CurrentUser;
 import com.great.deploy.dolpin.dto.*;
 import com.great.deploy.dolpin.dto.model.Provider;
 import com.great.deploy.dolpin.dto.model.Response;
+import com.great.deploy.dolpin.exception.BadRequestException;
 import com.great.deploy.dolpin.repository.AccountRepository;
 import com.great.deploy.dolpin.service.AccountService;
 import com.great.deploy.dolpin.swagger.AccessTokenResponseSwagger;
@@ -15,9 +16,11 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 import static com.great.deploy.dolpin.account.Account.validateAccount;
@@ -64,8 +67,13 @@ public class AccountController {
     @ApiOperation(value = "createUser user by email and sns", response = AccessTokenResponseSwagger.class)
     @PostMapping("/create")
     public Response<AccountWithTokenResponse> createUser(
-            @RequestBody AccountRequest accountRequest
+            @Valid @RequestBody AccountRequest accountRequest,
+            Errors errors
+
     ) {
+        if(errors.hasErrors()){
+            throw new BadRequestException("Null 체크 필요" );
+        }
         AccountWithToken account = accountService.createUser(
                 accountRequest.getEmail(),
                 accountRequest.getNickname(),

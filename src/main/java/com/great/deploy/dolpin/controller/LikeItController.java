@@ -14,6 +14,7 @@ import com.great.deploy.dolpin.repository.LikeItRepository;
 import com.great.deploy.dolpin.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -35,13 +36,17 @@ public class LikeItController {
 
     @PostMapping
     public Response<LikeItResponse> setLikeIt(@ApiIgnore @CurrentUser Account account,
-                                              @RequestBody LikeItRequest likeItRequest) {
+                                              @RequestBody LikeItRequest likeItRequest,
+                                              Errors errors) {
+        if(errors.hasErrors()){
+            throw new BadRequestException("null 체크 필요");
+        }
+
         Account.validateAccount(account);
         Long commentId = likeItRequest.getCommentId();
         // @CurrntUser가 가져오는 건 캐시된 account를 가져옴.
-        Account accountId = accountRepository.findById(likeItRequest.getAccountId()).orElseThrow(() -> new BadRequestException("Account Id"));
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new BadRequestException(" Comment Id"));
-        LikeIt likeIt = new LikeIt(comment, accountId);
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new BadRequestException("Comment Id"));
+        LikeIt likeIt = new LikeIt(comment, account);
         LikeIt newLikeIt = likeItRepository.save(likeIt);
         Comment newComment = commentRepository.save(newLikeIt.getComment());
         LikeItResponse likeItResponse = new LikeItResponse(true, account.getNickname(), newComment.getRecommendCount());

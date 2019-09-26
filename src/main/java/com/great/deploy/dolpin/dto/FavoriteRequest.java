@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Getter
@@ -14,5 +16,6 @@ import java.util.Set;
 @AllArgsConstructor
 public class FavoriteRequest {
 
+    @NotNull
     private Set<Favorite> favorites;
 }

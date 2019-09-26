@@ -6,6 +6,7 @@ import com.great.deploy.dolpin.domain.Favorite;
 import com.great.deploy.dolpin.dto.FavoriteRequest;
 import com.great.deploy.dolpin.dto.FavoriteResponse;
 import com.great.deploy.dolpin.dto.model.Response;
+import com.great.deploy.dolpin.exception.BadRequestException;
 import com.great.deploy.dolpin.exception.ResourceNotFoundException;
 import com.great.deploy.dolpin.service.AccountService;
 import com.great.deploy.dolpin.service.FavoriteService;
@@ -14,6 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -45,8 +47,12 @@ public class FavoriteController {
     @PutMapping
     @ApiOperation(value = "Update current user's favorites Info", response = FavoriteResponseSwagger.class)
     public Response<FavoriteResponse> updateFavorites(@RequestBody FavoriteRequest favorites,
-                                                      @ApiIgnore @CurrentUser Account account) {
+                                                      @ApiIgnore @CurrentUser Account account,
+                                                      Errors errors) {
         validateAccount(account);
+        if (errors.hasErrors()){
+            throw new BadRequestException("null 체크 필요");
+        }
 
         boolean validateGroups = favoriteService.isValidateGroups(favorites.getFavorites().stream()
                 .map(Favorite::getGroupId).collect(Collectors.toList()));

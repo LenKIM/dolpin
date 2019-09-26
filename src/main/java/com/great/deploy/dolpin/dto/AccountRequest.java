@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Builder
@@ -15,9 +16,13 @@ import java.util.Set;
 @AllArgsConstructor
 public class AccountRequest {
 
+    @NotNull
     private String email;
+    @NotNull
     private String nickname;
+    @NotNull
     private Provider snsType;
+    @NotNull
     private String snsId;
     private Set<Favorite> favorites;
 }

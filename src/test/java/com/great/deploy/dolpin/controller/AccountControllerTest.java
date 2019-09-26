@@ -200,6 +200,36 @@ public class AccountControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @TestDescription("회원가입 null 값일때.")
+    public void signUpByEmailWtihNull() throws Exception {
+
+        Set<Favorite> favoriteSet = new HashSet<>();
+        favoriteSet.add(new Favorite(9L, 8L));
+        favoriteSet.add(new Favorite(10L, 8L));
+        favoriteSet.add(new Favorite(11L, 8L));
+        favoriteSet.add(new Favorite(12L, 8L));
+        favoriteSet.add(new Favorite(13L, 8L));
+        favoriteSet.add(new Favorite(14L, 8L));
+
+        AccountRequest testAccount = AccountRequest.builder()
+                .email("joneg@gamil.com")
+                .favorites(favoriteSet)
+                .nickname(null)
+                .snsType(Provider.FACEBOOK)
+                .build();
+
+        this.mockMvc.perform(
+                post("/api/user/create")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(this.objectMapper.writeValueAsString(testAccount))
+        ).andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("code").value("400"))
+                .andExpect(jsonPath("msg").value("Bad Request"))
+                .andExpect(jsonPath("data.account_id").exists());
+    }
+
+    @Test
     @TestDescription("singIn By email")
     public void signInByEmail() throws Exception {
 

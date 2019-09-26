@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,8 +17,10 @@ public class CommentRequest {
         this.accountId = accountId;
         this.contents = contents;
     }
-
+    @NotNull
     private Integer accountId;
+    @NotNull
     private String contents;
+    @NotNull
     private String nickName;
 }
