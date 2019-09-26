@@ -76,7 +76,11 @@ public class PinServiceImpl implements PinService {
         Pins pin = pinsRepository.findById(pinId)
                 .orElseThrow(() -> new ResourceNotFoundException("pinId => " + pinId));
         List<Long> visits = visitRepository.findAllByAccountId(accountId).stream().map(Visit::getPinId).collect(Collectors.toList());
-        return new PinResponse(pin, visits.stream().anyMatch(visit -> visit.equals(pin.getId()))
+        Long pinCount = visitRepository.countVisitByPinId(pinId).orElse(0L);
+        return new PinResponse(
+                pin,
+                visits.stream().anyMatch(visit -> visit.equals(pin.getId())),
+                pinCount
         );
     }
 
@@ -101,6 +105,14 @@ public class PinServiceImpl implements PinService {
         List<Long> visits = visitRepository.findAllByAccountId(accountId).stream().map(Visit::getPinId).collect(Collectors.toList());
 
         return allPins.stream()
-                .map(pins -> new PinResponse(pins, visits.stream().anyMatch(visit -> visit.equals(pins.getId())))).collect(Collectors.toList());
+                .map(pins -> {
+                            Long visitCount = visitRepository.countVisitByPinId(pins.getId()).orElse(0L);
+                            return new PinResponse(
+                                    pins,
+                                    visits.stream().anyMatch(visit -> visit.equals(pins.getId())),
+                                    visitCount
+                            );
+                        }
+                ).collect(Collectors.toList());
     }
 }

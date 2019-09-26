@@ -27,8 +27,9 @@ public class PinResponse {
     private boolean isPinCertification;
     private String address;
     private String detailedAddress;
+    private Long likeCount;
 
-    public PinResponse(Pins pin, boolean isVisited) {
+    public PinResponse(Pins pin, boolean isVisited, Long likeCount) {
         this.id = pin.getId();
         this.title = pin.getTitle();
         this.latitude = pin.getLatitude();
@@ -42,5 +43,6 @@ public class PinResponse {
         this.isPinCertification = isVisited;
         this.address = pin.getAddress();
         this.detailedAddress = pin.getDetailedAddress();
+        this.likeCount = likeCount;
     }
 }

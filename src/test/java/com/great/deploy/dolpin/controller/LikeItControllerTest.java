@@ -82,7 +82,7 @@ public class LikeItControllerTest extends BaseControllerTest {
         Comment comment01 = new Comment(save, "하", 1, "DolKing");
         Comment saveComment = commentRepository.save(comment01);
 
-        LikeItRequest likeItRequest = new LikeItRequest(saveComment.getId(), 1);
+        LikeItRequest likeItRequest = new LikeItRequest(saveComment.getId());
 
         this.mockMvc.perform(
                 post("/api/comment/likeit")
@@ -145,7 +145,7 @@ public class LikeItControllerTest extends BaseControllerTest {
         Comment comment01 = new Comment(save, "하", 1, "DolKing");
         Comment saveComment = commentRepository.save(comment01);
 
-        LikeItRequest likeItRequest = new LikeItRequest(saveComment.getId(), 3);
+        LikeItRequest likeItRequest = new LikeItRequest(saveComment.getId());
         LikeIt likeIt1 = new LikeIt(1L, saveComment, len);
         likeItRepository.save(likeIt1);
 

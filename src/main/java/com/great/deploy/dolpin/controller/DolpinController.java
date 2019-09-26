@@ -13,6 +13,7 @@ import com.great.deploy.dolpin.exception.ResourceNotFoundException;
 import com.great.deploy.dolpin.dto.model.Celebrity;
 import com.great.deploy.dolpin.dto.model.PositingPeriod;
 import com.great.deploy.dolpin.dto.model.PostedAddress;
+import com.great.deploy.dolpin.repository.VisitRepository;
 import com.great.deploy.dolpin.service.ReportService;
 import com.great.deploy.dolpin.swagger.DolpinResponse;
 import com.great.deploy.dolpin.swagger.ProofResponseSwagger;
@@ -35,6 +36,9 @@ public class DolpinController {
     @Autowired
     private ReportService reportService;
 
+    @Autowired
+    private VisitRepository visitRepository;
+
     @ApiOperation(value = "아이돌 Pins 방문 인증(Authentication)", response = ProofResponseSwagger.class)
     @PostMapping("/proof")
     public Response<ProofResponse> idolPinAuthentication(
@@ -48,17 +52,14 @@ public class DolpinController {
         }
         Account.validateAccount(account);
 
-
         Visit visit = reportService.proof(request);
-        if(visit == Visit.NOT_FOUND){
-            throw new NonAuthorizationException("인증되지 않은 핀 정보입니다.");
-        }
+
+        if(visit == Visit.NOT_FOUND){ throw new NonAuthorizationException("인증되지 않은 핀 정보입니다."); }
         Integer accountId = visit.getAccountId();
+        Long pinCount = visitRepository.countVisitByPinId(visit.getPinId()).orElse(0L);
         Integer id = account.getId();
-        if (!accountId.equals(id)) {
-            throw new ResourceNotFoundException("계정을 찾을 수 없습니다.");
-        }
-        return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), new ProofResponse(true));
+        if (!accountId.equals(id)) { throw new ResourceNotFoundException("잘못된 계정입니다."); }
+        return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), new ProofResponse(true, pinCount));
     }
 
     @ApiOperation(value = "아이돌 광고 제보 API", response = DolpinResponse.class)

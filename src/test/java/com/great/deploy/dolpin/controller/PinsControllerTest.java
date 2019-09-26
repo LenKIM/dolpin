@@ -5,6 +5,7 @@ import com.great.deploy.dolpin.common.TestDescription;
 import com.great.deploy.dolpin.domain.CelebrityGroup;
 import com.great.deploy.dolpin.domain.CelebrityMember;
 import com.great.deploy.dolpin.domain.Pins;
+import com.great.deploy.dolpin.domain.Visit;
 import com.great.deploy.dolpin.dto.CelebrityRequest;
 import com.great.deploy.dolpin.dto.model.CelebrityType;
 import com.great.deploy.dolpin.dto.CreatePinRequest;
@@ -35,16 +36,23 @@ public class PinsControllerTest extends BaseControllerTest {
 
     @Autowired
     private VisitRepository visitRepository;
+
     @Test
     @TestDescription("Get All pins")
 
     public void getAllPins() throws Exception {
 
+        visitRepository.save(new Visit(1L, 3));
+        visitRepository.save(new Visit(1L, 1));
+        visitRepository.save(new Visit(1L, 2));
+        visitRepository.save(new Visit(1L, 4));
+
         this.mockMvc.perform(get("/api/pins")
                 .header(HttpHeaders.AUTHORIZATION, super.getBearerToken(true))
         )
             .andExpect(MockMvcResultMatchers.jsonPath("code").value("202"))
-            .andExpect(MockMvcResultMatchers.jsonPath("msg").value("Accep123ted")
+            .andExpect(MockMvcResultMatchers.jsonPath("msg").value("Accepted"))
+            .andExpect(MockMvcResultMatchers.jsonPath("data").value("Accepted")
             );
     }
 
