@@ -4,9 +4,7 @@ import java.util.Arrays;
 
 public enum Provider {
 
-
-
-    FACEBOOK, TWITTER, SYSTEM, NONE;
+    FACEBOOK, TWITTER, SYSTEM, NONE, APPLE;
 
     public static boolean isContain(Provider value) {
         return Arrays.asList(Provider.values()).contains(value);
