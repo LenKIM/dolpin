@@ -3,8 +3,8 @@ package com.great.deploy.dolpin.account;
 import com.great.deploy.dolpin.domain.Favorite;
 import com.great.deploy.dolpin.dto.AccountResponse;
 import com.great.deploy.dolpin.dto.AccountUpdateRequest;
-import com.great.deploy.dolpin.exception.OAuth2AuthenticationProcessingException;
 import com.great.deploy.dolpin.dto.model.Provider;
+import com.great.deploy.dolpin.exception.OAuth2AuthenticationProcessingException;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -43,7 +43,7 @@ public class Account {
                 oldAccount.getFavorites(),
                 oldAccount.getCreatedAt(),
                 LocalDateTime.now()
-                );
+        );
     }
 
     public static Account changeFavorites(Account account, Set<Favorite> favorite) {
@@ -116,6 +116,7 @@ public class Account {
 
     private String snsId;
 
+    @Column(unique = true)
     private String oauthId;
 
     @ElementCollection(fetch = FetchType.EAGER)

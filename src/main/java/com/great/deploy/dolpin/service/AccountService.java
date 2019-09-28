@@ -132,5 +132,12 @@ public class AccountService implements UserDetailsService {
         }
         return accountWithToken;
     }
+
+    public boolean checkDuplicatedNickName(String nickName){
+        if(nickName == null){
+            throw new BadRequestException("닉네임이 Null 값입니다.");
+        }
+        return accountRepository.existsByOauthId(nickName);
+    }
 }
 

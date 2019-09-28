@@ -10,6 +10,7 @@ import com.great.deploy.dolpin.repository.AccountRepository;
 import com.great.deploy.dolpin.service.AccountService;
 import com.great.deploy.dolpin.swagger.AccessTokenResponseSwagger;
 import com.great.deploy.dolpin.swagger.AccountResponseSwagger;
+import com.great.deploy.dolpin.swagger.DolpinResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -71,8 +72,8 @@ public class AccountController {
             Errors errors
 
     ) {
-        if(errors.hasErrors()){
-            throw new BadRequestException("Null 체크 필요" );
+        if (errors.hasErrors()) {
+            throw new BadRequestException("Null 체크 또는 이미 계정이 있음.");
         }
         AccountWithToken account = accountService.createUser(
                 accountRequest.getEmail(),
@@ -90,8 +91,8 @@ public class AccountController {
 
     @ApiOperation(value = "login user by email if user existed", response = AccessTokenResponseSwagger.class)
     @ApiResponses({
-            @ApiResponse(code=200, message = "로그인 성공"),
-            @ApiResponse(code=4001, message = "로그인 실패")})
+            @ApiResponse(code = 200, message = "로그인 성공"),
+            @ApiResponse(code = 4001, message = "로그인 실패")})
     @PostMapping("/login")
     public Response<AccountWithTokenResponse> loginUser(
             @RequestBody LoginRequest request
@@ -105,6 +106,12 @@ public class AccountController {
                 HttpStatus.OK.getReasonPhrase(),
                 AccountWithTokenResponse.of(account)
         );
+    }
+
+    @ApiOperation(value = "Check Nickname Duplicate", response = AccountResponseSwagger.class)
+    @GetMapping("/exist/nickname")
+    public DolpinResponse existNickname(@RequestParam String nickName) {
+        return new DolpinResponse(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), accountService.checkDuplicatedNickName(nickName));
     }
 
     @ApiOperation(value = "check existed user", response = ExistResponse.class)
