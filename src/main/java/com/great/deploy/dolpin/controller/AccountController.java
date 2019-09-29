@@ -108,7 +108,7 @@ public class AccountController {
         );
     }
 
-    @ApiOperation(value = "Check Nickname Duplicate", response = AccountResponseSwagger.class)
+    @ApiOperation(value = "Check Nickname Duplicate", response = DolpinResponse.class)
     @GetMapping("/exist/nickname")
     public DolpinResponse existNickname(@RequestParam String nickName) {
         return new DolpinResponse(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), accountService.checkDuplicatedNickName(nickName));
