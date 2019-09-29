@@ -15,6 +15,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.Errors;
@@ -30,6 +32,7 @@ import static com.great.deploy.dolpin.account.Account.validateAccount;
 @RestController
 @RequestMapping(value = "/api/user", produces = "application/json")
 public class AccountController {
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     AccountService accountService;
@@ -72,6 +75,7 @@ public class AccountController {
             Errors errors
 
     ) {
+        logger.info("        AAAAAA" + accountRequest.getEmail() +" , " + accountRequest.getSnsId() + ", " + accountRequest.getSnsType());
         if (errors.hasErrors()) {
             throw new BadRequestException("Null 체크 또는 이미 계정이 있음.");
         }
@@ -119,7 +123,9 @@ public class AccountController {
     public Response<ExistResponse> existedUser(
             @RequestBody LoginRequest request
     ) {
+        logger.info("Exist -------->" + request.getEmail() +" , " + request.getSnsId() + ", " + request.getSnsType());
         String oauthId = AccountService.getOauthId(request.getEmail(), request.getSnsType(), request.getSnsId());
+        logger.info("Exist oauth-------->" + oauthId);
         Account account = Optional.ofNullable(accountRepository.findByOauthId(oauthId)).orElse(Account.EMPTY);
         ExistResponse existResponse;
         if (account == Account.EMPTY) existResponse = new ExistResponse(false, Provider.NONE);

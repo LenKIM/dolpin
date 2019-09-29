@@ -86,6 +86,7 @@ public class AccountService implements UserDetailsService {
         }
 
         String oauthId = getOauthId(email, snsType, snsId);
+
         String password = "password";
 
         Account admin = Account.builder()
