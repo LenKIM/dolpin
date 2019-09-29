@@ -30,7 +30,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 @Api(value = "ReportController", description = "Report 관련 API")
 @RestController
-@RequestMapping("/api/report")
+@RequestMapping(value = "/api/report", produces = "application/json" )
 public class DolpinController {
 
     @Autowired

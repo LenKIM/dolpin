@@ -55,9 +55,9 @@ public class LikeItController {
 
     @DeleteMapping
     public Response<LikeItResponse> cancelLikeIt(@ApiIgnore @CurrentUser Account account,
-                                                 @RequestBody Long commentId){
+                                                 @RequestBody LikeItRequest likeItRequest){
 
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new BadRequestException("Not found CommentId"));
+        Comment comment = commentRepository.findById(likeItRequest.getCommentId()).orElseThrow(() -> new BadRequestException("Not found CommentId"));
 
         LikeIt likeIt = likeItRepository.findByCommentAndAccount(comment, account);
         likeItRepository.delete(likeIt);
