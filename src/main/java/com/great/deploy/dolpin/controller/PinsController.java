@@ -187,4 +187,20 @@ public class PinsController {
             throw new ResourceNotFoundException("Something wrong CelebrityType");
         }
     }
+
+    @ApiOperation("특정 연예인 리스트에 대한 Pin 가져오기")
+    @GetMapping("/pin/favorites")
+    public Response<List<PinResponse>> getCelebrities(
+            @ApiIgnore @CurrentUser Account account,
+            @RequestParam List<Long> memberIdList
+    ) {
+
+        Account.validateAccount(account);
+
+        return new Response<>(
+                HttpStatus.OK.value(),
+                HttpStatus.OK.getReasonPhrase(),
+                pinService.getPinsByListCelebritiesId(memberIdList, account.getId())
+        );
+    }
 }

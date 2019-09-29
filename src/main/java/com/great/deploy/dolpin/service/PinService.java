@@ -18,6 +18,8 @@ public interface PinService {
 
     void deletePin(Long pinId);
 
+    List<PinResponse> getPinsByListCelebritiesId(List<Long> celebritiesList, Integer accountId);
+
     PinResponse getPinDetail(Long pinId, Integer accountId);
 
     Pins modifyPin(Long pinId, PinRequest pinRequest);

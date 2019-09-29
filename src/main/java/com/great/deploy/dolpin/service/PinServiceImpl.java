@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,6 +70,15 @@ public class PinServiceImpl implements PinService {
     public List<PinResponse> getGroupPins(Long groupId, Integer accountId) {
         List<Pins> allByCelebrityMemberId = pinsRepository.findByCelebrityGroup_Id(groupId);
         return getPinResponses(accountId, allByCelebrityMemberId);
+    }
+
+    @Override
+    public List<PinResponse> getPinsByListCelebritiesId(List<Long> celebritiesList, Integer accountId) {
+        ArrayList<Pins> pinsArrayList = new ArrayList<>();
+        celebritiesList.forEach(
+                memberId -> pinsArrayList.addAll(pinsRepository.findByCelebrityMember_Id(memberId))
+        );
+        return getPinResponses(accountId, pinsArrayList);
     }
 
     @Override
