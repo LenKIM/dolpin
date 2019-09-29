@@ -134,11 +134,11 @@ public class AccountService implements UserDetailsService {
         return accountWithToken;
     }
 
-    public boolean checkDuplicatedNickName(String nickName){
-        if(nickName == null){
+    public boolean checkDuplicatedNickName(String nickname){
+        if(nickname == null){
             throw new BadRequestException("닉네임이 Null 값입니다.");
         }
-        return accountRepository.existsByOauthId(nickName);
+        return accountRepository.existsByOauthId(nickname);
     }
 }
 

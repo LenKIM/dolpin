@@ -9,6 +9,6 @@ import lombok.Setter;
 public class LikeItResponse {
 
     boolean likeIt;
-    String Nickname;
+    String nickname;
     int likeItCount;
 }

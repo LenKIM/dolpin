@@ -22,5 +22,5 @@ public class CommentRequest {
     @NotNull
     private String contents;
     @NotNull
-    private String nickName;
+    private String nickname;
 }

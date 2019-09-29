@@ -16,7 +16,7 @@ public class CommentResponse {
         this.id = comment.getId();
         this.accountId = comment.getAccountId();
         this.contents = comment.getContents();
-        this.nickName = comment.getNickName();
+        this.nickname = comment.getNickname();
         this.likeItCount = comment.getRecommendCount();
         this.recommended = recommended;
         this.createAt = comment.getCreateAt();
@@ -26,7 +26,7 @@ public class CommentResponse {
     private Long id;
     private Integer accountId;
     private String contents;
-    private String nickName;
+    private String nickname;
     private int likeItCount;
     private boolean recommended;
     private LocalDateTime createAt;

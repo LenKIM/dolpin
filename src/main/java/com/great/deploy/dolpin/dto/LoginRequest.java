@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,7 +15,9 @@ import lombok.Setter;
 public class LoginRequest {
 
     private String email;
+    @NotNull
     private Provider snsType;
+    @NotNull
     private String snsId;
 
 }

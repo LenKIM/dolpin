@@ -114,18 +114,22 @@ public class AccountController {
 
     @ApiOperation(value = "Check Nickname Duplicate", response = DolpinResponse.class)
     @GetMapping("/exist/nickname")
-    public DolpinResponse existNickname(@RequestParam String nickName) {
-        return new DolpinResponse(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), accountService.checkDuplicatedNickName(nickName));
+    public DolpinResponse existNickname(@RequestParam String nickname) {
+        return new DolpinResponse(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), accountService.checkDuplicatedNickName(nickname));
     }
 
     @ApiOperation(value = "check existed user", response = ExistResponse.class)
     @PostMapping("/exist")
     public Response<ExistResponse> existedUser(
-            @RequestBody LoginRequest request
+            @RequestBody LoginRequest request,
+            Errors errors
     ) {
         logger.info("Exist -------->" + request.getEmail() +" , " + request.getSnsId() + ", " + request.getSnsType());
         String oauthId = AccountService.getOauthId(request.getEmail(), request.getSnsType(), request.getSnsId());
         logger.info("Exist oauth-------->" + oauthId);
+        if(errors.hasErrors()){
+
+        }
         Account account = Optional.ofNullable(accountRepository.findByOauthId(oauthId)).orElse(Account.EMPTY);
         ExistResponse existResponse;
         if (account == Account.EMPTY) existResponse = new ExistResponse(false, Provider.NONE);

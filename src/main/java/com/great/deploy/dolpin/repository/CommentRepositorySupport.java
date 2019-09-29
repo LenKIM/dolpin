@@ -15,7 +15,7 @@ public class CommentRepositorySupport extends QuerydslRepositorySupport {
 
 //    public List<Comment> countLikeByAccountId(Long accountId){
 //        return jpaQueryFactory.selectFrom(QComment.comment)
-//                .where(QComment.comment.nickName.eq(name))
+//                .where(QComment.comment.nickname.eq(name))
 //                .fetch();
 //    }
 }

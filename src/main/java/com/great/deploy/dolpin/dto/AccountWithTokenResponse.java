@@ -19,7 +19,7 @@ public class AccountWithTokenResponse {
     private String email;
     private String name;
     private String imageUrl;
-    private String nickName;
+    private String nickname;
     private String activeRegion;
     private String medal;
     private String duckLevel;

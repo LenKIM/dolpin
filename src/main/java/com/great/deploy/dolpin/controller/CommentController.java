@@ -74,7 +74,7 @@ public class CommentController {
                 HttpStatus.OK.getReasonPhrase(),
                 pinsRepository.findById(pinsId)
                         .map(pins -> {
-                            Comment save = new Comment(pins, request.getContents(), request.getAccountId(), request.getNickName());
+                            Comment save = new Comment(pins, request.getContents(), request.getAccountId(), request.getNickname());
                             commentRepository.save(save);
                             List<Comment> comments = commentRepository.findAllByPinsId(pins.getId());
                             comments.sort(Comparator.comparing(Comment::getCreateAt).reversed());

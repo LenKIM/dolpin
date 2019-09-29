@@ -10,6 +10,6 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
 
     Boolean existsByEmail(String email);
     Boolean existsByOauthId(String oauthId);
-    Boolean existsByNickname(String nickName);
+    Boolean existsByNickname(String nickname);
 
 }

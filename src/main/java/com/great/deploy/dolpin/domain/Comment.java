@@ -30,7 +30,7 @@ public class Comment {
 
     private String contents;
     private Integer accountId;
-    private String nickName;
+    private String nickname;
     private int recommendCount;
 
     @Transient
@@ -51,10 +51,10 @@ public class Comment {
     @UpdateTimestamp
     private LocalDateTime updateAt;
 
-    public Comment(Pins pins, String contents, Integer accountId, String nickName) {
+    public Comment(Pins pins, String contents, Integer accountId, String nickname) {
         this.pins = pins;
         this.contents = contents;
         this.accountId = accountId;
-        this.nickName = nickName;
+        this.nickname = nickname;
     }
 }
