@@ -81,6 +81,7 @@ public class PinsController {
             throw new ResourceNotFoundException("Not Found createPinRequest Model");
         }
         String imageUrl;
+
         if (image != null) {
             // upload profile to storage
             imageUrl = amazonS3ClientService.uploadFileToS3Bucket(image, true);
@@ -105,8 +106,6 @@ public class PinsController {
                     Pins.of(
                             createPinRequest, celebrityMember, celebrityGroup, createPinRequest.getAddress(), createPinRequest.getDetailedAddress()
                     ), imageUrl);
-
-            System.out.println("IMAGE_URL = " + imageUrl);
 
             return new Response<>(
                     HttpStatus.CREATED.value(),

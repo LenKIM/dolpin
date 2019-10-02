@@ -9,7 +9,6 @@ import javax.persistence.Table;
 import java.time.LocalDate;
 
 @Getter
-@Setter
 @EqualsAndHashCode(of = "id", callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor

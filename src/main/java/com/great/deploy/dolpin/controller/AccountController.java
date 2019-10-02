@@ -75,7 +75,6 @@ public class AccountController {
             Errors errors
 
     ) {
-        logger.info("        AAAAAA" + accountRequest.getEmail() +" , " + accountRequest.getSnsId() + ", " + accountRequest.getSnsType());
         if (errors.hasErrors()) {
             throw new BadRequestException("Null 체크 또는 이미 계정이 있음.");
         }
@@ -124,9 +123,8 @@ public class AccountController {
             @RequestBody LoginRequest request,
             Errors errors
     ) {
-        logger.info("Exist -------->" + request.getEmail() +" , " + request.getSnsId() + ", " + request.getSnsType());
         String oauthId = AccountService.getOauthId(request.getEmail(), request.getSnsType(), request.getSnsId());
-        logger.info("Exist oauth-------->" + oauthId);
+
         if(errors.hasErrors()){
 
         }

@@ -1,9 +1,11 @@
 package com.great.deploy.dolpin.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.great.deploy.dolpin.common.AuditEntity;
 import com.great.deploy.dolpin.dto.CreatePinRequest;
 import com.great.deploy.dolpin.dto.PinRequest;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -42,7 +44,12 @@ public class Pins extends AuditEntity {
     private String title;
     private String imgUrl;
     private String imgProvider;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate startDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate endDate;
 
     private String address;

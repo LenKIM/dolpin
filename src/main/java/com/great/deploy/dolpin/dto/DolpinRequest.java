@@ -1,25 +1,24 @@
 package com.great.deploy.dolpin.dto;
 
-import com.great.deploy.dolpin.dto.model.CelebrityType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class DolpinRequest {
 
+    public static final DolpinRequest EMPTY = new DolpinRequest(null, "", "", null, null);
+
     @NotEmpty
-    private Long celebrityId;
-    @NotEmpty
-    private CelebrityType celebrityType;
+    private Long celebrityMemberId;
     @NotNull
     private String address;
     @NotNull

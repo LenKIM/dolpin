@@ -11,8 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class PositingPeriod {
 
-    LocalDate startDate;
-    LocalDate endDate;
-
+    private LocalDate startDate;
+    private LocalDate endDate;
 
 }
