@@ -31,9 +31,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
-    @Bean
-    public CommonsRequestLoggingFilter requestLoggingFilter() {
-        return new CommonsRequestLoggingFilter();
-    }
 }
