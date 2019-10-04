@@ -123,11 +123,12 @@ public class AccountController {
             @RequestBody LoginRequest request,
             Errors errors
     ) {
-        String oauthId = AccountService.getOauthId(request.getEmail(), request.getSnsType(), request.getSnsId());
+        logger.info(request.getEmail() + " / " + request.getSnsId() + " / " + request.getSnsType());
 
-        if(errors.hasErrors()){
-
+        if (errors.hasErrors()) {
+            throw new BadRequestException("null 체크 필요");
         }
+        String oauthId = AccountService.getOauthId(request.getEmail(), request.getSnsType(), request.getSnsId());
         Account account = Optional.ofNullable(accountRepository.findByOauthId(oauthId)).orElse(Account.EMPTY);
         ExistResponse existResponse;
         if (account == Account.EMPTY) existResponse = new ExistResponse(false, Provider.NONE);
