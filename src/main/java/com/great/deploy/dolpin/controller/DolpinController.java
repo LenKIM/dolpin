@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.great.deploy.dolpin.account.Account;
 import com.great.deploy.dolpin.account.CurrentUser;
 import com.great.deploy.dolpin.domain.Visit;
-import com.great.deploy.dolpin.dto.DolpinRequest;
-import com.great.deploy.dolpin.dto.ProofRequest;
-import com.great.deploy.dolpin.dto.ProofResponse;
+import com.great.deploy.dolpin.dto.*;
 import com.great.deploy.dolpin.dto.model.PositingPeriod;
 import com.great.deploy.dolpin.dto.model.PostedAddress;
 import com.great.deploy.dolpin.dto.model.Response;
@@ -16,6 +14,7 @@ import com.great.deploy.dolpin.exception.ResourceNotFoundException;
 import com.great.deploy.dolpin.repository.VisitRepository;
 import com.great.deploy.dolpin.service.ReportService;
 import com.great.deploy.dolpin.swagger.DolpinResponse;
+import com.great.deploy.dolpin.swagger.NewCelebrityResponseSwagger;
 import com.great.deploy.dolpin.swagger.ProofResponseSwagger;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -72,10 +71,29 @@ public class DolpinController {
         return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), new ProofResponse(true, pinCount));
     }
 
+    @ApiOperation(value = "새로운 아이돌 제보", response = NewCelebrityResponseSwagger.class)
+    @PostMapping("/celebrity/new")
+    public Response<NewCelebrityResponse> addNewCelebrity(
+            @ApiIgnore @CurrentUser Account account,
+            @RequestBody NewCelebrityRequest request,
+            Errors errors
+    ) {
+
+        if (errors.hasErrors()) {
+            throw new BadRequestException("Not Allowed null and Empty String");
+        }
+        Account.validateAccount(account);
+        String groupName = request.getGroupName();
+        String memberList = String.join(", ", request.getMemberList());
+        Boolean isSuccess = reportService.addNewCelebrity(groupName, memberList);
+
+        return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), new NewCelebrityResponse(isSuccess));
+    }
+
     @ApiOperation(value = "아이돌 광고 제보 API", response = DolpinResponse.class)
     @PostMapping("/dolpin")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "model", value = "DolpinRequest.class", required = true, dataType = "string", defaultValue = " {model=[{\"celebrity_member_id\":1,\"address\":\"서울시 강남구\",\"detailed_address\":\"강남역 8번 출구\",\"start_date\":\"2019-10-30\",\"end_date\":null}]}"),
+            @ApiImplicitParam(name = "model", value = "DolpinRequest.class", required = true, dataType = "string", defaultValue = "{\"celebrity_member_id\":1,\"address\":\"서울시 강남구\",\"detailed_address\":\"강남역 8번 출구\",\"start_date\":\"2019-10-30\",\"end_date\":null, \"type\":none }"),
     })
     public DolpinResponse dolpinIdol(
             @RequestParam("model") String model,
@@ -100,7 +118,7 @@ public class DolpinController {
         PostedAddress address = new PostedAddress(request.getAddress(), request.getDetailedAddress());
         PositingPeriod period = new PositingPeriod(request.getStartDate(), request.getEndDate());
         try {
-            reportService.dolpin(request.getCelebrityMemberId(), address, period, image);
+            reportService.dolpin(request.getCelebrityMemberId(), address, period, image, request.getType());
             return new DolpinResponse(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), Boolean.TRUE);
         } catch (Exception e) {
             return new DolpinResponse(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), Boolean.FALSE);

@@ -1,5 +1,6 @@
 package com.great.deploy.dolpin.dto;
 
+import com.great.deploy.dolpin.dto.model.DolpinType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import java.time.LocalDate;
 @Builder
 public class DolpinRequest {
 
-    public static final DolpinRequest EMPTY = new DolpinRequest(null, "", "", null, null);
+    public static final DolpinRequest EMPTY = new DolpinRequest(null, "", "", null, null, DolpinType.none);
 
     @NotEmpty
     private Long celebrityMemberId;
@@ -27,4 +28,6 @@ public class DolpinRequest {
     private LocalDate startDate;
     @NotNull
     private LocalDate endDate;
+    @NotNull
+    private DolpinType type;
 }
