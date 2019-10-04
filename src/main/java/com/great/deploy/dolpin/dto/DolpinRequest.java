@@ -24,10 +24,7 @@ public class DolpinRequest {
     private String address;
     @NotNull
     private String detailedAddress;
-    @NotNull
     private LocalDate startDate;
-    @NotNull
     private LocalDate endDate;
-    @NotNull
     private DolpinType type;
 }

@@ -73,7 +73,7 @@ public class DolpinController {
 
     @ApiOperation(value = "새로운 아이돌 제보", response = NewCelebrityResponseSwagger.class)
     @PostMapping("/celebrity/new")
-    public Response<NewCelebrityResponse> addNewCelebrity(
+    public Response<Boolean> addNewCelebrity(
             @ApiIgnore @CurrentUser Account account,
             @RequestBody NewCelebrityRequest request,
             Errors errors
@@ -87,7 +87,7 @@ public class DolpinController {
         String memberList = String.join(", ", request.getMemberList());
         Boolean isSuccess = reportService.addNewCelebrity(groupName, memberList);
 
-        return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), new NewCelebrityResponse(isSuccess));
+        return new Response<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), isSuccess);
     }
 
     @ApiOperation(value = "아이돌 광고 제보 API", response = DolpinResponse.class)
