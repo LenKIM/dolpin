@@ -1,5 +1,6 @@
 package com.great.deploy.dolpin.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.great.deploy.dolpin.domain.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +30,8 @@ public class CommentResponse {
     private String nickname;
     private int likeItCount;
     private boolean recommended;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createAt;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime updateAt;
 }
