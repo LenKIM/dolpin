@@ -13,6 +13,7 @@ import com.great.deploy.dolpin.exception.NonAuthorizationException;
 import com.great.deploy.dolpin.exception.ResourceNotFoundException;
 import com.great.deploy.dolpin.dto.model.Provider;
 import com.great.deploy.dolpin.repository.AccountRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,6 +28,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+@Slf4j
 @Service
 public class AccountService implements UserDetailsService {
 
@@ -50,7 +52,7 @@ public class AccountService implements UserDetailsService {
 
     public static String getOauthId(String email, Provider snsType, String snsId) {
         String oauthId;
-        if (email.equals("")) {
+        if (email.isEmpty()) {
             oauthId = snsType + snsId;
         } else {
             oauthId = email;
@@ -81,7 +83,7 @@ public class AccountService implements UserDetailsService {
         final Set<AccountRole> adminRoles = new HashSet<>();
         adminRoles.add(AccountRole.USER);
 
-        if(!Provider.isContain(snsType)){
+        if (!Provider.isContain(snsType)) {
             throw new ResourceNotFoundException("허가된 SNS 로그인이 아닙니다.");
         }
 
@@ -131,14 +133,17 @@ public class AccountService implements UserDetailsService {
         } catch (Exception e) {
             throw new BadRequestException("accessToken not valid");
         }
+
+        log.info("ACCESS_TOKEN >>>> " + response.getBody());
+        log.info("ACCESS_TOKEN >>>> " + accountWithToken.getAccessToken());
         return accountWithToken;
     }
 
-    public boolean checkDuplicatedNickName(String nickname){
-        if(nickname == null){
+    public boolean checkDuplicatedNickName(String nickname) {
+        if (nickname == null) {
             throw new BadRequestException("닉네임이 Null 값입니다.");
         }
-        return accountRepository.existsByOauthId(nickname);
+        return accountRepository.existsByNickname(nickname);
     }
 }
 

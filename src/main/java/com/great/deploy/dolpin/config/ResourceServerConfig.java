@@ -31,7 +31,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                             "/v2/**",
                             "/definitions/**",
                             "/api/celebrities**",
-                            "/api/user/exist/nickname"
+                            "/api/user/exist/nickname**"
                         )
                         .permitAll()
                     .mvcMatchers(HttpMethod.POST,

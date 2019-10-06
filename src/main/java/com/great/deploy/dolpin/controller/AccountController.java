@@ -15,6 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import java.util.Optional;
 
 import static com.great.deploy.dolpin.account.Account.validateAccount;
 
+@Slf4j
 @Api(value = "AccountController", description = "About USER API")
 @RestController
 @RequestMapping(value = "/api/user", produces = "application/json")
@@ -98,11 +100,20 @@ public class AccountController {
             @ApiResponse(code = 4001, message = "로그인 실패")})
     @PostMapping("/login")
     public Response<AccountWithTokenResponse> loginUser(
-            @RequestBody LoginRequest request
+            @RequestBody LoginRequest request,
+            Errors errors
     ) {
+        if( errors.hasErrors()){
+            throw new BadRequestException("Login Request Validation Fail");
+        }
         String email = request.getEmail();
         Provider snsType = request.getSnsType();
         String snsId = request.getSnsId();
+
+        log.info("EMAIL >>>> " + email);
+        log.info("SNSTYPE >>>> " + snsType);
+        log.info("SNSID >>>> " + snsId);
+
         AccountWithToken account = accountService.login(email, snsType, snsId);
         return new Response<>(
                 HttpStatus.OK.value(),
@@ -111,7 +122,7 @@ public class AccountController {
         );
     }
 
-    @ApiOperation(value = "Check Nickname Duplicate", response = DolpinResponse.class)
+    @ApiOperation(value = "exist Nickname Duplicate", response = DolpinResponse.class)
     @GetMapping("/exist/nickname")
     public DolpinResponse existNickname(@RequestParam String nickname) {
         return new DolpinResponse(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), accountService.checkDuplicatedNickName(nickname));
