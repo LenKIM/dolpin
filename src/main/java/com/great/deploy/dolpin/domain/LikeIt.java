@@ -1,17 +1,13 @@
 package com.great.deploy.dolpin.domain;
 
 import com.great.deploy.dolpin.account.Account;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-@Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "like_it")
 public class LikeIt {

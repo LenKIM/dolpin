@@ -1,17 +1,18 @@
 package com.great.deploy.dolpin.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.great.deploy.dolpin.common.AuditEntity;
 import com.great.deploy.dolpin.dto.model.DolpinType;
 import com.great.deploy.dolpin.dto.model.PositingPeriod;
 import com.great.deploy.dolpin.dto.model.PostedAddress;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "dolpin")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Dolpin extends AuditEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,15 +20,8 @@ public class Dolpin extends AuditEntity {
     private Long celebrityMemberId;
     private String address;
     private String detailedAddress;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate startDate;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate endDate;
-
     private String imgUrl;
 
     @Enumerated(EnumType.STRING)

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Comment {
 
@@ -33,23 +33,21 @@ public class Comment {
     private String nickname;
     private int recommendCount;
 
+    @CreationTimestamp
+    private LocalDateTime createAt;
+    @UpdateTimestamp
+    private LocalDateTime updateAt;
+
     @Transient
     private boolean recommended;
-
     public void increaseRecommendCount() {
         recommendCount++;
     }
-
     public void decreaseRecommendCount() {
         if (recommendCount > 0) {
             recommendCount--;
         }
     }
-
-    @CreationTimestamp
-    private LocalDateTime createAt;
-    @UpdateTimestamp
-    private LocalDateTime updateAt;
 
     public Comment(Pins pins, String contents, Integer accountId, String nickname) {
         this.pins = pins;

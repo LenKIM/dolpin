@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Setter
 @EqualsAndHashCode(of = "id", callSuper = false)
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "pins")
 public class Pins extends AuditEntity {

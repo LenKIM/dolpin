@@ -1,5 +1,6 @@
 package com.great.deploy.dolpin.domain;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,9 +9,9 @@ import javax.persistence.*;
 
 @Entity
 @AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "report")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Table(name = "report")
 public class Report {
 
     @Id

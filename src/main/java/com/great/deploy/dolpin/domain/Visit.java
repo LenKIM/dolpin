@@ -1,13 +1,14 @@
 package com.great.deploy.dolpin.domain;
 
 import com.great.deploy.dolpin.common.AuditEntity;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "visit")
 public class Visit extends AuditEntity {

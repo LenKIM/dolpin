@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 @Getter
 @EqualsAndHashCode(of = "id", callSuper = false)
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "history_comment")
 public class HistoryComment {
